@@ -1,0 +1,178 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include "strings.h"
+
+t_bool		_string_insert_at(Object *string, void *data, int pos)
+{
+  Container	*self;
+  char		*res;
+
+  self = string;
+  res = calloc(self->contained_size + 2, sizeof(char));
+  if (pos > 0)
+    memcpy(res, self->contained, pos);
+  res[pos] = *(char *)data;
+  memcpy(&res[pos + 1], &((char *)self->contained)[pos],
+	 self->contained_size - pos);
+  free(self->contained);
+  self->contained = res;
+  ++self->contained_size;
+  return (TRUE);
+}
+
+/*
+** TODO
+*/
+t_bool		_string_delete_at(Object *string, int pos)
+{
+  (void)pos;
+  --((Container *)string)->contained_size;
+  return (TRUE);
+}
+
+t_bool		_string_erase(Object *string)
+{
+  Container	*self;
+
+  self = string;
+  if (self->empty(self) == TRUE)
+    return (TRUE);
+  self->deleteAt(self, 0);
+  self->erase(self);
+  return (TRUE);
+}
+
+void		_string_affect(Object *string, void *data)
+{
+  Container	*self;
+
+  self = string;
+  free(self->contained);
+  self->contained_size = (data ? strlen(data) : 0);
+  self->contained = (data ? str_dup(data) : NULL);
+}
+
+Object		*_string_front(Object *string)
+{
+  Container	*container;
+
+  container = string;
+  return (container->contained ? &((char *)container->contained)[0] : NULL);
+}
+
+Object		*_string_back(Object *string)
+{
+  Container	*container;
+
+  container = string;
+  return (container->contained ?
+	  &((char *)container->contained)[container->contained_size - 1] :
+	  NULL);
+}
+
+Object		*_string_at(Object *string, size_t pos)
+{
+  Container	*container;
+
+  container = string;
+  return (pos < container->contained_size && container->contained ?
+	  &((char *)container->contained)[pos] :
+	  NULL);
+}
+
+void	_string_basic_print(size_t i, Object *elem, const char *prefix)
+{
+  printf("%s[%s]\n", prefix, (char *)elem);
+  (void)i;
+}
+
+void	_string_print(Object *self, const char *title,
+		      void (*f)(size_t i, Object *elem, const char *prefix),
+		      const char *prefix)
+{
+  char	*concat_prefix;
+
+  if (!(concat_prefix = concat(prefix, "  ")))
+    return ;
+  if (title)
+    printf("%s%s\n", prefix, title);
+  f(0, ((Container *)self)->contained, concat_prefix);
+  free(concat_prefix);
+}
+
+Object		*_string_dup(Object *self)
+{
+  Container	*string;
+
+  if ((string = new(_string, 0)))
+    string->affect(string, ((Container *)self)->contained);
+  return (string);
+}
+
+size_t	_string_findstr(Object *self, char *substr)
+{
+  char	*res;
+
+  res = strstr((char *)((Container *)self)->contained, substr);
+  return (res ? ((Container *)self)->contained_size - (strlen(res) - 1) : 0);
+}
+
+size_t	_string_find(Object *self, int c)
+{
+  char	*res;
+
+  res = strchr((char *)((Container *)self)->contained, c);
+  return (res ? ((Container *)self)->contained_size - (strlen(res) - 1) : 0);
+}
+
+size_t	_string_lfind(Object *self, int c)
+{
+  char	*res;
+
+  res = strrchr((char *)((Container *)self)->contained, c);
+  return (res ? ((Container *)self)->contained_size - (strlen(res) - 1) : 0);
+}
+
+static int	nmatch(const char *s1, const char *s2)
+{
+  if (*s1 != '\0' && *s2 == '*')
+    return (nmatch(s1 + 1, s2) + nmatch(s1, s2 + 1));
+  if (*s1 == '\0' && *s2 == '*')
+    return (nmatch(s1, s2 + 1));
+  if (*s1 == *s2 && *s1 != '\0' && s2 != '\0')
+    return (nmatch(s1 + 1, s2 + 1));
+  if (*s1 == *s2 && *s1 == '\0' && *s2 == '\0')
+    return (1);
+  return (0);
+}
+
+t_bool	_string_match(Object *self, char *compare)
+{
+  return (nmatch(((Container *)self)->contained, compare) ? TRUE : FALSE);
+}
+
+int	_string_nmatch(Object *self, char *compare)
+{
+  return (nmatch(((Container *)self)->contained, compare));
+}
+
+Object		*_string_split(Object *self, Class *type, const char *sep)
+{
+  Container	*container;
+  char		*token;
+  char		*strdump;
+
+  if (!(container = new(type, NULL, 0)))
+    return (NULL);
+  if (!(strdump = str_dup(((Container *)self)->contained)))
+    return (NULL);
+  token = strtok(strdump, sep);
+  while (token)
+    {
+      container->push_back(container, token);
+      token = strtok(NULL, sep);
+    }
+  free(strdump);
+  return (container);
+}
