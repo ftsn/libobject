@@ -19,12 +19,12 @@ int		main(void)
   delete((Object **)&splited);
 
   List		*list;
-  String       	*converted;
+  List       	*converted;
 
   list = new(_spl_clist, NULL, 4, "Lunkwill", "Frazou", "Roo", "Woklada");
-  converted = ((Container *)list)->sub(list, _string, -2, 3);
+  converted = ((Container *)list)->sub(list, _spl_clist, 12, 2);
   ((Container *)list)->dump(list, "Basic list", _list_basic_print, "");
-  ((Container *)converted)->dump(converted, "Converted string", _string_basic_print, "");
+  ((Container *)converted)->dump(converted, "Converted string", _list_basic_print, "");
 
   return (1);
 }
