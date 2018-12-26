@@ -49,11 +49,15 @@ int		main(void)
   delete((Object **)&converted2);
 
   Dict		*dict;
-
+  Array		*converted3;
+  
   dict = new(_dict);
   dict->push_back(dict, "MyKey", "MyValue");
-  ((Container *)dict)->dump(dict, "Dict dump", dict_basic_print, "");
+  converted3 = ((Container *)dict)->convert(dict, _array);
+  ((Container *)dict)->dump(dict, "Dict dump", pair_basic_print, "");
+  ((Container *)converted3)->dump(converted3, "Converted array (from a dict)", pair_basic_print, "");
   delete((Object **)&dict);
+  delete((Object **)&converted3);
   
   return (1);
 }

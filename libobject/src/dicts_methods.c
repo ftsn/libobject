@@ -3,18 +3,13 @@
 #include <stdio.h>
 #include "dicts.h"
 
-void		dict_basic_print(size_t i, Object *elem, const char *prefix)
+void	pair_basic_print(size_t i, Object *elem, const char *prefix)
 {
-  Container	*ctn;
-  
-  ctn = ((t_pair *)elem)->data;
-  printf("%skey: [%s]\n%svalue: [%s]\n", prefix, ((t_pair *)elem)->key, prefix, ((t_pair *)elem)->data);
-  (void)i;
+  printf("%s%zd)key: [%s]\tvalue: [%s]\n", prefix, i, ((t_pair *)elem)->key, ((t_pair *)elem)->data);
 }
 
 void		_dict_print(Object *container, const char *title,
-			    void (*f)(size_t i, Object *elem,
-				      const char *prefix),
+			    void (*f)(size_t i, Object *elem, const char *prefix),
 			    const char *prefix)
 {
   char		**dict;
