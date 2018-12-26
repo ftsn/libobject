@@ -2,6 +2,66 @@
 #include <stdio.h>
 #include "lists.h"
 
+static void	go_to_pos_in_list(t_list_data **list, t_list_data **tmp,
+				  int pos)
+{
+  int		i;
+
+  i = 0;
+  *tmp = NULL;
+  while (*list && i < pos)
+    {
+      ++i;
+      *tmp = *list;
+      *list = (*list)->next;
+    }
+}
+
+static void	list_link(t_list_data **list, t_list_data **tmp,
+			  t_list_data *elem, t_list_type type)
+{
+  if (type == CIRC_DOUBLE)
+    elem->prev = (*tmp ? *tmp : (*list ? _list_end(*list) : elem));
+  else
+    elem->prev = (type == DOUBLE ? *tmp : NULL);
+  if (type == CIRC_SIMPLE || type == CIRC_DOUBLE)
+    elem->next = (*list ? *list : elem);
+  else
+    elem->next = *list;
+  if (!*list && !*tmp)
+    {
+      *list = elem;
+      return ;
+    }
+  if (*tmp)
+    (*tmp)->next = elem;
+  else if (!*tmp && (type == CIRC_SIMPLE || type == CIRC_DOUBLE))
+    ((t_list_data *)_list_end(*list))->next = elem;
+  if ((type == DOUBLE || type == CIRC_DOUBLE) && *list)
+    (*list)->prev = elem;
+}
+
+static t_bool		list_add(t_list_data **list, void *data, int pos,
+				 t_list_type type)
+{
+  t_list_data		*begin;
+  t_list_data		*tmp;
+  t_list_data		*elem;
+
+  begin = *list;
+  tmp = NULL;
+  if (!(elem = malloc(sizeof(List))))
+    return (FALSE);
+  elem->data = data;
+  go_to_pos_in_list(list, &tmp, pos);
+  list_link(list, &tmp, elem, type);
+  if (begin && pos > 0)
+    *list = begin;
+  if (pos == 0)
+    *list = elem;
+  return (TRUE);
+}
+
 t_bool	_spl_list_add(Object *list, void *data, int pos)
 {
   if (list_add((t_list_data **)&((Container *)list)->contained,
@@ -158,66 +218,6 @@ void		_list_print(Object *container, const char *title,
   while (list && list != begin);
   list = begin;
   free(concat_prefix);
-}
-
-static void	go_to_pos_in_list(t_list_data **list, t_list_data **tmp,
-				  int pos)
-{
-  int		i;
-
-  i = 0;
-  *tmp = NULL;
-  while (*list && i < pos)
-    {
-      ++i;
-      *tmp = *list;
-      *list = (*list)->next;
-    }
-}
-
-static void	list_link(t_list_data **list, t_list_data **tmp,
-			  t_list_data *elem, t_list_type type)
-{
-  if (type == CIRC_DOUBLE)
-    elem->prev = (*tmp ? *tmp : (*list ? _list_end(*list) : elem));
-  else
-    elem->prev = (type == DOUBLE ? *tmp : NULL);
-  if (type == CIRC_SIMPLE || type == CIRC_DOUBLE)
-    elem->next = (*list ? *list : elem);
-  else
-    elem->next = *list;
-  if (!*list && !*tmp)
-    {
-      *list = elem;
-      return ;
-    }
-  if (*tmp)
-    (*tmp)->next = elem;
-  else if (!*tmp && (type == CIRC_SIMPLE || type == CIRC_DOUBLE))
-    ((t_list_data *)_list_end(*list))->next = elem;
-  if ((type == DOUBLE || type == CIRC_DOUBLE) && *list)
-    (*list)->prev = elem;
-}
-
-t_bool		list_add(t_list_data **list, void *data, int pos,
-			 t_list_type type)
-{
-  t_list_data	*begin;
-  t_list_data	*tmp;
-  t_list_data	*elem;
-
-  begin = *list;
-  tmp = NULL;
-  if (!(elem = malloc(sizeof(List))))
-    return (FALSE);
-  elem->data = data;
-  go_to_pos_in_list(list, &tmp, pos);
-  list_link(list, &tmp, elem, type);
-  if (begin && pos > 0)
-    *list = begin;
-  if (pos == 0)
-    *list = elem;
-  return (TRUE);
 }
 
 void	_list_affect(Object *list, void *data)

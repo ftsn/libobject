@@ -50,7 +50,6 @@ void	_list_print(Object *list, const char *title,
 		    const char *prefix);
 void	_list_basic_print(size_t i, Object *elem, const char *prefix);
 
-t_bool	list_add(t_list_data **list, void *data, int pos, t_list_type type);
 void	list_del(t_list_data **list, int pos, t_list_type type);
 
 #endif /* !LISTS_H_ */
