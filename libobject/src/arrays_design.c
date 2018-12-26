@@ -29,7 +29,7 @@ static void	copy_ctor(Container *array, void **copy, size_t size)
   array->contained = new_contained;
 }
 
-static int	_array_ctor(Object *self, va_list *args)
+static t_bool	_array_ctor(Object *self, va_list *args)
 {
   Container	*array;
   size_t	nb_args;

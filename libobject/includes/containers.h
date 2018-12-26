@@ -2,7 +2,6 @@
 # define CONTAINERS_H_
 
 # include "object.h"
-# include "utils.h"
 
 typedef Object	*(*t_data)(Object *self);
 Object		*_container_data(Object *self);

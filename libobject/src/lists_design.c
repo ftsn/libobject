@@ -1,10 +1,10 @@
 #include <stddef.h>
 #include "lists.h"
 
-static int	_list_ctor(Object *self, va_list *args)
+static t_bool	_list_ctor(Object *self, va_list *args)
 {
   Container	*list;
-  size_t	nb_args;
+  size_t       	nb_args;
 
   list = self;
   if ((list->contained = va_arg(*args, void *)))

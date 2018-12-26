@@ -2,7 +2,7 @@
 #include <string.h>
 #include "strings.h"
 
-static int	_string_ctor(Object *self, va_list *args)
+static t_bool	_string_ctor(Object *self, va_list *args)
 {
   Container	*string;
   size_t	nb_args;

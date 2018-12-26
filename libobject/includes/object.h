@@ -3,11 +3,12 @@
 
 # include <sys/types.h>
 # include <stdarg.h>
+# include "utils.h"
 
 typedef void Object;
 
 
-typedef int (*ctor_t)(Object *self, va_list *args);
+typedef t_bool (*ctor_t)(Object *self, va_list *args);
 typedef void (*dtor_t)(Object *self, va_list *args);
 
 typedef struct {

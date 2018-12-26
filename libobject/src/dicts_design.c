@@ -2,7 +2,7 @@
 #include "dicts.h"
 #include "arrays.h"
 
-static int	_dict_ctor(Object *self, va_list *args)
+static t_bool	_dict_ctor(Object *self, va_list *args)
 {
   (void)self;
   (void)args;
