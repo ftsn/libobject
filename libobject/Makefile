@@ -21,7 +21,9 @@ SRCS	=	new			\
 		strings_design		\
 		strings_methods		\
 		lists_design		\
-		lists_methods
+		lists_methods		\
+		arrays_design		\
+		arrays_methods
 
 SRCS	:=	$(addsuffix .$(EXT), $(SRCS))
 

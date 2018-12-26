@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <stddef.h>
 #include "containers.h"
 
@@ -67,7 +66,6 @@ Object		*_container_sub(Object *self, Class *type, int begin, int len)
     begin = 0;
   if (!(ctn = new(type, NULL, 0)))
     return (NULL);
-  printf("i=%d begin+i=%d  size=%zd\n", i, begin + i, self_c->contained_size);
   while (i < len && begin + i < (int)self_c->contained_size)
     {
       ctn->push_back(ctn, (at = (char *)self_c->at(self_c, begin + i)));
