@@ -2,6 +2,7 @@
 #include "strings.h"
 #include "lists.h"
 #include "arrays.h"
+#include "dicts.h"
 
 int		main(void)
 {
@@ -46,5 +47,13 @@ int		main(void)
   delete((Object **)&converted1);
   delete((Object **)&copied);
   delete((Object **)&converted2);
+
+  Dict		*dict;
+
+  dict = new(_dict);
+  dict->push_back(dict, "MyKey", "MyValue");
+  ((Container *)dict)->dump(dict, "Dict dump", dict_basic_print, "");
+  delete((Object **)&dict);
+  
   return (1);
 }
