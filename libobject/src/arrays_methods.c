@@ -87,17 +87,17 @@ t_bool		_array_erase(Object *container)
   return (TRUE);
 }
 
-Object		*_array_front(Object *array)
+Object			*_array_front(const Object *array)
 {
-  Container	*container;
+  const Container	*container;
 
   container = array;
   return (container->contained ? ((void **)container->contained)[0] : NULL);
 }
 
-Object		*_array_back(Object *array)
+Object			*_array_back(const Object *array)
 {
-  Container	*container;
+  const Container	*container;
 
   container = array;
   return (container->contained ?
@@ -105,9 +105,9 @@ Object		*_array_back(Object *array)
 	  NULL);
 }
 
-Object		*_array_at(Object *self, size_t pos)
+Object			*_array_at(const Object *self, size_t pos)
 {
-  Container	*container;
+  const Container	*container;
 
   container = self;
   return (pos < container->contained_size && container->contained ?
@@ -115,14 +115,13 @@ Object		*_array_at(Object *self, size_t pos)
 	  NULL);
 }
 
-void	array_basic_print(size_t i, Object *elem, const char *prefix)
+void	array_basic_print(size_t i, const Object *elem, const char *prefix)
 {
   printf("%s%u: [%s]\n", prefix, (unsigned int)i, (char *)elem);
 }
 
-void		_array_print(Object *container, const char *title,
-			     void (*f)(size_t i, Object *elem,
-				       const char *prefix),
+void		_array_print(const Object *container, const char *title,
+			     void (*f)(size_t i, const Object *elem, const char *prefix),
 			     const char *prefix)
 {
   char		**array;

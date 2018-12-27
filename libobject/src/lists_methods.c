@@ -134,29 +134,28 @@ t_bool	_dbl_clist_del(Object *list, int pos)
   return (TRUE);
 }
 
-Object	*_list_front(Object *list)
+Object	*_list_front(const Object *list)
 {
   if (list && ((Container *)list)->empty(list) == FALSE)
     return (((t_list_data *)((Container *)list)->contained)->data);
   return (NULL);
 }
 
-Object		*_list_end(Object *list)
+Object		*_list_end(const Object *list)
 {
   t_list_data	*begin;
   t_list_data	*res;
 
-  list = (t_list_data *)((Container *)list)->contained;
-  res = begin = list;
+  res = begin = (t_list_data *)((Container *)list)->contained;
   if (res && res->next)
     res = res->next;
   while (res && res->next && res->next != begin)
     res = res->next;
-  list = begin;
+  (void)list;
   return (res ? res->data : NULL);
 }
 
-Object		*_list_at(Object *list, size_t pos)
+Object		*_list_at(const Object *list, size_t pos)
 {
   t_list_data	*list_data;
   t_list_data	*begin;
@@ -177,9 +176,9 @@ Object		*_list_at(Object *list, size_t pos)
   return (list_data ? list_data->data : NULL);
 }
 
-void		_list_basic_print(size_t i, Object *elem, const char *prefix)
+void			_list_basic_print(size_t i, const Object *elem, const char *prefix)
 {
-  t_list_data	*list;
+  const t_list_data	*list;
 
   list = elem;
   printf("%s%u)prev [%s] cur [%s] next [%s]\n",
@@ -189,9 +188,8 @@ void		_list_basic_print(size_t i, Object *elem, const char *prefix)
 	 (list->next ? (char *)list->next->data : "null"));
 }
 
-void		_list_print(Object *container, const char *title,
-			    void (*f)(size_t i, Object *elem,
-				      const char *prefix),
+void		_list_print(const Object *container, const char *title,
+			    void (*f)(size_t i, const Object *elem, const char *prefix),
 			    const char *prefix)
 {
   t_list_data	*begin;
@@ -225,7 +223,7 @@ void	_list_affect(Object *list, void *data)
   ((Container *)list)->contained = data;
 }
 
-t_list_data	*get_nth_node(Object *list, size_t pos)
+t_list_data	*get_nth_node(const Object *list, size_t pos)
 {
   t_list_data	*list_data;
   t_list_data	*begin;

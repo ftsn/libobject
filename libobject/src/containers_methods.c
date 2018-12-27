@@ -1,17 +1,17 @@
 #include <stddef.h>
 #include "containers.h"
 
-Object	*_container_data(Object *self)
+Object	*_container_data(const Object *self)
 {
   return (((Container *)self)->contained);
 }
 
-size_t	_container_size(Object *container)
+size_t	_container_size(const Object *container)
 {
   return (((Container *)container)->contained_size);
 }
 
-t_bool	_container_empty(Object *container)
+t_bool	_container_empty(const Object *container)
 {
   return (((Container *)container)->contained_size == 0 ? TRUE : FALSE);
 }

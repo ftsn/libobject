@@ -18,7 +18,7 @@ typedef struct {
   dtor_t	__del__;
 } Class;
 
-Object	*new(Class *class, ...);
+Object	*new(const Class *class, ...);
 void	delete(Object **ptr, ...);
 
 #endif /* !OBJECT_H_ */

@@ -3,7 +3,7 @@
 #include "object.h"
 #include "utils.h"
 
-static Object	*va_new(Class *class, va_list *ap)
+static Object	*va_new(const Class *class, va_list *ap)
 {
   Object	*new;
 
@@ -16,7 +16,7 @@ static Object	*va_new(Class *class, va_list *ap)
   return (new);
 }
 
-Object		*new(Class *class, ...)
+Object		*new(const Class *class, ...)
 {
   Object	*new;
   va_list	ap;

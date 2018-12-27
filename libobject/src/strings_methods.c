@@ -53,17 +53,17 @@ void		_string_affect(Object *string, void *data)
   self->contained = (data ? str_dup(data) : NULL);
 }
 
-Object		*_string_front(Object *string)
+Object			*_string_front(const Object *string)
 {
-  Container	*container;
+  const Container	*container;
 
   container = string;
   return (container->contained ? &((char *)container->contained)[0] : NULL);
 }
 
-Object		*_string_back(Object *string)
+Object			*_string_back(const Object *string)
 {
-  Container	*container;
+  const Container	*container;
 
   container = string;
   return (container->contained ?
@@ -71,9 +71,9 @@ Object		*_string_back(Object *string)
 	  NULL);
 }
 
-Object		*_string_at(Object *string, size_t pos)
+Object			*_string_at(const Object *string, size_t pos)
 {
-  Container	*container;
+  const Container	*container;
 
   container = string;
   return (pos < container->contained_size && container->contained ?
@@ -81,14 +81,14 @@ Object		*_string_at(Object *string, size_t pos)
 	  NULL);
 }
 
-void	_string_basic_print(size_t i, Object *elem, const char *prefix)
+void	_string_basic_print(size_t i, const Object *elem, const char *prefix)
 {
   printf("%s[%s]\n", prefix, (char *)elem);
   (void)i;
 }
 
-void	_string_print(Object *self, const char *title,
-		      void (*f)(size_t i, Object *elem, const char *prefix),
+void	_string_print(const Object *self, const char *title,
+		      void (*f)(size_t i, const Object *elem, const char *prefix),
 		      const char *prefix)
 {
   char	*concat_prefix;
@@ -101,7 +101,7 @@ void	_string_print(Object *self, const char *title,
   free(concat_prefix);
 }
 
-Object		*_string_dup(Object *self)
+Object		*_string_dup(const Object *self)
 {
   Container	*string;
 
@@ -110,7 +110,7 @@ Object		*_string_dup(Object *self)
   return (string);
 }
 
-size_t	_string_findstr(Object *self, char *substr)
+size_t	_string_findstr(const Object *self, const char *substr)
 {
   char	*res;
 
@@ -118,7 +118,7 @@ size_t	_string_findstr(Object *self, char *substr)
   return (res ? ((Container *)self)->contained_size - (strlen(res) - 1) : 0);
 }
 
-size_t	_string_find(Object *self, int c)
+size_t	_string_find(const Object *self, int c)
 {
   char	*res;
 
@@ -126,7 +126,7 @@ size_t	_string_find(Object *self, int c)
   return (res ? ((Container *)self)->contained_size - (strlen(res) - 1) : 0);
 }
 
-size_t	_string_lfind(Object *self, int c)
+size_t	_string_lfind(const Object *self, int c)
 {
   char	*res;
 
@@ -147,17 +147,17 @@ static int	nmatch(const char *s1, const char *s2)
   return (0);
 }
 
-t_bool	_string_match(Object *self, char *compare)
+t_bool	_string_match(const Object *self, const char *compare)
 {
   return (nmatch(((Container *)self)->contained, compare) ? TRUE : FALSE);
 }
 
-int	_string_nmatch(Object *self, char *compare)
+int	_string_nmatch(const Object *self, const char *compare)
 {
   return (nmatch(((Container *)self)->contained, compare));
 }
 
-Object		*_string_split(Object *self, Class *type, const char *sep)
+Object		*_string_split(const Object *self, const Class *type, const char *sep)
 {
   Container	*container;
   char		*token;

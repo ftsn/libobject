@@ -3,14 +3,14 @@
 
 # include "object.h"
 
-typedef Object	*(*t_data)(Object *self);
-Object		*_container_data(Object *self);
+typedef Object	*(*t_data)(const Object *self);
+Object		*_container_data(const Object *self);
 
-typedef size_t	(*t_size)(Object *self);
-size_t		_container_size(Object *self);
+typedef size_t	(*t_size)(const Object *self);
+size_t		_container_size(const Object *self);
 
-typedef t_bool	(*t_empty)(Object *self);
-t_bool		_container_empty(Object *self);
+typedef t_bool	(*t_empty)(const Object *self);
+t_bool		_container_empty(const Object *self);
 
 typedef t_bool	(*t_rand_insert)(Object *self, void *data, int pos);
 
@@ -23,12 +23,12 @@ typedef t_bool	(*t_delete)(Object *self);
 
 typedef void	(*t_affect)(Object *self, void *data);
 
-typedef Object	*(*t_access)(Object *container);
+typedef Object	*(*t_access)(const Object *container);
 
-typedef Object	*(*t_rand_access)(Object *contained, size_t pos);
+typedef Object	*(*t_rand_access)(const Object *contained, size_t pos);
 
-typedef void	(*t_dump)(Object *self, const char *title,
-			  void (*f)(size_t i, Object *elem, const char *prefix),
+typedef void	(*t_dump)(const Object *self, const char *title,
+			  void (*f)(size_t i, const Object *elem, const char *prefix),
 			  const char *prefix);
 
 typedef Object	*(*t_converter)(Object *self, Class *type);
