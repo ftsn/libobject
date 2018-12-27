@@ -1,16 +1,39 @@
 #include <stdlib.h>
 #include <string.h>
 #include "iterators.h"
+#include "lists.h"
 
-static t_bool	_iterator_ctor(Object *self, va_list *args)
+static t_bool	_ra_iterator_ctor(Object *self, va_list *args)
 {
   Container	*container;
+  int		idx_start;
 
   container = va_arg(*args, void *);
   memcpy((char *)self + sizeof(Class),
 	 (char *)container + sizeof(Class),
 	 sizeof(Container) - sizeof(Class));
-  ((Iterator *)self)->cur = container->at(container, 0);
+  idx_start = va_arg(*args, int);
+  if (idx_start == REVERSE)
+    idx_start = (int)container->size(container) - 1;
+  ((Iterator *)self)->pos = idx_start;
+  ((Iterator *)self)->cur = container->at(container, idx_start);
+  return (TRUE);
+}
+
+static t_bool	_list_iterator_ctor(Object *self, va_list *args)
+{
+  List	        *container;
+  int		idx_start;
+
+  container = va_arg(*args, void *);
+  memcpy((char *)self + sizeof(Class),
+	 (char *)container + sizeof(Class),
+	 sizeof(Container) - sizeof(Class));
+  idx_start = va_arg(*args, int);
+  if (idx_start == REVERSE)
+    idx_start = (int)((Container *)container)->size(container) - 1;
+  ((Iterator *)self)->pos = idx_start;
+  ((Iterator *)self)->cur = container->nth_node(container, idx_start);
   return (TRUE);
 }
 
@@ -27,7 +50,7 @@ static ArrayIt _array_it_descr =
       {
 	sizeof(Iterator),
 	"Array Iterator",
-	&_iterator_ctor,
+	&_ra_iterator_ctor,
 	&_iterator_dtor
       },
       NULL,
@@ -69,7 +92,7 @@ static StringIt _string_it_descr =
       {
 	sizeof(Iterator),
 	"String Iterator",
-	&_iterator_ctor,
+	&_ra_iterator_ctor,
 	&_iterator_dtor
       },
       NULL,
@@ -110,8 +133,8 @@ static DictIt _dict_it_descr =
     {
       {
 	sizeof(Iterator),
-	"Array Iterator",
-	&_iterator_ctor,
+	"Dict Iterator",
+	&_ra_iterator_ctor,
 	&_iterator_dtor
       },
       NULL,
@@ -146,3 +169,45 @@ static DictIt _dict_it_descr =
   };
 
 Class	*_dict_it = (Class *)&_dict_it_descr;
+
+static ListIt _list_it_descr =
+  {
+    {
+      {
+	sizeof(Iterator),
+	"List Iterator",
+	&_list_iterator_ctor,
+	&_iterator_dtor
+      },
+      NULL,
+      0,
+
+      NULL,
+      NULL,
+      NULL,
+
+      NULL,
+      NULL,
+      NULL,
+      NULL,
+      NULL,
+
+      NULL,
+      NULL,
+      NULL,
+
+      NULL,
+
+      NULL,
+      NULL
+    },
+    NULL,
+    &_list_incr,
+    &_list_decr,
+    &_list_jump,
+    &_list_rvalue,
+    &_list_jmp_rvalue,
+    0
+  };
+
+Class	*_list_it = (Class *)&_list_it_descr;

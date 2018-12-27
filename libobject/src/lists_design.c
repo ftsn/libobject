@@ -58,7 +58,8 @@ static Spl_list _spl_list_descr =
 
       &_container_to_type,
       &_container_sub
-    }
+    },
+    &get_nth_node
   };
 
 static Spl_clist _spl_clist_descr =
@@ -91,7 +92,8 @@ static Spl_clist _spl_clist_descr =
 
       &_container_to_type,
       &_container_sub
-    }
+    },
+    &get_nth_node
   };
 
 static Dbl_list _dbl_list_descr =
@@ -124,7 +126,8 @@ static Dbl_list _dbl_list_descr =
 
       &_container_to_type,
       &_container_sub
-    }
+    },
+    &get_nth_node
   };
 
 static Dbl_clist _dbl_clist_descr =
@@ -157,7 +160,8 @@ static Dbl_clist _dbl_clist_descr =
 
       &_container_to_type,
       &_container_sub
-    }
+    },
+    &get_nth_node
   };
 
 Class *_spl_list = (Class *)&_spl_list_descr;

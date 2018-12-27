@@ -224,3 +224,24 @@ void	_list_affect(Object *list, void *data)
 {
   ((Container *)list)->contained = data;
 }
+
+t_list_data	*get_nth_node(Object *list, size_t pos)
+{
+  t_list_data	*list_data;
+  t_list_data	*begin;
+  size_t	i;
+
+  begin = list_data = (t_list_data *)((Container *)list)->contained;
+  i = 0;
+  if (list_data && i < pos)
+    {
+      list_data = list_data->next;
+      ++i;
+    }
+  while (list_data && list_data->next && list_data->next != begin && i < pos)
+    {
+      list_data = list_data->next;
+      ++i;
+    }
+  return (list_data);
+}

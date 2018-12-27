@@ -23,8 +23,15 @@ int		main(void)
 
   List		*list;
   List       	*converted;
+  ListIt	*it;
 
-  list = new(_spl_clist, NULL, 4, "Lunkwill", "Frazou", "Roo", "Woklada");
+  list = new(_dbl_clist, NULL, 4, "Lunkwill", "Frazou", "Roo", "Woklada");
+  it = new(_list_it, list, 2);
+  while (it->rvalue(it) != NULL)
+    {
+      printf("value: [%s]\n", it->rvalue(it));
+      it->incr(it);
+    }
   converted = ((Container *)list)->sub(list, _spl_clist, 12, 2);
   ((Container *)list)->dump(list, "Base list", _list_basic_print, "");
   ((Container *)converted)->dump(converted, "Converted list", _list_basic_print, "");
@@ -60,24 +67,5 @@ int		main(void)
   delete((Object **)&dict);
   delete((Object **)&converted3);
 
-  Dict       	*dict1;
-  DictIt	*it;
-
-  dict1 = new(_dict);
-  dict1->push_back(dict1, "MyKey", "MyValue");
-  dict1->push_back(dict1, "MyKey1", "MyValue1");
-  dict1->push_back(dict1, "MyKey2", "MyValue2");
-  it = new(_dict_it, dict1);
-  while (it->rvalue(it) != NULL)
-    {
-      printf("key: [%s]\tvalue: [%s]\n", ((t_pair *)it->rvalue(it))->key, ((t_pair *)it->rvalue(it))->data);
-      it->incr(it);
-    }
-  it->decr(it);
-  while (it->rvalue(it) != NULL)
-    {
-      printf("key: [%s]\tvalue: [%s]\n", ((t_pair *)it->rvalue(it))->key, ((t_pair *)it->rvalue(it))->data);
-      it->decr(it);
-    }
   return (1);
 }

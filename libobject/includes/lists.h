@@ -3,21 +3,20 @@
 
 # include "containers.h"
 
-extern Class	*_spl_list;
-extern Class	*_spl_clist;
-extern Class	*_dbl_list;
-extern Class	*_dbl_clist;
-
-typedef struct {
-  Container	base;
-} List;
-
 typedef struct		s_list_data
 {
   void			*data;
   struct s_list_data	*prev;
   struct s_list_data	*next;
 }			t_list_data;
+
+typedef t_list_data	*(*t_get_node)(Object *list, size_t pos);
+t_list_data		*get_nth_node(Object *list, size_t pos);
+
+typedef struct {
+  Container	base;
+  t_get_node	nth_node;
+} List;
 
 typedef List	Spl_list;
 typedef List	Spl_clist;
@@ -51,5 +50,10 @@ void	_list_print(Object *list, const char *title,
 void	_list_basic_print(size_t i, Object *elem, const char *prefix);
 
 void	list_del(t_list_data **list, int pos, t_list_type type);
+
+extern Class	*_spl_list;
+extern Class	*_spl_clist;
+extern Class	*_dbl_list;
+extern Class	*_dbl_clist;
 
 #endif /* !LISTS_H_ */
