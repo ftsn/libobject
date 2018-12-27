@@ -3,6 +3,7 @@
 #include "lists.h"
 #include "arrays.h"
 #include "dicts.h"
+#include "iterators.h"
 
 int		main(void)
 {
@@ -58,6 +59,22 @@ int		main(void)
   ((Container *)converted3)->dump(converted3, "Converted array (from a dict)", pair_basic_print, "");
   delete((Object **)&dict);
   delete((Object **)&converted3);
-  
+
+  Array		*iterable;
+  Iterator	*it;
+
+  iterable = new(_array, NULL, 4, "Ftsn", "Strelitzia", "E a s y B o t", "Deletebrig");
+  it = new(_it, iterable);
+  while (it->rvalue(it) != NULL)
+    {
+      printf("%s\n", it->rvalue(it));
+      it->incr(it);
+    }
+  it->decr(it);
+  while (it->rvalue(it) != NULL)
+    {
+      printf("%s\n", it->rvalue(it));
+      it->decr(it);
+    }
   return (1);
 }

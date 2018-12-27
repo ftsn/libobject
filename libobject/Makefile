@@ -25,7 +25,9 @@ SRCS	=	new			\
 		arrays_design		\
 		arrays_methods		\
 		dicts_design		\
-		dicts_methods
+		dicts_methods		\
+		iterators_design	\
+		iterators_methods
 
 SRCS	:=	$(addsuffix .$(EXT), $(SRCS))
 
