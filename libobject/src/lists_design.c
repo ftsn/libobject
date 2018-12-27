@@ -57,7 +57,10 @@ static Spl_list _spl_list_descr =
       &_list_print,
 
       &_container_to_type,
-      &_container_sub
+      &_container_sub,
+
+      &_container_begin,
+      &_container_last
     },
     &get_nth_node
   };
@@ -91,7 +94,10 @@ static Spl_clist _spl_clist_descr =
       &_list_print,
 
       &_container_to_type,
-      &_container_sub
+      &_container_sub,
+
+      &_container_begin,
+      &_container_last
     },
     &get_nth_node
   };
@@ -125,7 +131,10 @@ static Dbl_list _dbl_list_descr =
       &_list_print,
 
       &_container_to_type,
-      &_container_sub
+      &_container_sub,
+
+      &_container_begin,
+      &_container_last
     },
     &get_nth_node
   };
@@ -159,7 +168,10 @@ static Dbl_clist _dbl_clist_descr =
       &_list_print,
 
       &_container_to_type,
-      &_container_sub
+      &_container_sub,
+
+      &_container_begin,
+      &_container_last
     },
     &get_nth_node
   };

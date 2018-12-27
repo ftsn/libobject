@@ -1,5 +1,6 @@
-#include <stddef.h>
+#include <string.h>
 #include "containers.h"
+#include "iterators.h"
 
 Object	*_container_data(const Object *self)
 {
@@ -72,4 +73,35 @@ Object		*_container_sub(Object *self, Class *type, int begin, int len)
       ++i;
     }
   return (ctn);
+}
+
+static Object	*generate_it(Object *self, t_it_type type)
+{
+  Iterator	*it;
+  Container	*ctn;
+
+  ctn = self;
+  it = NULL;
+  if (!strcmp(ctn->base.__name__, "linked List") ||
+      !strcmp(ctn->base.__name__, "Circular linked List") ||
+      !strcmp(ctn->base.__name__, "Doubly linked List") ||
+      !strcmp(ctn->base.__name__, "Circular Doubly linked List"))
+    it = new(_list_it, self, type);
+  if (!strcmp(ctn->base.__name__, "Array"))
+    it = new(_array_it, self, type);
+  if (!strcmp(ctn->base.__name__, "Dict"))
+    it = new(_dict_it, self, type);
+  if (!strcmp(ctn->base.__name__, "String"))
+    it = new(_string_it, self, type);
+  return (it);
+}
+
+Object		*_container_begin(Object *self)
+{
+  return (generate_it(self, BASIC));
+}
+
+Object	*_container_last(Object *self)
+{
+  return (generate_it(self, REVERSE));
 }

@@ -91,7 +91,10 @@ static Array _array_descr =
       &_array_print,
 
       &_container_to_type,
-      &_container_sub
+      &_container_sub,
+
+      &_container_begin,
+      &_container_last
     }
   };
 

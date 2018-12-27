@@ -37,6 +37,10 @@ Object		*_container_to_type(Object *self, Class *type);
 typedef Object	*(*t_sub)(Object *self, Class *type, int begin, int len);
 Object		*_container_sub(Object *self, Class *type, int begin, int len);
 
+typedef Object	*(*t_it_create)(Object *self);
+Object	       	*_container_begin(Object *self);
+Object	       	*_container_last(Object *self);
+
 typedef struct {
   Class		base;
   Object	*contained;
@@ -61,6 +65,9 @@ typedef struct {
 
   t_converter	convert;
   t_sub		sub;
+
+  t_it_create   first;
+  t_it_create	last;
 } Container;
 
 #endif /* !CONTAINERS_H_ */

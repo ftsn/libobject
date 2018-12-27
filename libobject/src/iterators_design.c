@@ -73,6 +73,9 @@ static ArrayIt _array_it_descr =
       NULL,
 
       NULL,
+      NULL,
+
+      NULL,
       NULL
     },
     NULL,
@@ -112,6 +115,9 @@ static StringIt _string_it_descr =
       NULL,
       NULL,
 
+      NULL,
+
+      NULL,
       NULL,
 
       NULL,
@@ -157,6 +163,9 @@ static DictIt _dict_it_descr =
       NULL,
 
       NULL,
+      NULL,
+
+      NULL,
       NULL
     },
     NULL,
@@ -196,6 +205,9 @@ static ListIt _list_it_descr =
       NULL,
       NULL,
 
+      NULL,
+
+      NULL,
       NULL,
 
       NULL,

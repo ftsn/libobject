@@ -46,7 +46,10 @@ static Dict _dict_descr =
       &_dict_print,
 
       &_container_to_type,
-      &_container_sub
+      &_container_sub,
+
+      &_container_begin,
+      &_container_last
     },
     &_get_obj_by_key,
     &_dict_push_back

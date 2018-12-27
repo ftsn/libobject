@@ -61,7 +61,10 @@ static String _string_descr =
       &_string_print,
 
       &_container_to_type,
-      &_container_sub
+      &_container_sub,
+
+      &_container_begin,
+      &_container_last
     },
     &_string_dup,
     &_string_findstr,
