@@ -60,20 +60,23 @@ int		main(void)
   delete((Object **)&dict);
   delete((Object **)&converted3);
 
-  Array		*iterable;
-  Iterator	*it;
+  Dict       	*dict1;
+  DictIt	*it;
 
-  iterable = new(_array, NULL, 4, "Ftsn", "Strelitzia", "E a s y B o t", "Deletebrig");
-  it = new(_it, iterable);
+  dict1 = new(_dict);
+  dict1->push_back(dict1, "MyKey", "MyValue");
+  dict1->push_back(dict1, "MyKey1", "MyValue1");
+  dict1->push_back(dict1, "MyKey2", "MyValue2");
+  it = new(_dict_it, dict1);
   while (it->rvalue(it) != NULL)
     {
-      printf("%s\n", it->rvalue(it));
+      printf("key: [%s]\tvalue: [%s]\n", ((t_pair *)it->rvalue(it))->key, ((t_pair *)it->rvalue(it))->data);
       it->incr(it);
     }
   it->decr(it);
   while (it->rvalue(it) != NULL)
     {
-      printf("%s\n", it->rvalue(it));
+      printf("key: [%s]\tvalue: [%s]\n", ((t_pair *)it->rvalue(it))->key, ((t_pair *)it->rvalue(it))->data);
       it->decr(it);
     }
   return (1);

@@ -10,6 +10,7 @@ static t_bool	_iterator_ctor(Object *self, va_list *args)
   memcpy((char *)self + sizeof(Class),
 	 (char *)container + sizeof(Class),
 	 sizeof(Container) - sizeof(Class));
+  ((Iterator *)self)->cur = container->at(container, 0);
   return (TRUE);
 }
 
@@ -20,12 +21,12 @@ static void	_iterator_dtor(Object *self, va_list *args)
   free(self);
 }
 
-static Iterator _it_descr =
+static ArrayIt _array_it_descr =
   {
     {
       {
 	sizeof(Iterator),
-	"Iterator",
+	"Array Iterator",
 	&_iterator_ctor,
 	&_iterator_dtor
       },
@@ -51,12 +52,97 @@ static Iterator _it_descr =
       NULL,
       NULL
     },
-    &_incr,
-    &_decr,
-    &_jump,
-    &_rvalue,
-    &_jmp_rvalue,
+    NULL,
+    &_ra_incr,
+    &_ra_decr,
+    &_ra_jump,
+    &_ra_rvalue,
+    &_ra_jmp_rvalue,
     0
   };
 
-Class	*_it = (Class *)&_it_descr;
+Class	*_array_it = (Class *)&_array_it_descr;
+
+static StringIt _string_it_descr =
+  {
+    {
+      {
+	sizeof(Iterator),
+	"String Iterator",
+	&_iterator_ctor,
+	&_iterator_dtor
+      },
+      NULL,
+      0,
+
+      NULL,
+      NULL,
+      NULL,
+
+      NULL,
+      NULL,
+      NULL,
+      NULL,
+      NULL,
+
+      NULL,
+      NULL,
+      NULL,
+
+      NULL,
+
+      NULL,
+      NULL
+    },
+    NULL,
+    &_ra_incr,
+    &_ra_decr,
+    &_ra_jump,
+    &_ra_rvalue,
+    &_ra_jmp_rvalue,
+    0
+  };
+
+Class	*_string_it = (Class *)&_string_it_descr;
+
+static DictIt _dict_it_descr =
+  {
+    {
+      {
+	sizeof(Iterator),
+	"Array Iterator",
+	&_iterator_ctor,
+	&_iterator_dtor
+      },
+      NULL,
+      0,
+
+      NULL,
+      NULL,
+      NULL,
+
+      NULL,
+      NULL,
+      NULL,
+      NULL,
+      NULL,
+
+      NULL,
+      NULL,
+      NULL,
+
+      NULL,
+
+      NULL,
+      NULL
+    },
+    NULL,
+    &_ra_incr,
+    &_ra_decr,
+    &_ra_jump,
+    &_ra_rvalue,
+    &_ra_jmp_rvalue,
+    0
+  };
+
+Class	*_dict_it = (Class *)&_dict_it_descr;
