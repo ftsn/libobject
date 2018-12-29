@@ -22,7 +22,7 @@ t_bool		_container_push_back(Object *self, void *data)
   Container	*self_c;
 
   self_c = self;
-  return (self_c->insertAt(self_c, data, self_c->contained_size));
+  return (self_c->insert_at(self_c, data, self_c->contained_size));
 }
 
 Object		*_container_to_type(Object *self, Class *type)

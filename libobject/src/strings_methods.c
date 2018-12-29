@@ -38,7 +38,7 @@ t_bool		_string_erase(Object *string)
   self = string;
   if (self->empty(self) == TRUE)
     return (TRUE);
-  self->deleteAt(self, 0);
+  self->delete_at(self, 0);
   self->erase(self);
   return (TRUE);
 }

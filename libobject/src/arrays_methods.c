@@ -82,7 +82,7 @@ t_bool		_array_erase(Object *container)
   self = container;
   if (self->empty(self) == TRUE)
     return (TRUE);
-  self->deleteAt(self, 0);
+  self->delete_at(self, 0);
   self->erase(self);
   return (TRUE);
 }

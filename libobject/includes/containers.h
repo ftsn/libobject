@@ -53,9 +53,9 @@ typedef struct {
   t_size	size;
   t_empty	empty;
 
-  t_rand_insert	insertAt;
+  t_rand_insert	insert_at;
   t_insert	push_back;
-  t_rand_delete	deleteAt;
+  t_rand_delete	delete_at;
   t_delete	erase;
   t_affect	affect;
 

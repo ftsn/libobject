@@ -47,7 +47,7 @@ static void	_list_dtor(Object *self, va_list *args)
 
   list = self;
   while (list->contained)
-    list->deleteAt(list, 0);
+    list->delete_at(list, 0);
   (void)args;
 }
 

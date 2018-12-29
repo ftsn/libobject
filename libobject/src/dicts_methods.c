@@ -62,5 +62,5 @@ t_bool		_dict_push_back(Object *self, char *key, void *data)
     return (FALSE);
   pair->key = key;
   pair->data = data;
-  return (self_c->insertAt(self_c, pair, self_c->contained_size));
+  return (self_c->insert_at(self_c, pair, self_c->contained_size));
 }
