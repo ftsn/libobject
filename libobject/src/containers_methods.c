@@ -46,7 +46,7 @@ Object		*_container_sub(Object *self, Class *type, int begin, int len)
 {
   Container	*ctn;
   Container	*self_c;
-  char		*at;
+  void		*at;
   int		i;
 
   i = 0;
@@ -69,7 +69,7 @@ Object		*_container_sub(Object *self, Class *type, int begin, int len)
     return (NULL);
   while (i < len && begin + i < (int)self_c->contained_size)
     {
-      ctn->push_back(ctn, (at = (char *)self_c->at(self_c, begin + i)));
+      ctn->push_back(ctn, (at = self_c->at(self_c, begin + i)));
       ++i;
     }
   return (ctn);
