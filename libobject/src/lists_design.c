@@ -28,8 +28,6 @@ static t_bool	_list_ctor(Object *self, va_list *args)
   void		*copy;
 
   list = self;
-  if (!(list->contained = calloc(1, sizeof(void *))))
-    return (FALSE);
   if ((copy = va_arg(*args, void *)))
     if (copy_ctor(list, copy, va_arg(*args, size_t)) == FALSE)
       return (FALSE);
@@ -45,7 +43,11 @@ static t_bool	_list_ctor(Object *self, va_list *args)
 
 static void	_list_dtor(Object *self, va_list *args)
 {
-  (void)self;
+  Container	*list;
+
+  list = self;
+  while (list->contained)
+    list->deleteAt(list, 0);
   (void)args;
 }
 

@@ -2,8 +2,19 @@
 #include <stdio.h>
 #include "lists.h"
 
-static void	go_to_pos_in_list(t_list_data **list, t_list_data **tmp,
-				  int pos)
+static t_list_data     	*get_last_node(t_list_data *list)
+{
+  t_list_data	*begin;
+
+  begin = list;
+  if (list && list->next)
+    list = list->next;
+  while (list && list->next && list->next != begin)
+    list = list->next;
+  return (list);
+}
+
+static void	go_to_pos_in_list(t_list_data **list, t_list_data **tmp, int pos)
 {
   int		i;
 
@@ -17,11 +28,10 @@ static void	go_to_pos_in_list(t_list_data **list, t_list_data **tmp,
     }
 }
 
-static void	list_link(t_list_data **list, t_list_data **tmp,
-			  t_list_data *elem, t_list_type type)
+static void	list_link(t_list_data **list, t_list_data **tmp, t_list_data *end, t_list_data *elem, t_list_type type)
 {
   if (type == CIRC_DOUBLE)
-    elem->prev = (*tmp ? *tmp : (*list ? _list_end(*list) : elem));
+    elem->prev = (*tmp ? *tmp : (*list ? end : elem));
   else
     elem->prev = (type == DOUBLE ? *tmp : NULL);
   if (type == CIRC_SIMPLE || type == CIRC_DOUBLE)
@@ -35,26 +45,27 @@ static void	list_link(t_list_data **list, t_list_data **tmp,
     }
   if (*tmp)
     (*tmp)->next = elem;
-  else if (!*tmp && (type == CIRC_SIMPLE || type == CIRC_DOUBLE))
-    ((t_list_data *)_list_end(*list))->next = elem;
+  if (!*tmp && (type == CIRC_SIMPLE || type == CIRC_DOUBLE))
+    end->next = elem;
   if ((type == DOUBLE || type == CIRC_DOUBLE) && *list)
     (*list)->prev = elem;
 }
 
-static t_bool		list_add(t_list_data **list, void *data, int pos,
-				 t_list_type type)
+static t_bool  	list_add(t_list_data **list, void *data, int pos, t_list_type type)
 {
-  t_list_data		*begin;
-  t_list_data		*tmp;
-  t_list_data		*elem;
+  t_list_data  	*begin;
+  t_list_data  	*end;
+  t_list_data  	*tmp;
+  t_list_data  	*elem;
 
   begin = *list;
+  end = get_last_node(begin);
   tmp = NULL;
   if (!(elem = malloc(sizeof(List))))
     return (FALSE);
   elem->data = data;
   go_to_pos_in_list(list, &tmp, pos);
-  list_link(list, &tmp, elem, type);
+  list_link(list, &tmp, end, elem, type);
   if (begin && pos > 0)
     *list = begin;
   if (pos == 0)
@@ -62,10 +73,56 @@ static t_bool		list_add(t_list_data **list, void *data, int pos,
   return (TRUE);
 }
 
+static void	list_unlink(t_list_data **list, t_list_data **tmp, t_list_data *end, t_list_type type)
+{
+  t_list_data	*next_node;
+
+  if (!*list)
+    return ;
+  next_node = (*list)->next;
+  if (!*tmp)
+    {
+      if ((type == CIRC_SIMPLE || type == CIRC_DOUBLE))
+        end->next = next_node;
+      if (next_node)
+	next_node->prev = type == CIRC_DOUBLE ? end : NULL;
+    }
+  else
+    {
+      (*tmp)->next = next_node;
+      if (next_node)
+	next_node->prev = (type == CIRC_DOUBLE || type == DOUBLE) ? *tmp : NULL;
+    }
+  free(*list);
+  *list = NULL;
+}
+
+static t_bool		list_del(t_list_data **list, int pos, t_list_type type)
+{
+  t_list_data		*begin;
+  t_list_data		*end;
+  t_list_data		*tmp;
+
+  if (pos == 0)
+    {
+      if (*list)
+	begin = ((*list)->next == *list || !(*list)) ? NULL : (*list)->next;
+      else
+	begin = NULL;
+    }
+  else
+    begin = *list;
+  end = get_last_node(*list);
+  tmp = NULL;
+  go_to_pos_in_list(list, &tmp, pos);
+  list_unlink(list, &tmp, end, type);
+  *list = begin;
+  return (TRUE);
+}
+
 t_bool	_spl_list_add(Object *list, void *data, int pos)
 {
-  if (list_add((t_list_data **)&((Container *)list)->contained,
-	       data, pos, SIMPLE) == TRUE)
+  if (list_add((t_list_data **)&((Container *)list)->contained, data, pos, SIMPLE) == TRUE)
     {
       ++((Container *)list)->contained_size;
       return (TRUE);
@@ -75,8 +132,7 @@ t_bool	_spl_list_add(Object *list, void *data, int pos)
 
 t_bool	_spl_clist_add(Object *list, void *data, int pos)
 {
-  if (list_add((t_list_data **)&((Container *)list)->contained,
-	       data, pos, CIRC_SIMPLE) == TRUE)
+  if (list_add((t_list_data **)&((Container *)list)->contained, data, pos, CIRC_SIMPLE) == TRUE)
     {
       ++((Container *)list)->contained_size;
       return (TRUE);
@@ -86,8 +142,7 @@ t_bool	_spl_clist_add(Object *list, void *data, int pos)
 
 t_bool	_dbl_list_add(Object *list, void *data, int pos)
 {
-  if (list_add((t_list_data **)&((Container *)list)->contained,
-	       data, pos, DOUBLE) == TRUE)
+  if (list_add((t_list_data **)&((Container *)list)->contained, data, pos, DOUBLE) == TRUE)
     {
       ++((Container *)list)->contained_size;
       return (TRUE);
@@ -97,8 +152,7 @@ t_bool	_dbl_list_add(Object *list, void *data, int pos)
 
 t_bool	_dbl_clist_add(Object *list, void *data, int pos)
 {
-  if (list_add((t_list_data **)&((Container *)list)->contained,
-	       data, pos, CIRC_DOUBLE) == TRUE)
+  if (list_add((t_list_data **)&((Container *)list)->contained, data, pos, CIRC_DOUBLE) == TRUE)
     {
       ++((Container *)list)->contained_size;
       return (TRUE);
@@ -108,29 +162,37 @@ t_bool	_dbl_clist_add(Object *list, void *data, int pos)
 
 t_bool	_spl_list_del(Object *list, int pos)
 {
-  (void)list;
-  (void)pos;
+  if (pos > (int)((Container *)list)->contained_size - 1)
+    return (FALSE);
+  if (list_del((t_list_data **)&((Container *)list)->contained, pos, SIMPLE) == TRUE)
+    --((Container *)list)->contained_size;
   return (TRUE);
 }
 
 t_bool	_spl_clist_del(Object *list, int pos)
 {
-  (void)list;
-  (void)pos;
+  if (pos > (int)((Container *)list)->contained_size - 1)
+    return (FALSE);
+  if (list_del((t_list_data **)&((Container *)list)->contained, pos, CIRC_SIMPLE) == TRUE)
+    --((Container *)list)->contained_size;
   return (TRUE);
 }
 
 t_bool	_dbl_list_del(Object *list, int pos)
 {
-  (void)list;
-  (void)pos;
+  if (pos > (int)((Container *)list)->contained_size - 1)
+    return (FALSE);
+  if (list_del((t_list_data **)&((Container *)list)->contained, pos, DOUBLE) == TRUE)
+    --((Container *)list)->contained_size;
   return (TRUE);
 }
 
 t_bool	_dbl_clist_del(Object *list, int pos)
 {
-  (void)list;
-  (void)pos;
+  if (pos > (int)((Container *)list)->contained_size - 1)
+    return (FALSE);
+  if (list_del((t_list_data **)&((Container *)list)->contained, pos, CIRC_DOUBLE) == TRUE)
+    --((Container *)list)->contained_size;
   return (TRUE);
 }
 
