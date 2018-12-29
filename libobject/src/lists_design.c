@@ -1,23 +1,41 @@
-#include <stddef.h>
+#include <stdlib.h>
 #include "lists.h"
+
+static t_bool	copy_ctor(Container *list, void **copy, size_t size)
+{
+  size_t	i;
+
+  i = 0;
+  if (size == 0) /* COPY_ALL */
+    while (copy[size])
+      ++size;
+  while (i < size)
+    {
+      if (list->push_back(list, copy[i]) == FALSE)
+	return (FALSE);
+      ++i;
+    }
+  return (TRUE);
+}
 
 static t_bool	_list_ctor(Object *self, va_list *args)
 {
   Container	*list;
-  size_t       	nb_args;
+  size_t	nb_args;
+  void		*copy;
 
   list = self;
-  if ((list->contained = va_arg(*args, void *)))
-    list->contained_size = va_arg(*args, size_t);
+  if (!(list->contained = calloc(1, sizeof(void *))))
+    return (FALSE);
+  if ((copy = va_arg(*args, void *)))
+    if (copy_ctor(list, copy, va_arg(*args, size_t)) == FALSE)
+      return (FALSE);
   nb_args = va_arg(*args, size_t);
-  if (nb_args > 0)
+  while (nb_args > 0)
     {
-      while (nb_args > 0)
-	{
-	  list->insertAt(list, va_arg(*args, void *),
-			 list->contained_size);
-	  --nb_args;
-	}
+      if (list->push_back(list, va_arg(*args, void *)) == FALSE)
+	return (FALSE);
+      --nb_args;
     }
   return (TRUE);
 }

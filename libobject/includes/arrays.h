@@ -3,8 +3,6 @@
 
 # include "containers.h"
 
-# define COPY_ALL	0
-
 typedef struct {
   Container	base;
 } Array;

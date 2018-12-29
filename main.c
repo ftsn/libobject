@@ -1,13 +1,15 @@
 #include <stdio.h>
-#include "arrays.h"
+#include "lists.h"
 #include "iterators.h"
 
-int		main(void)
+int		main(int ac, char **av)
 {
   Container    	*array_test_it;
   ArrayIt	*it;
 
-  array_test_it = new(_array, NULL, 4, "Lunkwill", "Frazou", "Roo", "Woklada");
+  (void)ac;
+  (void)av;
+  array_test_it = new(_spl_list, NULL, 4, "Lunkwill", "Frazou", "Roo", "Woklada");
   it = (array_test_it)->first(array_test_it);
   while (it->rvalue(it) != NULL)
     {

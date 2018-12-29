@@ -4,29 +4,16 @@
 static void	copy_ctor(Container *array, void **copy, size_t size)
 {
   size_t	i;
-  size_t	j;
-  void		*new_contained;
 
+  i = 0;
   if (size == 0) /* COPY_ALL */
     while (copy[size])
       ++size;
-  size += array->contained_size;
-  if (!(new_contained = calloc(size + 1, sizeof(void *))))
-    return ;
-  i = 0;
-  while (i < array->contained_size)
+  while (i < size)
     {
-      ((char **)new_contained)[i] = array->at(array, i);
+      array->push_back(array, copy[i]);
       ++i;
     }
-  array->contained_size = size;
-  j = 0;
-  while (i + j < array->contained_size)
-    {
-      ((char **)new_contained)[i + j] = ((char **)copy)[j];
-      ++j;
-    }
-  array->contained = new_contained;
 }
 
 static t_bool	_array_ctor(Object *self, va_list *args)
