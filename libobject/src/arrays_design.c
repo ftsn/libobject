@@ -6,9 +6,12 @@ static void	copy_ctor(Container *array, void **copy, size_t size)
   size_t	i;
 
   i = 0;
-  if (size == 0) /* COPY_ALL */
-    while (copy[size])
-      ++size;
+  if (size == COPY_ALL)
+    {
+      size = 0;
+      while (copy[size])
+	++size;
+    }
   while (i < size)
     {
       array->push_back(array, copy[i]);
@@ -23,6 +26,8 @@ static t_bool	_array_ctor(Object *self, va_list *args)
   void		*copy;
 
   array = self;
+  if (!(array->contained = calloc(1, sizeof(void *))))
+    return (FALSE);
   if ((copy = va_arg(*args, void *)))
     copy_ctor(array, copy, va_arg(*args, size_t));
   nb_args = va_arg(*args, size_t);
@@ -31,12 +36,6 @@ static t_bool	_array_ctor(Object *self, va_list *args)
       if (array->push_back(array, va_arg(*args, void *)) == FALSE)
 	return (FALSE);
       --nb_args;
-    }
-  if (!array->contained)
-    {
-      if (array->push_back(array, NULL) == FALSE)
-	return (FALSE);
-      array->contained_size = 0;
     }
   return (TRUE);
 }

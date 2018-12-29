@@ -96,7 +96,7 @@ static Object	*generate_it(Object *self, t_it_type type)
   return (it);
 }
 
-Object		*_container_begin(Object *self)
+Object 	*_container_begin(Object *self)
 {
   return (generate_it(self, BASIC));
 }

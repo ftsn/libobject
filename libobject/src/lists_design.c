@@ -6,9 +6,12 @@ static t_bool	copy_ctor(Container *list, void **copy, size_t size)
   size_t	i;
 
   i = 0;
-  if (size == 0) /* COPY_ALL */
-    while (copy[size])
-      ++size;
+  if (size == COPY_ALL)
+    {
+      size = 0;
+      while (copy[size])
+	++size;
+    }
   while (i < size)
     {
       if (list->push_back(list, copy[i]) == FALSE)
