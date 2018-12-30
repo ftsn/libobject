@@ -1,31 +1,38 @@
+#include <stdlib.h>
 #include <stdio.h>
-#include "lists.h"
+#include "arrays.h"
 #include "iterators.h"
+
+static void	*cat_with_idx(ssize_t i, void *cur)
+{
+  int		size;
+  char		*str;
+
+  str = NULL;
+  size = snprintf(NULL, 0, "%s %zd toto", (char *)cur, i);
+  str = calloc(size + 1, sizeof(char));
+  snprintf(str, size + 1, "%s %zd toto", (char *)cur, i);
+  return (str);
+}
 
 int		main(int ac, char **av)
 {
   (void)ac;
   (void)av;
-  Container    	*array_test_it;
+  Container    	*array;
+  Container	*mapped;
   ArrayIt	*it;
 
-  array_test_it = new(_spl_list, NULL, 5, "Lunkwill", "Frazou", "Roo", "Noscope", "Woklada");
-
-
-  array_test_it->delete_at(array_test_it, 4000);
-  it = (array_test_it)->first(array_test_it);
+  array = new(_array, NULL, 5, "Lunkwill", "Frazou", "Roo", "Noscope", "Woklada");
+  mapped = array->map(array, _array, &cat_with_idx);
+  it = mapped->first(mapped);
   while (it->rvalue(it) != NULL)
     {
       printf("value: [%s]\n", it->rvalue(it));
       it->incr(it);
     }
-  array_test_it->delete_at(array_test_it, 4);
-
-  array_test_it->dump(array_test_it, "Without woklada", _list_basic_print, "");
-  array_test_it->delete_at(array_test_it, 0);
-  array_test_it->dump(array_test_it, "Without Lunkwill", _list_basic_print, "");
-  array_test_it->delete_at(array_test_it, 1);
-  array_test_it->dump(array_test_it, "Without Roo", _list_basic_print, "");
+  array->dump(array, "Array", array_basic_print, "");
+  mapped->dump(mapped, "Mapped", array_basic_print, "");
 
   return (1);
 }

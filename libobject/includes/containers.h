@@ -39,6 +39,9 @@ Object		*_container_to_type(Object *self, Class *type);
 typedef Object	*(*t_sub)(Object *self, Class *type, ssize_t begin, ssize_t len);
 Object		*_container_sub(Object *self, Class *type, ssize_t begin, ssize_t len);
 
+typedef Object	*(*t_map)(Object *self, Class *type, void *(*fptr)(ssize_t i, void *cur));
+Object	*_container_map(Object *self, Class *type, void *(*fptr)(ssize_t i, void *cur));
+
 typedef Object	*(*t_it_create)(Object *self);
 Object	       	*_container_begin(Object *self);
 Object	       	*_container_last(Object *self);
@@ -67,6 +70,7 @@ typedef struct {
 
   t_converter	convert;
   t_sub		sub;
+  t_map		map;
 
   t_it_create   first;
   t_it_create	last;

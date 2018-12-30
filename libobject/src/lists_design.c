@@ -81,6 +81,7 @@ static Spl_list _spl_list_descr =
 
       &_container_to_type,
       &_container_sub,
+      &_container_map,
 
       &_container_begin,
       &_container_last
@@ -118,6 +119,7 @@ static Spl_clist _spl_clist_descr =
 
       &_container_to_type,
       &_container_sub,
+      &_container_map,
 
       &_container_begin,
       &_container_last
@@ -155,6 +157,7 @@ static Dbl_list _dbl_list_descr =
 
       &_container_to_type,
       &_container_sub,
+      &_container_map,
 
       &_container_begin,
       &_container_last
@@ -192,6 +195,7 @@ static Dbl_clist _dbl_clist_descr =
 
       &_container_to_type,
       &_container_sub,
+      &_container_map,
 
       &_container_begin,
       &_container_last

@@ -75,6 +75,26 @@ Object		*_container_sub(Object *self, Class *type, ssize_t begin, ssize_t len)
   return (ctn);
 }
 
+Object		*_container_map(Object *self, Class *type, void *(*fptr)(ssize_t i, void *cur))
+{
+  Container	*ctn;
+  Iterator	*it;
+  ssize_t	i;
+
+  if (!(ctn = new(type, NULL, 0)))
+    return (NULL);
+  if (!(it = ((Container *)self)->first(self)))
+    return (NULL);
+  i = 0;
+  while (it->rvalue(it) != NULL)
+    {
+      ctn->push_back(ctn, fptr(i, it->rvalue(it)));
+      ++i;
+      it->incr(it);
+    }
+  return (ctn);
+}
+
 static Object	*generate_it(Object *self, t_it_type type)
 {
   Iterator	*it;

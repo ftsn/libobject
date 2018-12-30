@@ -61,6 +61,7 @@ static String _string_descr =
 
       &_container_to_type,
       &_container_sub,
+      &_container_map,
 
       &_container_begin,
       &_container_last
