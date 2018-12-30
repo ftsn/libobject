@@ -7,18 +7,18 @@ typedef struct {
   Container	base;
 } Array;
 
-t_bool	_array_insert_at(Object *self, void *data, int pos);
-t_bool	_array_delete_at(Object *self, int pos);
+t_bool	_array_insert_at(Object *self, void *data, ssize_t pos);
+t_bool	_array_delete_at(Object *self, ssize_t pos);
 t_bool	_array_erase(Object *self);
 
 Object	*_array_front(const Object *self);
 Object	*_array_back(const Object *self);
-Object	*_array_at(const Object *self, size_t pos);
+Object	*_array_at(const Object *self, ssize_t pos);
 
 void	_array_print(const Object *self, const char *title,
-		     void (*f)(size_t i, const Object *elem, const char *prefix),
+		     void (*f)(ssize_t i, const Object *elem, const char *prefix),
 		     const char *prefix);
-void	array_basic_print(size_t i, const Object *elem, const char *prefix);
+void	array_basic_print(ssize_t i, const Object *elem, const char *prefix);
 
 extern Class	*_array;
 

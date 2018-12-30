@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include "strings.h"
 
-t_bool		_string_insert_at(Object *string, void *data, int pos)
+t_bool		_string_insert_at(Object *string, void *data, ssize_t pos)
 {
   Container	*self;
   char		*res;
@@ -24,7 +24,7 @@ t_bool		_string_insert_at(Object *string, void *data, int pos)
 /*
 ** TODO
 */
-t_bool		_string_delete_at(Object *string, int pos)
+t_bool		_string_delete_at(Object *string, ssize_t pos)
 {
   (void)pos;
   --((Container *)string)->contained_size;
@@ -71,7 +71,7 @@ Object			*_string_back(const Object *string)
 	  NULL);
 }
 
-Object			*_string_at(const Object *string, size_t pos)
+Object			*_string_at(const Object *string, ssize_t pos)
 {
   const Container	*container;
 
@@ -81,14 +81,14 @@ Object			*_string_at(const Object *string, size_t pos)
 	  NULL);
 }
 
-void	_string_basic_print(size_t i, const Object *elem, const char *prefix)
+void	_string_basic_print(ssize_t i, const Object *elem, const char *prefix)
 {
   printf("%s[%s]\n", prefix, (char *)elem);
   (void)i;
 }
 
 void	_string_print(const Object *self, const char *title,
-		      void (*f)(size_t i, const Object *elem, const char *prefix),
+		      void (*f)(ssize_t i, const Object *elem, const char *prefix),
 		      const char *prefix)
 {
   char	*concat_prefix;
@@ -110,7 +110,7 @@ Object		*_string_dup(const Object *self)
   return (string);
 }
 
-size_t	_string_findstr(const Object *self, const char *substr)
+ssize_t	_string_findstr(const Object *self, const char *substr)
 {
   char	*res;
 
@@ -118,7 +118,7 @@ size_t	_string_findstr(const Object *self, const char *substr)
   return (res ? ((Container *)self)->contained_size - (strlen(res) - 1) : 0);
 }
 
-size_t	_string_find(const Object *self, int c)
+ssize_t	_string_find(const Object *self, int c)
 {
   char	*res;
 
@@ -126,7 +126,7 @@ size_t	_string_find(const Object *self, int c)
   return (res ? ((Container *)self)->contained_size - (strlen(res) - 1) : 0);
 }
 
-size_t	_string_lfind(const Object *self, int c)
+ssize_t	_string_lfind(const Object *self, int c)
 {
   char	*res;
 
@@ -134,7 +134,7 @@ size_t	_string_lfind(const Object *self, int c)
   return (res ? ((Container *)self)->contained_size - (strlen(res) - 1) : 0);
 }
 
-static int	nmatch(const char *s1, const char *s2)
+static size_t	nmatch(const char *s1, const char *s2)
 {
   if (*s1 != '\0' && *s2 == '*')
     return (nmatch(s1 + 1, s2) + nmatch(s1, s2 + 1));
@@ -152,7 +152,7 @@ t_bool	_string_match(const Object *self, const char *compare)
   return (nmatch(((Container *)self)->contained, compare) ? TRUE : FALSE);
 }
 
-int	_string_nmatch(const Object *self, const char *compare)
+size_t	_string_nmatch(const Object *self, const char *compare)
 {
   return (nmatch(((Container *)self)->contained, compare));
 }

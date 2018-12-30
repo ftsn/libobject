@@ -2,10 +2,10 @@
 #include <stdio.h>
 #include "arrays.h"
 
-static void	copy_array(void **dest, void **src, void *data, int pos)
+static void	copy_array(void **dest, void **src, void *data, ssize_t pos)
 {
-  int		i;
-  int		j;
+  ssize_t      	i;
+  ssize_t  	j;
 
   i = 0;
   if (!dest || !src)
@@ -21,7 +21,7 @@ static void	copy_array(void **dest, void **src, void *data, int pos)
     dest[i++] = src[j++];
 }
 
-t_bool		_array_insert_at(Object *container, void *data, int pos)
+t_bool		_array_insert_at(Object *container, void *data, ssize_t pos)
 {
   void		**res;
   Container	*self;
@@ -47,17 +47,17 @@ t_bool		_array_insert_at(Object *container, void *data, int pos)
   return (TRUE);
 }
 
-t_bool		_array_delete_at(Object *container, int pos)
+t_bool		_array_delete_at(Object *container, ssize_t pos)
 {
   Container	*self;
   void		**res;
-  int		i;
-  int		j;
+  ssize_t  	i;
+  ssize_t  	j;
 
   self = container;
   if (self->empty(self) == TRUE)
     return (TRUE);
-  if (pos >= (int)self->contained_size)
+  if (pos >= self->contained_size)
     pos = self->contained_size - 1;
   if (!(res = malloc(self->contained_size * sizeof(void *))))
     return (FALSE);
@@ -105,7 +105,7 @@ Object			*_array_back(const Object *array)
 	  NULL);
 }
 
-Object			*_array_at(const Object *self, size_t pos)
+Object			*_array_at(const Object *self, ssize_t pos)
 {
   const Container	*container;
 
@@ -115,18 +115,18 @@ Object			*_array_at(const Object *self, size_t pos)
 	  NULL);
 }
 
-void	array_basic_print(size_t i, const Object *elem, const char *prefix)
+void	array_basic_print(ssize_t i, const Object *elem, const char *prefix)
 {
-  printf("%s%u: [%s]\n", prefix, (unsigned int)i, (char *)elem);
+  printf("%s%zd: [%s]\n", prefix, i, (char *)elem);
 }
 
 void		_array_print(const Object *container, const char *title,
-			     void (*f)(size_t i, const Object *elem, const char *prefix),
+			     void (*f)(ssize_t i, const Object *elem, const char *prefix),
 			     const char *prefix)
 {
   char		**array;
   char		*concat_prefix;
-  unsigned int	i;
+  ssize_t	i;
 
   array = ((Container *)container)->contained;
   i = 0;

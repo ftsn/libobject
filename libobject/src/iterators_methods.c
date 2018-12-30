@@ -23,7 +23,7 @@ void		_ra_decr(Object *self)
   it->cur = it->container.at((Container *)it, it->pos);
 }
 
-void		_ra_jump(Object *self, int pos)
+void		_ra_jump(Object *self, ssize_t pos)
 {
   Iterator	*it;
 
@@ -37,12 +37,12 @@ Object		*_ra_rvalue(Object *self)
   Iterator	*it;
 
   it = self;
-  if (it->pos >= 0 && it->pos < (int)it->container.contained_size)
+  if (it->pos >= 0 && it->pos < it->container.contained_size)
     return (it->cur);
   return (NULL);
 }
 
-Object		*_ra_jmp_rvalue(Object *self, int pos)
+Object		*_ra_jmp_rvalue(Object *self, ssize_t pos)
 {
   Iterator	*it;
 
@@ -72,10 +72,10 @@ void		_list_decr(Object *self)
   it->cur = ((t_list_data *)it->cur)->prev;
 }
 
-void		_list_jump(Object *self, int pos)
+void		_list_jump(Object *self, ssize_t pos)
 {
   Iterator	*it;
-  int		i;
+  ssize_t      	i;
 
   i = 0;
   it = self;
@@ -103,12 +103,12 @@ Object		*_list_rvalue(Object *self)
   Iterator	*it;
 
   it = self;
-  if (it->pos >= 0 && it->pos < (int)it->container.contained_size)
+  if (it->pos >= 0 && it->pos < it->container.contained_size)
     return (((t_list_data *)it->cur)->data);
   return (NULL);
 }
 
-Object		*_list_jmp_rvalue(Object *self, int pos)
+Object		*_list_jmp_rvalue(Object *self, ssize_t pos)
 {
   Iterator	*it;
 

@@ -10,8 +10,8 @@ typedef struct		s_list_data
   struct s_list_data	*next;
 }			t_list_data;
 
-typedef t_list_data	*(*t_get_node)(const Object *list, size_t pos);
-t_list_data		*get_nth_node(const Object *list, size_t pos);
+typedef t_list_data	*(*t_get_node)(const Object *list, ssize_t pos);
+t_list_data		*get_nth_node(const Object *list, ssize_t pos);
 
 typedef struct {
   Container	base;
@@ -30,24 +30,24 @@ typedef enum	e_list_type {
   CIRC_DOUBLE
 }		t_list_type;
 
-t_bool	_spl_list_add(Object *list, void *data, int pos);
-t_bool	_spl_clist_add(Object *list, void *data, int pos);
-t_bool	_dbl_list_add(Object *list, void *data, int pos);
-t_bool	_dbl_clist_add(Object *list, void *data, int pos);
+t_bool	_spl_list_add(Object *list, void *data, ssize_t pos);
+t_bool	_spl_clist_add(Object *list, void *data, ssize_t pos);
+t_bool	_dbl_list_add(Object *list, void *data, ssize_t pos);
+t_bool	_dbl_clist_add(Object *list, void *data, ssize_t pos);
 
-t_bool	_spl_list_del(Object *list, int pos);
-t_bool	_spl_clist_del(Object *list, int pos);
-t_bool	_dbl_list_del(Object *list, int pos);
-t_bool	_dbl_clist_del(Object *list, int pos);
+t_bool	_spl_list_del(Object *list, ssize_t pos);
+t_bool	_spl_clist_del(Object *list, ssize_t pos);
+t_bool	_dbl_list_del(Object *list, ssize_t pos);
+t_bool	_dbl_clist_del(Object *list, ssize_t pos);
 
 Object	*_list_front(const Object *list);
 Object	*_list_end(const Object *list);
-Object	*_list_at(const Object *list, size_t pos);
+Object	*_list_at(const Object *list, ssize_t pos);
 
 void	_list_print(const Object *list, const char *title,
-		    void (*f)(size_t i, const Object *elem, const char *prefix),
+		    void (*f)(ssize_t i, const Object *elem, const char *prefix),
 		    const char *prefix);
-void	_list_basic_print(size_t i, const Object *elem, const char *prefix);
+void	_list_basic_print(ssize_t i, const Object *elem, const char *prefix);
 
 extern Class	*_spl_list;
 extern Class	*_spl_clist;

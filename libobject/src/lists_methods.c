@@ -14,9 +14,9 @@ static t_list_data     	*get_last_node(t_list_data *list)
   return (list);
 }
 
-static void	go_to_pos_in_list(t_list_data **list, t_list_data **tmp, int pos)
+static void	go_to_pos_in_list(t_list_data **list, t_list_data **tmp, ssize_t pos)
 {
-  int		i;
+  ssize_t  	i;
 
   i = 0;
   *tmp = NULL;
@@ -51,7 +51,7 @@ static void	list_link(t_list_data **list, t_list_data **tmp, t_list_data *end, t
     (*list)->prev = elem;
 }
 
-static t_bool  	list_add(t_list_data **list, void *data, int pos, t_list_type type)
+static t_bool  	list_add(t_list_data **list, void *data, ssize_t pos, t_list_type type)
 {
   t_list_data  	*begin;
   t_list_data  	*end;
@@ -97,7 +97,7 @@ static void	list_unlink(t_list_data **list, t_list_data **tmp, t_list_data *end,
   *list = NULL;
 }
 
-static t_bool		list_del(t_list_data **list, int pos, t_list_type type)
+static t_bool		list_del(t_list_data **list, ssize_t pos, t_list_type type)
 {
   t_list_data		*begin;
   t_list_data		*end;
@@ -120,7 +120,7 @@ static t_bool		list_del(t_list_data **list, int pos, t_list_type type)
   return (TRUE);
 }
 
-t_bool	_spl_list_add(Object *list, void *data, int pos)
+t_bool	_spl_list_add(Object *list, void *data, ssize_t pos)
 {
   if (list_add((t_list_data **)&((Container *)list)->contained, data, pos, SIMPLE) == TRUE)
     {
@@ -130,7 +130,7 @@ t_bool	_spl_list_add(Object *list, void *data, int pos)
   return (FALSE);
 }
 
-t_bool	_spl_clist_add(Object *list, void *data, int pos)
+t_bool	_spl_clist_add(Object *list, void *data, ssize_t pos)
 {
   if (list_add((t_list_data **)&((Container *)list)->contained, data, pos, CIRC_SIMPLE) == TRUE)
     {
@@ -140,7 +140,7 @@ t_bool	_spl_clist_add(Object *list, void *data, int pos)
   return (FALSE);
 }
 
-t_bool	_dbl_list_add(Object *list, void *data, int pos)
+t_bool	_dbl_list_add(Object *list, void *data, ssize_t pos)
 {
   if (list_add((t_list_data **)&((Container *)list)->contained, data, pos, DOUBLE) == TRUE)
     {
@@ -150,7 +150,7 @@ t_bool	_dbl_list_add(Object *list, void *data, int pos)
   return (FALSE);
 }
 
-t_bool	_dbl_clist_add(Object *list, void *data, int pos)
+t_bool	_dbl_clist_add(Object *list, void *data, ssize_t pos)
 {
   if (list_add((t_list_data **)&((Container *)list)->contained, data, pos, CIRC_DOUBLE) == TRUE)
     {
@@ -160,36 +160,36 @@ t_bool	_dbl_clist_add(Object *list, void *data, int pos)
   return (FALSE);
 }
 
-t_bool	_spl_list_del(Object *list, int pos)
+t_bool	_spl_list_del(Object *list, ssize_t pos)
 {
-  if (pos > (int)((Container *)list)->contained_size - 1)
+  if (pos > ((Container *)list)->contained_size - 1)
     return (FALSE);
   if (list_del((t_list_data **)&((Container *)list)->contained, pos, SIMPLE) == TRUE)
     --((Container *)list)->contained_size;
   return (TRUE);
 }
 
-t_bool	_spl_clist_del(Object *list, int pos)
+t_bool	_spl_clist_del(Object *list, ssize_t pos)
 {
-  if (pos > (int)((Container *)list)->contained_size - 1)
+  if (pos > ((Container *)list)->contained_size - 1)
     return (FALSE);
   if (list_del((t_list_data **)&((Container *)list)->contained, pos, CIRC_SIMPLE) == TRUE)
     --((Container *)list)->contained_size;
   return (TRUE);
 }
 
-t_bool	_dbl_list_del(Object *list, int pos)
+t_bool	_dbl_list_del(Object *list, ssize_t pos)
 {
-  if (pos > (int)((Container *)list)->contained_size - 1)
+  if (pos > ((Container *)list)->contained_size - 1)
     return (FALSE);
   if (list_del((t_list_data **)&((Container *)list)->contained, pos, DOUBLE) == TRUE)
     --((Container *)list)->contained_size;
   return (TRUE);
 }
 
-t_bool	_dbl_clist_del(Object *list, int pos)
+t_bool	_dbl_clist_del(Object *list, ssize_t pos)
 {
-  if (pos > (int)((Container *)list)->contained_size - 1)
+  if (pos > ((Container *)list)->contained_size - 1)
     return (FALSE);
   if (list_del((t_list_data **)&((Container *)list)->contained, pos, CIRC_DOUBLE) == TRUE)
     --((Container *)list)->contained_size;
@@ -213,15 +213,14 @@ Object		*_list_end(const Object *list)
     res = res->next;
   while (res && res->next && res->next != begin)
     res = res->next;
-  (void)list;
   return (res ? res->data : NULL);
 }
 
-Object		*_list_at(const Object *list, size_t pos)
+Object		*_list_at(const Object *list, ssize_t pos)
 {
   t_list_data	*list_data;
   t_list_data	*begin;
-  size_t	i;
+  ssize_t	i;
 
   begin = list_data = (t_list_data *)((Container *)list)->contained;
   i = 0;
@@ -238,26 +237,26 @@ Object		*_list_at(const Object *list, size_t pos)
   return (list_data ? list_data->data : NULL);
 }
 
-void			_list_basic_print(size_t i, const Object *elem, const char *prefix)
+void			_list_basic_print(ssize_t i, const Object *elem, const char *prefix)
 {
   const t_list_data	*list;
 
   list = elem;
-  printf("%s%u)prev [%s] cur [%s] next [%s]\n",
-	 prefix, (unsigned int)i,
+  printf("%s%zd)prev [%s] cur [%s] next [%s]\n",
+	 prefix, i,
 	 (list->prev ? (char *)list->prev->data : "null"),
 	 (char *)list->data,
 	 (list->next ? (char *)list->next->data : "null"));
 }
 
 void		_list_print(const Object *container, const char *title,
-			    void (*f)(size_t i, const Object *elem, const char *prefix),
+			    void (*f)(ssize_t i, const Object *elem, const char *prefix),
 			    const char *prefix)
 {
   t_list_data	*begin;
   t_list_data	*list;
   char		*concat_prefix;
-  size_t	i;
+  ssize_t	i;
 
   list = (t_list_data *)((Container *)container)->contained;
   if (!(concat_prefix = concat(prefix, "  ")))
@@ -285,11 +284,11 @@ void	_list_affect(Object *list, void *data)
   ((Container *)list)->contained = data;
 }
 
-t_list_data	*get_nth_node(const Object *list, size_t pos)
+t_list_data	*get_nth_node(const Object *list, ssize_t pos)
 {
   t_list_data	*list_data;
   t_list_data	*begin;
-  size_t	i;
+  ssize_t	i;
 
   begin = list_data = (t_list_data *)((Container *)list)->contained;
   i = 0;

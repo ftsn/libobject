@@ -5,8 +5,8 @@
 char	*concat(const char *dest, const char *src)
 {
   char		*res;
-  size_t	i;
-  size_t	j;
+  ssize_t	i;
+  ssize_t	j;
 
   i = j = 0;
   if ((res = calloc(strlen(dest) + strlen(src) + 1, sizeof(char))) == NULL)

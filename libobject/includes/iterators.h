@@ -14,17 +14,17 @@ void		_ra_decr(Object *self);
 void		_list_incr(Object *self);
 void		_list_decr(Object *self);
 
-typedef void	(*t_it_rand_access)(Object *self, int pos);
-void		_ra_jump(Object *self, int pos);
-void		_list_jump(Object *self, int pos);
+typedef void	(*t_it_rand_access)(Object *self, ssize_t pos);
+void		_ra_jump(Object *self, ssize_t pos);
+void		_list_jump(Object *self, ssize_t pos);
 
 typedef Object	*(*t_rvalue)(Object *self);
 Object		*_ra_rvalue(Object *self);
 Object		*_list_rvalue(Object *self);
 
-typedef Object	*(*t_access_val)(Object *self, int pos);
-Object		*_ra_jmp_rvalue(Object *self, int pos);
-Object		*_list_jmp_rvalue(Object *self, int pos);
+typedef Object	*(*t_access_val)(Object *self, ssize_t pos);
+Object		*_ra_jmp_rvalue(Object *self, ssize_t pos);
+Object		*_list_jmp_rvalue(Object *self, ssize_t pos);
 
 typedef struct {
   Container		container;

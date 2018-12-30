@@ -6,15 +6,15 @@
 static t_bool	_ra_iterator_ctor(Object *self, va_list *args)
 {
   Container	*container;
-  int		idx_start;
+  ssize_t      	idx_start;
 
   container = va_arg(*args, void *);
   memcpy((char *)self + sizeof(Class),
 	 (char *)container + sizeof(Class),
 	 sizeof(Container) - sizeof(Class));
-  idx_start = va_arg(*args, int);
+  idx_start = va_arg(*args, ssize_t);
   if (idx_start == REVERSE)
-    idx_start = (int)container->size(container) - 1;
+    idx_start = container->size(container) - 1;
   ((Iterator *)self)->pos = idx_start;
   ((Iterator *)self)->cur = container->at(container, idx_start);
   return (TRUE);
@@ -22,16 +22,16 @@ static t_bool	_ra_iterator_ctor(Object *self, va_list *args)
 
 static t_bool	_list_iterator_ctor(Object *self, va_list *args)
 {
-  List	        *container;
-  int		idx_start;
+  List		*container;
+  ssize_t      	idx_start;
 
   container = va_arg(*args, void *);
   memcpy((char *)self + sizeof(Class),
 	 (char *)container + sizeof(Class),
 	 sizeof(Container) - sizeof(Class));
-  idx_start = va_arg(*args, int);
+  idx_start = va_arg(*args, ssize_t);
   if (idx_start == REVERSE)
-    idx_start = (int)((Container *)container)->size(container) - 1;
+    idx_start = ((Container *)container)->size(container) - 1;
   ((Iterator *)self)->pos = idx_start;
   ((Iterator *)self)->cur = container->nth_node(container, idx_start);
   return (TRUE);

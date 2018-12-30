@@ -3,18 +3,18 @@
 #include <stdio.h>
 #include "dicts.h"
 
-void	pair_basic_print(size_t i, const Object *elem, const char *prefix)
+void	pair_basic_print(ssize_t i, const Object *elem, const char *prefix)
 {
   printf("%s%zd)key: [%s]\tvalue: [%s]\n", prefix, i, ((t_pair *)elem)->key, ((t_pair *)elem)->data);
 }
 
 void		_dict_print(const Object *container, const char *title,
-			    void (*f)(size_t i, const Object *elem, const char *prefix),
+			    void (*f)(ssize_t i, const Object *elem, const char *prefix),
 			    const char *prefix)
 {
   char		**dict;
   char		*concat_prefix;
-  unsigned int	i;
+  ssize_t	i;
 
   dict = ((Container *)container)->contained;
   i = 0;
@@ -37,7 +37,7 @@ Object			*_get_obj_by_key(const Object *dict_obj, const char *key)
 {
   const Container	*dict;
   t_pair		**pairs;
-  size_t		i;
+  ssize_t		i;
 
   dict = dict_obj;
   if (!(pairs = dict->data(dict)))

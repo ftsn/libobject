@@ -1,9 +1,9 @@
 #include <stdlib.h>
 #include "lists.h"
 
-static t_bool	copy_ctor(Container *list, void **copy, size_t size)
+static t_bool	copy_ctor(Container *list, void **copy, ssize_t size)
 {
-  size_t	i;
+  ssize_t	i;
 
   i = 0;
   if (size == COPY_ALL)
@@ -24,14 +24,14 @@ static t_bool	copy_ctor(Container *list, void **copy, size_t size)
 static t_bool	_list_ctor(Object *self, va_list *args)
 {
   Container	*list;
-  size_t	nb_args;
+  ssize_t	nb_args;
   void		*copy;
 
   list = self;
   if ((copy = va_arg(*args, void *)))
-    if (copy_ctor(list, copy, va_arg(*args, size_t)) == FALSE)
+    if (copy_ctor(list, copy, va_arg(*args, ssize_t)) == FALSE)
       return (FALSE);
-  nb_args = va_arg(*args, size_t);
+  nb_args = va_arg(*args, ssize_t);
   while (nb_args > 0)
     {
       if (list->push_back(list, va_arg(*args, void *)) == FALSE)

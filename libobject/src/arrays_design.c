@@ -1,9 +1,9 @@
 #include <stdlib.h>
 #include "arrays.h"
 
-static void	copy_ctor(Container *array, void **copy, size_t size)
+static void	copy_ctor(Container *array, void **copy, ssize_t size)
 {
-  size_t	i;
+  ssize_t	i;
 
   i = 0;
   if (size == COPY_ALL)
@@ -22,15 +22,15 @@ static void	copy_ctor(Container *array, void **copy, size_t size)
 static t_bool	_array_ctor(Object *self, va_list *args)
 {
   Container	*array;
-  size_t	nb_args;
+  ssize_t	nb_args;
   void		*copy;
 
   array = self;
   if (!(array->contained = calloc(1, sizeof(void *))))
     return (FALSE);
   if ((copy = va_arg(*args, void *)))
-    copy_ctor(array, copy, va_arg(*args, size_t));
-  nb_args = va_arg(*args, size_t);
+    copy_ctor(array, copy, va_arg(*args, ssize_t));
+  nb_args = va_arg(*args, ssize_t);
   while (nb_args > 0)
     {
       if (array->push_back(array, va_arg(*args, void *)) == FALSE)

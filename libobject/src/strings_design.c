@@ -5,17 +5,17 @@
 static t_bool	_string_ctor(Object *self, va_list *args)
 {
   Container	*string;
-  size_t	nb_args;
+  ssize_t	nb_args;
   char		*copy;
 
   string = self;
   if ((copy = va_arg(*args, char *)))
     {
-      string->contained = str_dup(copy);
-      if (string->contained)
-	string->contained_size = strlen(string->contained);
+      if (!(string->contained = str_dup(copy)))
+	return (FALSE);
+      string->contained_size = strlen(string->contained);
     }
-  nb_args = va_arg(*args, size_t);
+  nb_args = va_arg(*args, ssize_t);
   while (nb_args > 0)
     {
       string->insert_at(string, va_arg(*args, void *), string->contained_size);

@@ -4,11 +4,11 @@
 
 int		main(int ac, char **av)
 {
+  (void)ac;
+  (void)av;
   Container    	*array_test_it;
   ArrayIt	*it;
 
-  (void)ac;
-  (void)av;
   array_test_it = new(_spl_list, NULL, 5, "Lunkwill", "Frazou", "Roo", "Noscope", "Woklada");
 
 

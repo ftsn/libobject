@@ -7,7 +7,7 @@ Object	*_container_data(const Object *self)
   return (((Container *)self)->contained);
 }
 
-size_t	_container_size(const Object *container)
+ssize_t	_container_size(const Object *container)
 {
   return (((Container *)container)->contained_size);
 }
@@ -29,7 +29,7 @@ Object		*_container_to_type(Object *self, Class *type)
 {
   Container	*self_c;
   Container	*container;
-  size_t	i;
+  ssize_t	i;
 
   self_c = self;
   container = new(type, NULL, 0);
@@ -42,23 +42,23 @@ Object		*_container_to_type(Object *self, Class *type)
   return (container);
 }
 
-Object		*_container_sub(Object *self, Class *type, int begin, int len)
+Object		*_container_sub(Object *self, Class *type, ssize_t begin, ssize_t len)
 {
   Container	*ctn;
   Container	*self_c;
   void		*at;
-  int		i;
+  ssize_t      	i;
 
   i = 0;
   self_c = (Container *)self;
   if (self_c->contained_size > 0)
     {
-      if (begin > 0 && begin >= (int)self_c->contained_size)
+      if (begin > 0 && begin >= self_c->contained_size)
 	begin = begin % self_c->contained_size;
       if (begin < 0)
 	{
 	  begin = -begin;
-	  if (begin > (int)self_c->contained_size)
+	  if (begin > self_c->contained_size)
 	    begin = begin % self_c->contained_size;
 	  begin = self_c->contained_size - begin;
 	}
@@ -67,7 +67,7 @@ Object		*_container_sub(Object *self, Class *type, int begin, int len)
     begin = 0;
   if (!(ctn = new(type, NULL, 0)))
     return (NULL);
-  while (i < len && begin + i < (int)self_c->contained_size)
+  while (i < len && begin + i < self_c->contained_size)
     {
       ctn->push_back(ctn, (at = self_c->at(self_c, begin + i)));
       ++i;
