@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include "arrays.h"
 
-static void	copy_ctor(Container *array, void **copy, ssize_t size)
+static t_bool	copy_ctor(Container *array, void **copy, ssize_t size)
 {
   ssize_t	i;
 
@@ -14,9 +14,11 @@ static void	copy_ctor(Container *array, void **copy, ssize_t size)
     }
   while (i < size)
     {
-      array->push_back(array, copy[i]);
+      if (array->push_back(array, copy[i]) == FALSE)
+	return (FALSE);
       ++i;
     }
+  return (TRUE);
 }
 
 static t_bool	_array_ctor(Object *self, va_list *args)
@@ -29,7 +31,8 @@ static t_bool	_array_ctor(Object *self, va_list *args)
   if (!(array->contained = calloc(1, sizeof(void *))))
     return (FALSE);
   if ((copy = va_arg(*args, void *)))
-    copy_ctor(array, copy, va_arg(*args, ssize_t));
+    if (copy_ctor(array, copy, va_arg(*args, ssize_t)) == FALSE)
+      return (FALSE);
   nb_args = va_arg(*args, ssize_t);
   while (nb_args > 0)
     {

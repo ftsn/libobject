@@ -31,7 +31,7 @@ char	*str_dup(const char *str)
 
   if (!str)
     return (NULL);
-  if (!(res = calloc(strlen(str) + 1, sizeof(char))) || !str)
+  if (!(res = calloc(strlen(str) + 1, sizeof(char))))
     return (NULL);
   memcpy(res, str, strlen(str));
   return (res);

@@ -2,7 +2,7 @@
 #include "dicts.h"
 #include "arrays.h"
 
-static void	copy_ctor(Container *dict, void **copy, ssize_t size)
+static t_bool	copy_ctor(Container *dict, void **copy, ssize_t size)
 {
   ssize_t	i;
 
@@ -15,9 +15,11 @@ static void	copy_ctor(Container *dict, void **copy, ssize_t size)
     }
   while (i < size)
     {
-      dict->push_back(dict, copy[i]);
+      if (dict->push_back(dict, copy[i]) == FALSE)
+	return (FALSE);
       ++i;
     }
+  return (TRUE);
 }
 
 static t_bool	_dict_ctor(Object *self, va_list *args)
@@ -30,7 +32,8 @@ static t_bool	_dict_ctor(Object *self, va_list *args)
   if (!(dict->contained = calloc(1, sizeof(void *))))
     return (FALSE);
   if ((copy = va_arg(*args, void *)))
-    copy_ctor(dict, copy, va_arg(*args, ssize_t));
+    if (copy_ctor(dict, copy, va_arg(*args, ssize_t)) == FALSE)
+      return (FALSE);
   nb_args = va_arg(*args, ssize_t);
   while (nb_args > 0)
     {

@@ -36,7 +36,11 @@ Object		*_container_to_type(Object *self, Class *type)
   i = 0;
   while (i < self_c->contained_size)
     {
-      container->push_back(container, self_c->at(self_c, i));
+      if (container->push_back(container, self_c->at(self_c, i)) == FALSE)
+	{
+	  delete((void **)&container);
+	  return (NULL);
+	}
       ++i;
     }
   return (container);
@@ -69,7 +73,11 @@ Object		*_container_sub(Object *self, Class *type, ssize_t begin, ssize_t len)
     return (NULL);
   while (i < len && begin + i < self_c->contained_size)
     {
-      ctn->push_back(ctn, (at = self_c->at(self_c, begin + i)));
+      if (ctn->push_back(ctn, (at = self_c->at(self_c, begin + i))) == FALSE)
+	{
+	  delete((void **)&ctn);
+	  return (NULL);
+	}
       ++i;
     }
   return (ctn);
@@ -84,11 +92,19 @@ Object		*_container_map(Object *self, Class *type, void *(*fptr)(ssize_t i, void
   if (!(ctn = new(type, NULL, 0)))
     return (NULL);
   if (!(it = ((Container *)self)->first(self)))
-    return (NULL);
+    {
+      delete((void **)&ctn);
+      return (NULL);
+    }
   i = 0;
   while (it->rvalue(it) != NULL)
     {
-      ctn->push_back(ctn, fptr(i, it->rvalue(it)));
+      if (ctn->push_back(ctn, fptr(i, it->rvalue(it))) == FALSE)
+	{
+	  delete((void **)&it);
+	  delete((void **)&ctn);
+	  return (NULL);
+	}
       ++i;
       it->incr(it);
     }

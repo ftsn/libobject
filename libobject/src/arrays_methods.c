@@ -46,7 +46,7 @@ t_bool		_array_delete_at(Object *container, ssize_t pos)
 
   self = container;
   if (self->empty(self) == TRUE)
-    return (TRUE);
+    return (FALSE);
   if (pos >= self->contained_size)
     pos = self->contained_size - 1;
   if (!(res = malloc(self->contained_size * sizeof(void *))))
@@ -70,9 +70,8 @@ t_bool		_array_erase(Object *container)
   Container	*self;
 
   self = container;
-  if (self->empty(self) == TRUE)
-    return (TRUE);
-  self->delete_at(self, 0);
+  if (self->empty(self) == TRUE || self->delete_at(self, 0) == FALSE)
+    return (FALSE);
   self->erase(self);
   return (TRUE);
 }

@@ -9,7 +9,8 @@ t_bool		_string_insert_at(Object *string, void *data, ssize_t pos)
   char		*res;
 
   self = string;
-  res = calloc(self->contained_size + 2, sizeof(char));
+  if (!(res = calloc(self->contained_size + 2, sizeof(char))))
+    return (FALSE);
   if (pos > 0)
     memcpy(res, self->contained, pos);
   res[pos] = *(char *)data;
@@ -36,9 +37,8 @@ t_bool		_string_erase(Object *string)
   Container	*self;
 
   self = string;
-  if (self->empty(self) == TRUE)
-    return (TRUE);
-  self->delete_at(self, 0);
+  if (self->empty(self) == TRUE || self->delete_at(self, 0) == FALSE)
+    return (FALSE);
   self->erase(self);
   return (TRUE);
 }
@@ -49,8 +49,8 @@ void		_string_affect(Object *string, void *data)
 
   self = string;
   free(self->contained);
-  self->contained_size = (data ? strlen(data) : 0);
-  self->contained = (data ? str_dup(data) : NULL);
+  self->contained = data;
+  self->contained_size = strlen(data);
 }
 
 Object			*_string_front(const Object *string)
@@ -103,11 +103,7 @@ void	_string_print(const Object *self, const char *title,
 
 Object		*_string_dup(const Object *self)
 {
-  Container	*string;
-
-  if ((string = new(_string, 0)))
-    string->affect(string, ((Container *)self)->contained);
-  return (string);
+  return (new(_string, ((Container *)self)->contained, 0));
 }
 
 ssize_t	_string_findstr(const Object *self, const char *substr)
@@ -166,11 +162,19 @@ Object		*_string_split(const Object *self, const Class *type, const char *sep)
   if (!(container = new(type, NULL, 0)))
     return (NULL);
   if (!(strdump = str_dup(((Container *)self)->contained)))
-    return (NULL);
+    {
+      delete((void **)&container);
+      return (NULL);
+    }
   token = strtok(strdump, sep);
   while (token)
     {
-      container->push_back(container, token);
+      if (container->push_back(container, token) == FALSE)
+	{
+	  free(strdump);
+	  delete((void **)&container);
+	  return (NULL);
+	}
       token = strtok(NULL, sep);
     }
   free(strdump);

@@ -18,7 +18,8 @@ static t_bool	_string_ctor(Object *self, va_list *args)
   nb_args = va_arg(*args, ssize_t);
   while (nb_args > 0)
     {
-      string->insert_at(string, va_arg(*args, void *), string->contained_size);
+      if (string->insert_at(string, va_arg(*args, void *), string->contained_size) == FALSE)
+	return (FALSE);
       --nb_args;
     }
   return (TRUE);

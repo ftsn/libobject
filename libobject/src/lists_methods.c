@@ -164,8 +164,8 @@ t_bool	_spl_list_del(Object *list, ssize_t pos)
 {
   if (pos > ((Container *)list)->contained_size - 1)
     return (FALSE);
-  if (list_del((t_list_data **)&((Container *)list)->contained, pos, SIMPLE) == TRUE)
-    --((Container *)list)->contained_size;
+  list_del((t_list_data **)&((Container *)list)->contained, pos, SIMPLE);
+  --((Container *)list)->contained_size;
   return (TRUE);
 }
 
@@ -173,8 +173,8 @@ t_bool	_spl_clist_del(Object *list, ssize_t pos)
 {
   if (pos > ((Container *)list)->contained_size - 1)
     return (FALSE);
-  if (list_del((t_list_data **)&((Container *)list)->contained, pos, CIRC_SIMPLE) == TRUE)
-    --((Container *)list)->contained_size;
+  list_del((t_list_data **)&((Container *)list)->contained, pos, CIRC_SIMPLE);
+  --((Container *)list)->contained_size;
   return (TRUE);
 }
 
@@ -182,8 +182,8 @@ t_bool	_dbl_list_del(Object *list, ssize_t pos)
 {
   if (pos > ((Container *)list)->contained_size - 1)
     return (FALSE);
-  if (list_del((t_list_data **)&((Container *)list)->contained, pos, DOUBLE) == TRUE)
-    --((Container *)list)->contained_size;
+  list_del((t_list_data **)&((Container *)list)->contained, pos, DOUBLE);
+  --((Container *)list)->contained_size;
   return (TRUE);
 }
 
@@ -191,8 +191,8 @@ t_bool	_dbl_clist_del(Object *list, ssize_t pos)
 {
   if (pos > ((Container *)list)->contained_size - 1)
     return (FALSE);
-  if (list_del((t_list_data **)&((Container *)list)->contained, pos, CIRC_DOUBLE) == TRUE)
-    --((Container *)list)->contained_size;
+  list_del((t_list_data **)&((Container *)list)->contained, pos, CIRC_DOUBLE);
+  --((Container *)list)->contained_size;
   return (TRUE);
 }
 
