@@ -92,6 +92,7 @@ Object		*_container_map(Object *self, Class *type, void *(*fptr)(ssize_t i, void
       ++i;
       it->incr(it);
     }
+  delete((void **)&it);
   return (ctn);
 }
 

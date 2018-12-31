@@ -5,7 +5,7 @@
 
 void	pair_basic_print(ssize_t i, const Object *elem, const char *prefix)
 {
-  printf("%s%zd)key: [%s]\tvalue: [%s]\n", prefix, i, ((t_pair *)elem)->key, ((t_pair *)elem)->data);
+  printf("%s%d)key: [%s]\tvalue: [%s]\n", prefix, (int)i, ((t_pair *)elem)->key, (char *)((t_pair *)elem)->data);
 }
 
 void		_dict_print(const Object *container, const char *title,

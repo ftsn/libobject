@@ -1,38 +1,38 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include "lists.h"
 #include "arrays.h"
 #include "iterators.h"
 
 static void	*cat_with_idx(ssize_t i, void *cur)
 {
-  int		size;
-  char		*str;
-
-  str = NULL;
-  size = snprintf(NULL, 0, "%s %zd toto", (char *)cur, i);
-  str = calloc(size + 1, sizeof(char));
-  snprintf(str, size + 1, "%s %zd toto", (char *)cur, i);
-  return (str);
+  (void)i;
+  (void)cur;
+  return ("bite");
 }
 
 int		main(int ac, char **av)
 {
   (void)ac;
   (void)av;
-  Container    	*array;
+  Container    	*list;
   Container	*mapped;
-  ArrayIt	*it;
+  ListIt	*it;
 
-  array = new(_array, NULL, 5, "Lunkwill", "Frazou", "Roo", "Noscope", "Woklada");
-  mapped = array->map(array, _array, &cat_with_idx);
+  list = new(_dbl_clist, NULL, 5, "Lunkwill", "Frazou", "Roo", "Noscope", "Woklada");
+  mapped = list->map(list, _array, &cat_with_idx);
   it = mapped->first(mapped);
   while (it->rvalue(it) != NULL)
     {
-      printf("value: [%s]\n", it->rvalue(it));
+      printf("value: [%s]\n", (char *)it->rvalue(it));
       it->incr(it);
     }
-  array->dump(array, "Array", array_basic_print, "");
+  list->dump(list, "Array", _list_basic_print, "");
   mapped->dump(mapped, "Mapped", array_basic_print, "");
+  delete((void **)&it);
+  delete((void **)&list);
+  delete((void **)&mapped);
+  
 
   return (1);
 }

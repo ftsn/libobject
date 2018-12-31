@@ -41,7 +41,6 @@ static void	_iterator_dtor(Object *self, va_list *args)
 {
   (void)self;
   (void)args;
-  free(self);
 }
 
 static ArrayIt _array_it_descr =

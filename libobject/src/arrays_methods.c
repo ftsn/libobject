@@ -27,22 +27,12 @@ t_bool		_array_insert_at(Object *container, void *data, ssize_t pos)
   Container	*self;
 
   self = container;
-  if (self->empty(self) == TRUE)
-    {
-      if (!(self->contained = malloc(2 * sizeof(void *))))
-	return (FALSE);
-      ((void **)self->contained)[0] = data;
-      ((void **)self->contained)[1] = NULL;
-    }
-  else
-    {
-      if (!(res = malloc(sizeof(void *) * (self->contained_size + 2))))
-	return (FALSE);
-      copy_array(res, self->contained, data, pos);
-      res[self->contained_size + 1] = NULL;
-      free(self->contained);
-      self->contained = res;
-    }
+  if (!(res = malloc(sizeof(void *) * (self->contained_size + 2))))
+    return (FALSE);
+  copy_array(res, self->contained, data, pos);
+  res[self->contained_size + 1] = NULL;
+  free(self->contained);
+  self->contained = res;
   ++self->contained_size;
   return (TRUE);
 }
@@ -117,7 +107,7 @@ Object			*_array_at(const Object *self, ssize_t pos)
 
 void	array_basic_print(ssize_t i, const Object *elem, const char *prefix)
 {
-  printf("%s%zd: [%s]\n", prefix, i, (char *)elem);
+  printf("%s%d: [%s]\n", prefix, (int)i, (char *)elem);
 }
 
 void		_array_print(const Object *container, const char *title,

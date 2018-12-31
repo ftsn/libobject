@@ -242,8 +242,8 @@ void			_list_basic_print(ssize_t i, const Object *elem, const char *prefix)
   const t_list_data	*list;
 
   list = elem;
-  printf("%s%zd)prev [%s] cur [%s] next [%s]\n",
-	 prefix, i,
+  printf("%s%d)prev [%s] cur [%s] next [%s]\n",
+	 prefix, (int)i,
 	 (list->prev ? (char *)list->prev->data : "null"),
 	 (char *)list->data,
 	 (list->next ? (char *)list->next->data : "null"));
