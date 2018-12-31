@@ -3,7 +3,7 @@
 
 # include "object.h"
 
-# define COPY_ALL	0
+# define COPY_ALL	((ssize_t)-1)
 
 typedef Object	*(*t_data)(const Object *self);
 Object		*_container_data(const Object *self);

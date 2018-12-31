@@ -2,6 +2,20 @@
 #include <string.h>
 #include "strings.h"
 
+static t_bool	copy_ctor(Container *string, char *copy, ssize_t size)
+{
+  char		*res;
+
+  if (size == COPY_ALL)
+    size = strlen(copy);
+  if (!(res = calloc(size + 1, sizeof(char))))
+    return (FALSE);
+  memcpy(res, copy, size);
+  string->contained = res;
+  string->contained_size = size;
+  return (TRUE);
+}
+
 static t_bool	_string_ctor(Object *self, va_list *args)
 {
   Container	*string;
@@ -10,11 +24,8 @@ static t_bool	_string_ctor(Object *self, va_list *args)
 
   string = self;
   if ((copy = va_arg(*args, char *)))
-    {
-      if (!(string->contained = str_dup(copy)))
-	return (FALSE);
-      string->contained_size = strlen(string->contained);
-    }
+    if (copy_ctor(string, copy, va_arg(*args, ssize_t)) == FALSE)
+      return (FALSE);
   nb_args = va_arg(*args, ssize_t);
   while (nb_args > 0)
     {
