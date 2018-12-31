@@ -19,6 +19,6 @@ typedef struct {
 } Class;
 
 Object	*new(const Class *class, ...);
-void	delete(Object **ptr, ...);
+void	delete(Object *ptr, ...);
 
 #endif /* !OBJECT_H_ */

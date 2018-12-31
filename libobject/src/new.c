@@ -27,17 +27,16 @@ Object		*new(const Class *class, ...)
   return (new);
 }
 
-void		delete(Object **ptr, ...)
+void		delete(Object *ptr, ...)
 {
   Class		*class;
   va_list	ap;
 
-  if (!*ptr)
+  if (!ptr)
     return ;
   va_start(ap, ptr);
-  class = *ptr;
-  class->__del__(*ptr, &ap);
+  class = ptr;
+  class->__del__(ptr, &ap);
   va_end(ap);
-  free(*ptr);
-  *ptr = NULL;
+  free(ptr);
 }

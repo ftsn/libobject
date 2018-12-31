@@ -168,7 +168,7 @@ Object		*_string_split(const Object *self, const Class *type, const char *sep)
     return (NULL);
   if (!(strdump = str_dup(((Container *)self)->contained)))
     {
-      delete((void **)&container);
+      delete(container);
       return (NULL);
     }
   token = strtok(strdump, sep);
@@ -177,7 +177,7 @@ Object		*_string_split(const Object *self, const Class *type, const char *sep)
       if (container->push_back(container, token) == FALSE)
 	{
 	  free(strdump);
-	  delete((void **)&container);
+	  delete(container);
 	  return (NULL);
 	}
       token = strtok(NULL, sep);
