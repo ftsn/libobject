@@ -14,20 +14,25 @@ t_bool		_string_insert_at(Object *string, void *data, ssize_t pos)
   if (pos > 0)
     memcpy(res, self->contained, pos);
   res[pos] = *(char *)data;
-  memcpy(&res[pos + 1], &((char *)self->contained)[pos],
-	 self->contained_size - pos);
+  memcpy(&res[pos + 1], &((char *)self->contained)[pos], self->contained_size - pos);
   free(self->contained);
   self->contained = res;
   ++self->contained_size;
   return (TRUE);
 }
 
-/*
-** TODO
-*/
 t_bool		_string_delete_at(Object *string, ssize_t pos)
 {
-  (void)pos;
+  Container	*self;
+  char		*res;
+
+  self = string;
+  if (!(res = calloc(self->contained_size, sizeof(char))))
+    return (FALSE);
+  memcpy(res, self->contained, pos);
+  memcpy(&res[pos], &((char *)self->contained)[pos + 1], self->contained_size - pos - 1);
+  free(self->contained);
+  self->contained = res;
   --((Container *)string)->contained_size;
   return (TRUE);
 }
