@@ -20,23 +20,6 @@ static t_bool	_ra_iterator_ctor(Object *self, va_list *args)
   return (TRUE);
 }
 
-static t_bool	_list_iterator_ctor(Object *self, va_list *args)
-{
-  List		*container;
-  ssize_t      	idx_start;
-
-  container = va_arg(*args, void *);
-  memcpy((char *)self + sizeof(Class),
-	 (char *)container + sizeof(Class),
-	 sizeof(Container) - sizeof(Class));
-  idx_start = va_arg(*args, ssize_t);
-  if (idx_start == REVERSE)
-    idx_start = ((Container *)container)->contained_size - 1;
-  ((Iterator *)self)->pos = idx_start;
-  ((Iterator *)self)->cur = container->nth_node(container, idx_start);
-  return (TRUE);
-}
-
 static void	_iterator_dtor(Object *self, va_list *args)
 {
   (void)self;
@@ -187,7 +170,7 @@ static ListIt _list_it_descr =
       {
 	sizeof(Iterator),
 	"List Iterator",
-	&_list_iterator_ctor,
+	&_ra_iterator_ctor,
 	&_iterator_dtor
       },
       NULL,

@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <string.h>
 #include "containers.h"
 #include "iterators.h"
@@ -28,58 +29,64 @@ t_bool		_container_push_back(Object *self, void *data)
 Object		*_container_to_type(Object *self, Class *type)
 {
   Container	*self_c;
-  Container	*container;
-  ssize_t	i;
+  Container	*ctn;
+  Iterator	*it;
 
   self_c = self;
-  container = new(type, NULL, 0);
-  i = 0;
-  while (i < self_c->contained_size)
+  if (!(ctn = new(type, NULL, 0)))
+    return (NULL);
+  if (!(it = self_c->first(self_c)))
     {
-      if (container->push_back(container, self_c->at(self_c, i)) == FALSE)
+      delete((void **)&ctn);
+      return (NULL);
+    }
+  while (it->rvalue(it) != NULL)
+    {
+      if (ctn->push_back(ctn, it->rvalue(it)) == FALSE)
 	{
-	  delete((void **)&container);
+	  delete((void **)&ctn);
+	  delete((void **)&it);
 	  return (NULL);
 	}
-      ++i;
+      it->incr(it);
     }
-  return (container);
+  delete((void **)&it);
+  return (ctn);
 }
 
 Object		*_container_sub(Object *self, Class *type, ssize_t begin, ssize_t len)
 {
   Container	*ctn;
   Container	*self_c;
-  void		*at;
+  Iterator	*it;
   ssize_t      	i;
 
   i = 0;
   self_c = (Container *)self;
-  if (self_c->contained_size > 0)
-    {
-      if (begin > 0 && begin >= self_c->contained_size)
-	begin = begin % self_c->contained_size;
-      if (begin < 0)
-	{
-	  begin = -begin;
-	  if (begin > self_c->contained_size)
-	    begin = begin % self_c->contained_size;
-	  begin = self_c->contained_size - begin;
-	}
-    }
-  else
-    begin = 0;
+  if (begin < 0)
+    begin = self_c->contained_size - (-begin);
+  if (self_c->contained_size > 0 && begin >= 0 && begin >= self_c->contained_size)
+    return (NULL);
   if (!(ctn = new(type, NULL, 0)))
     return (NULL);
+  if (!(it = self_c->first(self_c)))
+    {
+      delete((void **)&ctn);
+      return (NULL);
+    }
+  it->jump(it, begin);
   while (i < len && begin + i < self_c->contained_size)
     {
-      if (ctn->push_back(ctn, (at = self_c->at(self_c, begin + i))) == FALSE)
+      if (ctn->push_back(ctn, it->rvalue(it)) == FALSE)
 	{
 	  delete((void **)&ctn);
+	  delete((void **)&it);
 	  return (NULL);
 	}
       ++i;
+      it->incr(it);
     }
+  delete((void **)&it);
   return (ctn);
 }
 

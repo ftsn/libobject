@@ -198,9 +198,7 @@ t_bool	_dbl_clist_del(Object *list, ssize_t pos)
 
 Object	*_list_front(const Object *list)
 {
-  if (list && ((Container *)list)->empty(list) == FALSE)
-    return (((t_list_data *)((Container *)list)->contained)->data);
-  return (NULL);
+  return (((Container *)list)->contained);
 }
 
 Object		*_list_end(const Object *list)
@@ -213,7 +211,7 @@ Object		*_list_end(const Object *list)
     res = res->next;
   while (res && res->next && res->next != begin)
     res = res->next;
-  return (res ? res->data : NULL);
+  return (res);
 }
 
 Object		*_list_at(const Object *list, ssize_t pos)
@@ -234,7 +232,7 @@ Object		*_list_at(const Object *list, ssize_t pos)
       list_data = list_data->next;
       ++i;
     }
-  return (list_data ? list_data->data : NULL);
+  return (list_data);
 }
 
 void			_list_basic_print(ssize_t i, const Object *elem, const char *prefix)

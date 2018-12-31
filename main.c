@@ -4,12 +4,12 @@
 #include "arrays.h"
 #include "iterators.h"
 
-static void	*cat_with_idx(ssize_t i, void *cur)
+/*static void	*cat_with_idx(ssize_t i, void *cur)
 {
   (void)i;
   (void)cur;
-  return ("bite");
-}
+  return (cur);
+}*/
 
 int		main(int ac, char **av)
 {
@@ -20,7 +20,7 @@ int		main(int ac, char **av)
   ListIt	*it;
 
   list = new(_dbl_clist, NULL, 5, "Lunkwill", "Frazou", "Roo", "Noscope", "Woklada");
-  mapped = list->map(list, _array, &cat_with_idx);
+  mapped = list->convert(list, _array);
   it = mapped->first(mapped);
   while (it->rvalue(it) != NULL)
     {
