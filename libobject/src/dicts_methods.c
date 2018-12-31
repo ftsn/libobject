@@ -40,7 +40,7 @@ Object			*_get_obj_by_key(const Object *dict_obj, const char *key)
   ssize_t		i;
 
   dict = dict_obj;
-  if (!(pairs = dict->data(dict)))
+  if (!(pairs = dict->contained))
     return (NULL);
   i = 0;
   while (i < dict->contained_size)

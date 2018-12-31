@@ -14,7 +14,7 @@ static t_bool	_ra_iterator_ctor(Object *self, va_list *args)
 	 sizeof(Container) - sizeof(Class));
   idx_start = va_arg(*args, ssize_t);
   if (idx_start == REVERSE)
-    idx_start = container->size(container) - 1;
+    idx_start = container->contained_size - 1;
   ((Iterator *)self)->pos = idx_start;
   ((Iterator *)self)->cur = container->at(container, idx_start);
   return (TRUE);
@@ -31,7 +31,7 @@ static t_bool	_list_iterator_ctor(Object *self, va_list *args)
 	 sizeof(Container) - sizeof(Class));
   idx_start = va_arg(*args, ssize_t);
   if (idx_start == REVERSE)
-    idx_start = ((Container *)container)->size(container) - 1;
+    idx_start = ((Container *)container)->contained_size - 1;
   ((Iterator *)self)->pos = idx_start;
   ((Iterator *)self)->cur = container->nth_node(container, idx_start);
   return (TRUE);
