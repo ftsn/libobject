@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "arrays.h"
+#include "iterators.h"
 
 static void	copy_array(void **dest, void **src, void *data, ssize_t pos)
 {
@@ -104,32 +105,24 @@ Object			*_array_at(const Object *self, ssize_t pos)
 	  NULL);
 }
 
-void	array_basic_print(ssize_t i, const Object *elem, const char *prefix)
+/*
+** Basic function provided to the user to allow him to print the container
+** without having to create his own function
+*/
+void	array_basic_print(ssize_t i, const t_data *elem, const char *prefix)
 {
-  printf("%s%d: [%s]\n", prefix, (int)i, (char *)elem);
-}
-
-void		_array_print(const Object *container, const char *title,
-			     void (*f)(ssize_t i, const Object *elem, const char *prefix),
-			     const char *prefix)
-{
-  char		**array;
-  char		*concat_prefix;
-  ssize_t	i;
-
-  array = ((Container *)container)->contained;
-  i = 0;
-  if (!(concat_prefix = concat(prefix, "  ")))
-    return ;
-  if (title)
-    printf("%s%s\n", prefix, title);
-  printf("%s[\n", prefix);
-  if (array)
-    while (array[i])
-      {
-	f(i, array[i], concat_prefix);
-	++i;
-      }
-  printf("%s]\n", prefix);
-  free(concat_prefix);
+  switch (elem->type)
+    {
+    case TYPE_CHAR:
+      printf("%s%d: [%c]\n", prefix, (int)i, *(char *)elem->data);
+      break;
+    case TYPE_CSTRING:
+      printf("%s%d: [%s]\n", prefix, (int)i, (char *)elem->data);
+      break;
+    case TYPE_INT:
+      printf("%s%d: [%d]\n", prefix, (int)i, *(int *)elem->data);
+      break;
+    default:
+      ;
+    }
 }

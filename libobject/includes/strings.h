@@ -40,10 +40,8 @@ void	_string_affect(Object *self, void *data);
 Object	*_string_front(const Object *self);
 Object	*_string_back(const Object *self);
 Object	*_string_at(const Object *self, ssize_t pos);
-void	_string_print(const Object *self, const char *title,
-		      void (*f)(ssize_t i, const Object *elem, const char *prefix),
-		      const char *prefix);
-void	_string_basic_print(ssize_t i, const Object *elem, const char *prefix);
+
+void	string_basic_print(ssize_t i, const t_data *elem, const char *prefix);
 
 extern Class	*_string;
 

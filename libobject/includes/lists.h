@@ -44,10 +44,7 @@ Object	*_list_front(const Object *list);
 Object	*_list_end(const Object *list);
 Object	*_list_at(const Object *list, ssize_t pos);
 
-void	_list_print(const Object *list, const char *title,
-		    void (*f)(ssize_t i, const Object *elem, const char *prefix),
-		    const char *prefix);
-void	_list_basic_print(ssize_t i, const Object *elem, const char *prefix);
+void	list_basic_print(ssize_t i, const t_data *elem, const char *prefix);
 
 extern Class	*_spl_list;
 extern Class	*_spl_clist;

@@ -5,7 +5,7 @@
 
 # define COPY_ALL	((ssize_t)-1)
 
-typedef Object	*(*t_data)(const Object *self);
+typedef Object	*(*t_get_data)(const Object *self);
 Object		*_container_data(const Object *self);
 
 typedef ssize_t	(*t_size)(const Object *self);
@@ -30,8 +30,11 @@ typedef Object	*(*t_access)(const Object *container);
 typedef Object	*(*t_rand_access)(const Object *contained, ssize_t pos);
 
 typedef void	(*t_dump)(const Object *self, const char *title,
-			  void (*f)(ssize_t i, const Object *elem, const char *prefix),
+			  void (*f)(ssize_t i, const t_data *elem, const char *prefix),
 			  const char *prefix);
+void		_container_print(const Object *container, const char *title,
+				 void (*f)(ssize_t i, const t_data *elem, const char *prefix),
+				 const char *prefix);
 
 typedef Object	*(*t_converter)(Object *self, Class *type);
 Object		*_container_to_type(Object *self, Class *type);
@@ -42,16 +45,16 @@ Object		*_container_sub(Object *self, Class *type, ssize_t begin, ssize_t len);
 typedef Object	*(*t_map)(Object *self, Class *type, void *(*fptr)(ssize_t i, void *cur));
 Object	*_container_map(Object *self, Class *type, void *(*fptr)(ssize_t i, void *cur));
 
-typedef Object	*(*t_it_create)(Object *self);
-Object	       	*_container_begin(Object *self);
-Object	       	*_container_last(Object *self);
+typedef Object	*(*t_it_create)(const Object *self);
+Object	       	*_container_begin(const Object *self);
+Object	       	*_container_last(const Object *self);
 
 typedef struct {
   Class		base;
   Object	*contained;
 
   ssize_t	contained_size;
-  t_data	data;
+  t_get_data	data;
 
   t_size	size;
   t_empty	empty;

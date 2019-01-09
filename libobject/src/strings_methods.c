@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "strings.h"
+#include "utils.h"
 
 t_bool		_string_insert_at(Object *string, void *data, ssize_t pos)
 {
@@ -86,24 +87,10 @@ Object			*_string_at(const Object *string, ssize_t pos)
 	  NULL);
 }
 
-void	_string_basic_print(ssize_t i, const Object *elem, const char *prefix)
+void	string_basic_print(ssize_t i, const t_data *elem, const char *prefix)
 {
   printf("%s[%s]\n", prefix, (char *)elem);
   (void)i;
-}
-
-void	_string_print(const Object *self, const char *title,
-		      void (*f)(ssize_t i, const Object *elem, const char *prefix),
-		      const char *prefix)
-{
-  char	*concat_prefix;
-
-  if (!(concat_prefix = concat(prefix, "  ")))
-    return ;
-  if (title)
-    printf("%s%s\n", prefix, title);
-  f(0, ((Container *)self)->contained, concat_prefix);
-  free(concat_prefix);
 }
 
 Object		*_string_dup(const Object *self)

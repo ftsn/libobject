@@ -10,12 +10,13 @@ OBJDIR	=	build
 
 LIBSDIR	=	libs
 
-CFLAGS	=	-Wall -Wextra -Werror -ansi -pedantic -g3
+CFLAGS	=	-Wall -Wextra -Werror -std=c99 -pedantic -g3
 CFLAGS	+=	-I./includes/
 
 VPATH	=	src/
 
-SRCS	=	new			\
+SRCS	=	types			\
+		new			\
 		utils			\
 		containers_methods	\
 		strings_design		\

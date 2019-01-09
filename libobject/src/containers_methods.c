@@ -1,7 +1,10 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+#include <inttypes.h>
 #include "containers.h"
 #include "iterators.h"
+#include "utils.h"
 
 Object	*_container_data(const Object *self)
 {
@@ -24,6 +27,92 @@ t_bool		_container_push_back(Object *self, void *data)
 
   self_c = self;
   return (self_c->insert_at(self_c, data, self_c->contained_size));
+}
+
+/*
+** Basic function provided to the user to allow him to print the container
+** without having to create his own function
+*/
+static void	_array_basic_print(ssize_t i, const t_data *elem, const char *prefix)
+{
+  switch (elem->type)
+    {
+    case TYPE_CHAR:
+      printf("%s%d: [%c]\n", prefix, (int)i, *(char *)elem->data);
+      break;
+    case TYPE_UCHAR:
+      printf("%s%d: [%hhu]\n", prefix, (int)i, *(unsigned char *)elem->data);
+      break;
+    case TYPE_CSTRING:
+      printf("%s%d: [%s]\n", prefix, (int)i, (char *)elem->data);
+      break;
+    case TYPE_INT:
+      printf("%s%d: [%d]\n", prefix, (int)i, *(int *)elem->data);
+      break;
+    case TYPE_UINT:
+      printf("%s%d: [%u]\n", prefix, (int)i, *(unsigned int *)elem->data);
+      break;
+    case TYPE_LONG:
+      printf("%s%d: [%ld]\n", prefix, (int)i, *(long *)elem->data);
+      break;
+    case TYPE_ULONG:
+      printf("%s%d: [%lu]\n", prefix, (int)i, *(unsigned long *)elem->data);
+      break;
+    case TYPE_INT64:
+      printf("%s%d: [%" PRId64 "]\n", prefix, (int)i, *(int64_t *)elem->data);
+      break;
+    case TYPE_UINT64:
+      printf("%s%d: [%" PRIu64 "]\n", prefix, (int)i, *(uint64_t *)elem->data);
+      break;
+    case TYPE_DOUBLE:
+      printf("%s%d: [%f]\n", prefix, (int)i, *(double *)elem->data);
+      break;
+    case TYPE_FLOAT:
+      printf("%s%d: [%f]\n", prefix, (int)i, *(float *)elem->data);
+      break;
+    case TYPE_PTR:
+      printf("%s%d: [%p]\n", prefix, (int)i, elem->data);
+      break;
+    case TYPE_BOOL:
+      printf("%s%d: [%s]\n", prefix, (int)i, *(t_bool *)elem->data == TRUE ? "True" : "False");
+      break;
+    default:
+      ;
+    }
+}
+
+void		_container_print(const Object *container, const char *title,
+				 void (*f)(ssize_t i, const t_data *elem, const char *prefix),
+				 const char *prefix)
+{
+  Iterator	*it;
+  char		*concat_prefix;
+  t_data	*cur;
+  ssize_t	i;
+
+  if (!(it = ((const Container *)container)->first(container)))
+    return ;
+  i = 0;
+  if (!(concat_prefix = concat(prefix, "  ")))
+    return ;
+  if (title)
+    printf("%s%s\n", prefix, title);
+  printf("%s[\n", prefix);
+  while ((cur = it->rvalue(it)) != NULL)
+    {
+      if (is_of_type(cur, TYPE_ARRAY))
+	{
+	  printf("%s%d:\n", concat_prefix, (int)i);
+	  _container_print(cur->data, "Sub array", _array_basic_print, concat_prefix);
+	}
+      else
+	f(i, cur, concat_prefix);
+      ++i;
+      it->incr(it);
+    }
+  printf("%s]\n", prefix);
+  delete(it);
+  free(concat_prefix);
 }
 
 Object		*_container_to_type(Object *self, Class *type)
@@ -119,33 +208,33 @@ Object		*_container_map(Object *self, Class *type, void *(*fptr)(ssize_t i, void
   return (ctn);
 }
 
-static Object	*generate_it(Object *self, t_it_type type)
+static Object		*generate_it(const Object *self, t_it_type type)
 {
-  Iterator	*it;
-  Container	*ctn;
+  Iterator		*it;
+  const Container	*ctn;
 
   ctn = self;
   it = NULL;
-  if (!strcmp(ctn->base.__name__, "linked List") ||
-      !strcmp(ctn->base.__name__, "Circular linked List") ||
-      !strcmp(ctn->base.__name__, "Doubly linked List") ||
-      !strcmp(ctn->base.__name__, "Circular Doubly linked List"))
+  if (ctn->base.__type__ == TYPE_LINKED_LIST ||
+      ctn->base.__type__ == TYPE_CIRCULAR_LINKED_LIST ||
+      ctn->base.__type__ == TYPE_DOUBLY_LINKED_LIST ||
+      ctn->base.__type__ == TYPE_CIRCULAR_DOUBLY_LINKED_LIST)
     it = new(_list_it, self, type);
-  if (!strcmp(ctn->base.__name__, "Array"))
+  if (ctn->base.__type__ == TYPE_ARRAY)
     it = new(_array_it, self, type);
-  if (!strcmp(ctn->base.__name__, "Dict"))
+  if (ctn->base.__type__ == TYPE_DICT)
     it = new(_dict_it, self, type);
-  if (!strcmp(ctn->base.__name__, "String"))
+  if (ctn->base.__type__ == TYPE_STRING)
     it = new(_string_it, self, type);
   return (it);
 }
 
-Object 	*_container_begin(Object *self)
+Object 	*_container_begin(const Object *self)
 {
   return (generate_it(self, BASIC));
 }
 
-Object	*_container_last(Object *self)
+Object	*_container_last(const Object *self)
 {
   return (generate_it(self, REVERSE));
 }

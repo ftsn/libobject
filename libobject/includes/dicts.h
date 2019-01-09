@@ -20,10 +20,7 @@ typedef struct {
   t_map_push	push_back;
 } Dict;
 
-void    pair_basic_print(ssize_t i, const Object *elem, const char *prefix);
-void	_dict_print(const Object *container, const char *title,
-		    void (*f)(ssize_t i, const Object *elem, const char *prefix),
-		    const char *prefix);
+void    dict_basic_print(ssize_t i, const t_data *elem, const char *prefix);
 
 extern Class	*_dict;
 

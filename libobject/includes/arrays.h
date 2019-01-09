@@ -15,10 +15,7 @@ Object	*_array_front(const Object *self);
 Object	*_array_back(const Object *self);
 Object	*_array_at(const Object *self, ssize_t pos);
 
-void	_array_print(const Object *self, const char *title,
-		     void (*f)(ssize_t i, const Object *elem, const char *prefix),
-		     const char *prefix);
-void	array_basic_print(ssize_t i, const Object *elem, const char *prefix);
+void	array_basic_print(ssize_t i, const t_data *elem, const char *prefix);
 
 extern Class	*_array;
 

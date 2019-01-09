@@ -2,35 +2,11 @@
 #include <string.h>
 #include <stdio.h>
 #include "dicts.h"
+#include "iterators.h"
 
-void	pair_basic_print(ssize_t i, const Object *elem, const char *prefix)
+void	dict_basic_print(ssize_t i, const t_data *elem, const char *prefix)
 {
   printf("%s%d)key: [%s]\tvalue: [%s]\n", prefix, (int)i, ((t_pair *)elem)->key, (char *)((t_pair *)elem)->data);
-}
-
-void		_dict_print(const Object *container, const char *title,
-			    void (*f)(ssize_t i, const Object *elem, const char *prefix),
-			    const char *prefix)
-{
-  char		**dict;
-  char		*concat_prefix;
-  ssize_t	i;
-
-  dict = ((Container *)container)->contained;
-  i = 0;
-  if (!(concat_prefix = concat(prefix, "  ")))
-    return ;
-  if (title)
-    printf("%s%s\n", prefix, title);
-  printf("%s[\n", prefix);
-  if (dict)
-    while (dict[i])
-      {
-	f(i, dict[i], concat_prefix);
-	++i;
-      }
-  printf("%s]\n", prefix);
-  free(concat_prefix);
 }
 
 Object			*_get_obj_by_key(const Object *dict_obj, const char *key)

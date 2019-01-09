@@ -235,46 +235,16 @@ Object		*_list_at(const Object *list, ssize_t pos)
   return (list_data);
 }
 
-void			_list_basic_print(ssize_t i, const Object *elem, const char *prefix)
+void			list_basic_print(ssize_t i, const t_data *elem, const char *prefix)
 {
   const t_list_data	*list;
 
-  list = elem;
+  list = (const t_list_data *)elem;
   printf("%s%d)prev [%s] cur [%s] next [%s]\n",
 	 prefix, (int)i,
 	 (list->prev ? (char *)list->prev->data : "null"),
 	 (char *)list->data,
 	 (list->next ? (char *)list->next->data : "null"));
-}
-
-void		_list_print(const Object *container, const char *title,
-			    void (*f)(ssize_t i, const Object *elem, const char *prefix),
-			    const char *prefix)
-{
-  t_list_data	*begin;
-  t_list_data	*list;
-  char		*concat_prefix;
-  ssize_t	i;
-
-  list = (t_list_data *)((Container *)container)->contained;
-  if (!(concat_prefix = concat(prefix, "  ")))
-    return ;
-  if (title)
-    printf("%s%s\n", prefix, title);
-  begin = list;
-  i = 0;
-  do
-    {
-      if (list)
-	{
-	  f(i, list, concat_prefix);
-	  list = list->next;
-	  ++i;
-	}
-    }
-  while (list && list != begin);
-  list = begin;
-  free(concat_prefix);
 }
 
 void	_list_affect(Object *list, void *data)

@@ -28,184 +28,184 @@ static void	_iterator_dtor(Object *self, va_list *args)
 
 static ArrayIt _array_it_descr =
   {
+   {
     {
-      {
-	sizeof(Iterator),
-	"Array Iterator",
-	&_ra_iterator_ctor,
-	&_iterator_dtor
-      },
-      NULL,
-      0,
-
-      NULL,
-      NULL,
-      NULL,
-
-      NULL,
-      NULL,
-      NULL,
-      NULL,
-      NULL,
-
-      NULL,
-      NULL,
-      NULL,
-
-      NULL,
-
-      NULL,
-      NULL,
-      NULL,
-
-      NULL,
-      NULL
+     TYPE_ARRAY_ITERATOR,
+     sizeof(Iterator),
+     &_ra_iterator_ctor,
+     &_iterator_dtor
     },
     NULL,
-    &_ra_incr,
-    &_ra_decr,
-    &_ra_jump,
-    &_ra_rvalue,
-    &_ra_jmp_rvalue,
-    0
+    0,
+
+    NULL,
+    NULL,
+    NULL,
+
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+
+    NULL,
+    NULL,
+    NULL,
+
+    NULL,
+
+    NULL,
+    NULL,
+    NULL,
+
+    NULL,
+    NULL
+   },
+   NULL,
+   &_ra_incr,
+   &_ra_decr,
+   &_ra_jump,
+   &_ra_rvalue,
+   &_ra_jmp_rvalue,
+   0
   };
 
 Class	*_array_it = (Class *)&_array_it_descr;
 
 static StringIt _string_it_descr =
   {
+   {
     {
-      {
-	sizeof(Iterator),
-	"String Iterator",
-	&_ra_iterator_ctor,
-	&_iterator_dtor
-      },
-      NULL,
-      0,
-
-      NULL,
-      NULL,
-      NULL,
-
-      NULL,
-      NULL,
-      NULL,
-      NULL,
-      NULL,
-
-      NULL,
-      NULL,
-      NULL,
-
-      NULL,
-
-      NULL,
-      NULL,
-      NULL,
-
-      NULL,
-      NULL
+     TYPE_STRING_ITERATOR,
+     sizeof(Iterator),
+     &_ra_iterator_ctor,
+     &_iterator_dtor
     },
     NULL,
-    &_ra_incr,
-    &_ra_decr,
-    &_ra_jump,
-    &_ra_rvalue,
-    &_ra_jmp_rvalue,
-    0
+    0,
+
+    NULL,
+    NULL,
+    NULL,
+
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+
+    NULL,
+    NULL,
+    NULL,
+
+    NULL,
+
+    NULL,
+    NULL,
+    NULL,
+
+    NULL,
+    NULL
+   },
+   NULL,
+   &_ra_incr,
+   &_ra_decr,
+   &_ra_jump,
+   &_ra_rvalue,
+   &_ra_jmp_rvalue,
+   0
   };
 
 Class	*_string_it = (Class *)&_string_it_descr;
 
 static DictIt _dict_it_descr =
   {
+   {
     {
-      {
-	sizeof(Iterator),
-	"Dict Iterator",
-	&_ra_iterator_ctor,
-	&_iterator_dtor
-      },
-      NULL,
-      0,
-
-      NULL,
-      NULL,
-      NULL,
-
-      NULL,
-      NULL,
-      NULL,
-      NULL,
-      NULL,
-
-      NULL,
-      NULL,
-      NULL,
-
-      NULL,
-
-      NULL,
-      NULL,
-      NULL,
-
-      NULL,
-      NULL
+     TYPE_DICT_ITERATOR,
+     sizeof(Iterator),
+     &_ra_iterator_ctor,
+     &_iterator_dtor
     },
     NULL,
-    &_ra_incr,
-    &_ra_decr,
-    &_ra_jump,
-    &_ra_rvalue,
-    &_ra_jmp_rvalue,
-    0
+    0,
+
+    NULL,
+    NULL,
+    NULL,
+
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+
+    NULL,
+    NULL,
+    NULL,
+
+    NULL,
+
+    NULL,
+    NULL,
+    NULL,
+
+    NULL,
+    NULL
+   },
+   NULL,
+   &_ra_incr,
+   &_ra_decr,
+   &_ra_jump,
+   &_ra_rvalue,
+   &_ra_jmp_rvalue,
+   0
   };
 
 Class	*_dict_it = (Class *)&_dict_it_descr;
 
 static ListIt _list_it_descr =
   {
+   {
     {
-      {
-	sizeof(Iterator),
-	"List Iterator",
-	&_ra_iterator_ctor,
-	&_iterator_dtor
-      },
-      NULL,
-      0,
-
-      NULL,
-      NULL,
-      NULL,
-
-      NULL,
-      NULL,
-      NULL,
-      NULL,
-      NULL,
-
-      NULL,
-      NULL,
-      NULL,
-
-      NULL,
-
-      NULL,
-      NULL,
-      NULL,
-
-      NULL,
-      NULL
+     TYPE_LIST_ITERATOR,
+     sizeof(Iterator),
+     &_ra_iterator_ctor,
+     &_iterator_dtor
     },
     NULL,
-    &_list_incr,
-    &_list_decr,
-    &_list_jump,
-    &_list_rvalue,
-    &_list_jmp_rvalue,
-    0
+    0,
+
+    NULL,
+    NULL,
+    NULL,
+
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+
+    NULL,
+    NULL,
+    NULL,
+
+    NULL,
+
+    NULL,
+    NULL,
+    NULL,
+
+    NULL,
+    NULL
+   },
+   NULL,
+   &_list_incr,
+   &_list_decr,
+   &_list_jump,
+   &_list_rvalue,
+   &_list_jmp_rvalue,
+   0
   };
 
 Class	*_list_it = (Class *)&_list_it_descr;

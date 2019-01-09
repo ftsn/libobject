@@ -45,46 +45,46 @@ static void	_string_dtor(Object *self, va_list *args)
 
 static String _string_descr =
   {
+   {
     {
-      {
-	sizeof(String),
-	"String",
-	&_string_ctor,
-	&_string_dtor
-      },
-      NULL,
-      0,
-
-      &_container_data,
-      &_container_size,
-      &_container_empty,
-
-      &_string_insert_at,
-      &_container_push_back,
-      &_string_delete_at,
-      &_string_erase,
-      &_string_affect,
-
-      &_string_front,
-      &_string_back,
-      &_string_at,
-
-      &_string_print,
-
-      &_container_to_type,
-      &_container_sub,
-      &_container_map,
-
-      &_container_begin,
-      &_container_last
+     TYPE_STRING,
+     sizeof(String),
+     &_string_ctor,
+     &_string_dtor
     },
-    &_string_dup,
-    &_string_findstr,
-    &_string_find,
-    &_string_lfind,
-    &_string_match,
-    &_string_nmatch,
-    &_string_split
+    NULL,
+    0,
+
+    &_container_data,
+    &_container_size,
+    &_container_empty,
+
+    &_string_insert_at,
+    &_container_push_back,
+    &_string_delete_at,
+    &_string_erase,
+    &_string_affect,
+
+    &_string_front,
+    &_string_back,
+    &_string_at,
+
+    &_container_print,
+
+    &_container_to_type,
+    &_container_sub,
+    &_container_map,
+
+    &_container_begin,
+    &_container_last
+   },
+   &_string_dup,
+   &_string_findstr,
+   &_string_find,
+   &_string_lfind,
+   &_string_match,
+   &_string_nmatch,
+   &_string_split
   };
 
 Class	*_string = (Class *)&_string_descr;
