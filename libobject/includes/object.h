@@ -5,17 +5,18 @@
 # include <stdarg.h>
 # include "types.h"
 
-typedef t_bool (*ctor_t)(Object *self, va_list *args);
-typedef void (*dtor_t)(Object *self, va_list *args);
+typedef t_bool  (*ctor_t)(Object *self, va_list *args);
+typedef void    (*dtor_t)(Object *self, va_list *args);
 
-typedef struct {
-  const t_type	__type__;
-  const size_t	__size__;
-  ctor_t	__init__;
-  dtor_t	__del__;
+typedef struct
+{
+  const t_type  __type__;
+  const size_t  __size__;
+  ctor_t        __init__;
+  dtor_t        __del__;
 } Class;
 
-Object	*new(const Class *class, ...);
-void	delete(Object *ptr, ...);
+Object  *new(const Class *class, ...);
+void    delete(Object *ptr, ...);
 
 #endif /* !OBJECT_H_ */
