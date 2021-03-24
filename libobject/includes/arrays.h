@@ -5,7 +5,7 @@
 
 typedef struct
 {
-    Container base;
+    Container   base;
 } Array;
 
 t_bool  _array_insert_at(Object *self, void *data, ssize_t pos);

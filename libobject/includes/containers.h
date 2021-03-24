@@ -50,33 +50,33 @@ Object          *_container_begin(const Object *self);
 Object          *_container_last(const Object *self);
 
 typedef struct {
-    Class		    base;
+    Class           base;
     Object          *contained;
 
-    ssize_t	        contained_size;
-    t_get_data	    data;
+    ssize_t         contained_size;
+    t_get_data      data;
 
-    t_size	        size;
-    t_empty	        empty;
+    t_size          size;
+    t_empty         empty;
 
     t_rand_insert   insert_at;
-    t_insert	    push_back;
-    t_rand_delete	delete_at;
-    t_delete	    erase;
-    t_affect	    affect;
+    t_insert        push_back;
+    t_rand_delete   delete_at;
+    t_delete        erase;
+    t_affect        affect;
 
-    t_access	    front;
-    t_access	    back;
-    t_rand_access	at;
+    t_access        front;
+    t_access        back;
+    t_rand_access   at;
 
-    t_dump	        dump;
+    t_dump          dump;
 
-    t_converter	    convert;
-    t_sub		    sub;
-    t_map		    map;
+    t_converter     convert;
+    t_sub           sub;
+    t_map           map;
 
     t_it_create     first;
-    t_it_create	    last;
+    t_it_create     last;
 } Container;
 
 #endif /* !CONTAINERS_H_ */
