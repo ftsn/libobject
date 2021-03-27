@@ -1,0 +1,5 @@
+a.out
+a.out.dSYM/
+build/
+libobject/build/
+libobject/libobject.a
