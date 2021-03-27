@@ -4,17 +4,15 @@
 #include "stringsdef.h"
 #include "utils.h"
 
-t_bool          _string_insert_at(Object *string, void *data, ssize_t pos)
+t_bool      _string_insert_at(String *self, char c, ssize_t pos)
 {
-    Container   *self;
-    char        *res;
+    char    *res;
 
-    self = string;
     if (!(res = calloc(self->contained_size + 2, sizeof(char))))
         return (FALSE);
     if (pos > 0)
         memcpy(res, self->contained, pos);
-    res[pos] = *(char *)data;
+    res[pos] = c;
     memcpy(&res[pos + 1], &((char *)self->contained)[pos], self->contained_size - pos);
     free(self->contained);
     self->contained = res;
@@ -22,103 +20,80 @@ t_bool          _string_insert_at(Object *string, void *data, ssize_t pos)
     return (TRUE);
 }
 
-t_bool          _string_delete_at(Object *string, ssize_t pos)
+t_bool  _string_push_back(String *self, char c)
 {
-    Container   *self;
-    char        *res;
+    return (self->insert_at(self, c, self->contained_size));
+}
 
-    self = string;
+t_bool      _string_delete_at(String *self, ssize_t pos)
+{
+    char    *res;
+
     if (!(res = calloc(self->contained_size, sizeof(char))))
         return (FALSE);
     memcpy(res, self->contained, pos);
-    memcpy(&res[pos], &((char *)self->contained)[pos + 1], self->contained_size - pos - 1);
+    memcpy(&res[pos], &(self->contained[pos + 1]), self->contained_size - pos - 1);
     free(self->contained);
     self->contained = res;
-    --((Container *)string)->contained_size;
+    --self->contained_size;
     return (TRUE);
 }
 
-t_bool          _string_erase(Object *string)
+t_bool  _string_erase(String *self)
 {
-    Container   *self;
-
-    self = string;
-    if (self->empty(self) == TRUE || self->delete_at(self, 0) == FALSE)
-        return (FALSE);
-    self->erase(self);
+    free(self->contained);
+    self->contained = NULL;
     return (TRUE);
 }
 
-void            _string_affect(Object *string, void *data)
+void    _string_affect(String *self, void *data)
 {
-    Container   *self;
-
-    self = string;
     free(self->contained);
     self->contained = data;
     self->contained_size = strlen(data);
 }
 
-Object              *_string_front(const Object *string)
+char    *_string_front(const String *self)
 {
-    const Container *container;
-
-    container = string;
-    return (container->contained ? &((char *)container->contained)[0] : NULL);
+    return (self->contained ? &((char *)self->contained)[0] : NULL);
 }
 
-Object              *_string_back(const Object *string)
+char    *_string_back(const String *self)
 {
-    const Container *container;
-
-    container = string;
-    return (container->contained ? &((char *)container->contained)[container->contained_size - 1] : NULL);
+    return (self->contained ? &((char *)self->contained)[self->contained_size - 1] : NULL);
 }
 
-Object              *_string_at(const Object *string, ssize_t pos)
+char    *_string_at(const String *self, ssize_t pos)
 {
-    const Container *container;
-
-    container = string;
-    return (pos < container->contained_size && container->contained ? &((char *)container->contained)[pos] : NULL);
+    return (pos < self->contained_size && self->contained ? &((char *)self->contained)[pos] : NULL);
 }
 
-void    string_basic_print(ssize_t i, const t_data *elem, const char *prefix)
+void    _string_print(const String *self, const char *title)
 {
-    printf("%s[%s]\n", prefix, (char *)elem);
-    (void)i;
+    printf("%s[%s]\n", title, (char *)self->contained);
 }
 
-Object  *_string_dup(const Object *self)
+String  *_string_dup(const String *self)
 {
-    return (new(_string, ((Container *)self)->contained, 0));
+    return (new(_string, self->contained, 0));
 }
 
-ssize_t     _string_findstr(const Object *self, const char *substr)
+char    *_string_findstr(const String *self, const char *substr)
 {
-    char    *res;
-
-    res = strstr((char *)((Container *)self)->contained, substr);
-    return (res ? ((Container *)self)->contained_size - (strlen(res) - 1) : 0);
+    return (strstr((char *)self->contained, substr));
 }
 
-ssize_t     _string_find(const Object *self, int c)
+char    *_string_find(const String *self, int c)
 {
-    char    *res;
-
-    res = strchr((char *)((Container *)self)->contained, c);
-    return (res ? ((Container *)self)->contained_size - (strlen(res) - 1) : 0);
+    return (strchr((char *)self->contained, c));
 }
 
-ssize_t     _string_lfind(const Object *self, int c)
+char    *_string_lfind(const String *self, int c)
 {
-    char    *res;
-
-    res = strrchr((char *)((Container *)self)->contained, c);
-    return (res ? ((Container *)self)->contained_size - (strlen(res) - 1) : 0);
+    return (strrchr((char *)self->contained, c));
 }
 
-static  size_t nmatch(const char *s1, const char *s2)
+static size_t   nmatch(const char *s1, const char *s2)
 {
     if (*s1 != '\0' && *s2 == '*')
         return (nmatch(s1 + 1, s2) + nmatch(s1, s2 + 1));
@@ -131,17 +106,17 @@ static  size_t nmatch(const char *s1, const char *s2)
     return (0);
 }
 
-t_bool  _string_match(const Object *self, const char *compare)
+t_bool  _string_match(const String *self, const char *compare)
 {
-    return (nmatch(((Container *)self)->contained, compare) ? TRUE : FALSE);
+    return (nmatch((char *)self->contained, compare) ? TRUE : FALSE);
 }
 
-size_t  _string_nmatch(const Object *self, const char *compare)
+size_t  _string_nmatch(const String *self, const char *compare)
 {
-    return (nmatch(((Container *)self)->contained, compare));
+    return (nmatch((char *)self->contained, compare));
 }
 
-Object          *_string_split(const Object *self, const Class *type, const char *sep)
+Object          *_string_split(const String *self, const Class *type, const char *sep)
 {
     Container   *container;
     char        *token;
@@ -149,7 +124,7 @@ Object          *_string_split(const Object *self, const Class *type, const char
 
     if (!(container = new (type, NULL, 0)))
         return (NULL);
-    if (!(strdump = str_dup(((Container *)self)->contained)))
+    if (!(strdump = str_dup((char *)self->contained)))
     {
         delete (container);
         return (NULL);
@@ -157,7 +132,7 @@ Object          *_string_split(const Object *self, const Class *type, const char
     token = strtok(strdump, sep);
     while (token)
     {
-        if (container->push_back(container, token) == FALSE)
+        if (container->push_back(container, token, TYPE_CSTRING) == FALSE)
         {
             free(strdump);
             delete (container);

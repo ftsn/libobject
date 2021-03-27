@@ -3,46 +3,84 @@
 
 # include "containers.h"
 
-typedef Object  *(*t_dup)(const Object *self);
-Object          *_string_dup(const Object *self);
+// Forward declaration of the String class so we can use the type in our methods
+typedef struct s_string String;
 
-typedef ssize_t (*t_str_findstr)(const Object *self, const char *substr);
-ssize_t         _string_findstr(const Object *self, const char *substr);
+typedef t_bool  (*t_str_rand_insert)(String *self, char c, ssize_t pos);
+t_bool          _string_insert_at(String *string, char c, ssize_t pos);
 
-typedef ssize_t (*t_str_find)(const Object *self, int c);
-ssize_t         _string_find(const Object *self, int c);
-ssize_t         _string_lfind(const Object *self, int c);
+typedef t_bool  (*t_str_insert)(String *self, char c);
+t_bool          _string_push_back(String *self, char c);
 
-typedef t_bool  (*t_str_match)(const Object *self, const char *compare);
-t_bool          _string_match(const Object *self, const char *compare);
+typedef t_bool  (*t_str_rand_delete)(String *self, ssize_t pos);
+t_bool          _string_delete_at(String *self, ssize_t pos);
 
-typedef size_t  (*t_str_nmatch)(const Object *self, const char *compare);
-size_t          _string_nmatch(const Object *self, const char *compare);
+typedef t_bool  (*t_str_delete)(String *self);
+t_bool          _string_erase(String *self);
 
-typedef Object  *(*t_str_split)(const Object *self, const Class *type, const char *sep);
-Object          *_string_split(const Object *self, const Class *type, const char *sep);
+typedef void    (*t_str_affect)(String *self, void *data);
+void            _string_affect(String *self, void *data);
 
-typedef struct
+typedef char    *(*t_str_access)(const String *self);
+char            *_string_front(const String *self);
+char            *_string_back(const String *self);
+
+typedef char    *(*t_str_rand_access)(const String *self, ssize_t pos);
+char            *_string_at(const String *self, ssize_t pos);
+
+typedef void    (*t_str_dump)(const String *self, const char *title);
+void            _string_print(const String *self, const char *title);
+
+typedef String  *(*t_dup)(const String *self);
+String          *_string_dup(const String *self);
+
+typedef char    *(*t_str_findstr)(const String *self, const char *substr);
+char            *_string_findstr(const String *self, const char *substr);
+
+typedef char    *(*t_str_find)(const String *self, int c);
+char            *_string_find(const String *self, int c);
+char            *_string_lfind(const String *self, int c);
+
+typedef t_bool  (*t_str_match)(const String *self, const char *compare);
+t_bool          _string_match(const String *self, const char *compare);
+
+typedef size_t  (*t_str_nmatch)(const String *self, const char *compare);
+size_t          _string_nmatch(const String *self, const char *compare);
+
+typedef Object  *(*t_str_split)(const String *self, const Class *type, const char *sep);
+Object          *_string_split(const String *self, const Class *type, const char *sep);
+
+struct s_string
 {
-    Container       base;
-    t_dup           dup;
-    t_str_findstr   find_str;
-    t_str_find      find;
-    t_str_find      lfind;
-    t_str_match     match;
-    t_str_nmatch    nmatch;
-    t_str_split     split;
-} String;
+    Class               base;
+    char                *contained;
 
-t_bool  _string_insert_at(Object *string, void *data, ssize_t pos);
-t_bool  _string_delete_at(Object *self, ssize_t pos);
-t_bool  _string_erase(Object *self);
-void    _string_affect(Object *self, void *data);
-Object  *_string_front(const Object *self);
-Object  *_string_back(const Object *self);
-Object  *_string_at(const Object *self, ssize_t pos);
+    ssize_t             contained_size;
+    t_get_data          cstr;
 
-void    string_basic_print(ssize_t i, const t_data *elem, const char *prefix);
+    t_size              size;
+    t_empty             empty;
+
+    t_str_rand_insert   insert_at;
+    t_str_insert        push_back;
+    t_str_rand_delete   delete_at;
+    t_str_delete        erase;
+    t_str_affect        affect;
+
+    t_str_access        front;
+    t_str_access        back;
+    t_str_rand_access   at;
+
+    t_str_dump          dump;
+    
+    t_dup               dup;
+    t_str_findstr       find_str;
+    t_str_find          find;
+    t_str_find          lfind;
+    t_str_match         match;
+    t_str_nmatch        nmatch;
+    t_str_split         split;
+};
 
 extern Class *_string;
 

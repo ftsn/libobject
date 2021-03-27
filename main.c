@@ -2,11 +2,13 @@
 #include <stdio.h>
 #include "arrays.h"
 #include "lists.h"
+#include "stringsdef.h"
 
 int     main(int ac, char **av)
 {
     Container *a, *b, *c;
     t_data **data_array1, **data_array2;
+    String *s;
     int nb;
 
     data_array2 = init_typed_array(2);
@@ -32,6 +34,18 @@ int     main(int ac, char **av)
     delete(c);
     free_typed_array(data_array1);
     free_typed_array(data_array2);
+
+    if (ac == 2) {
+        s = new(_string, av[1], COPY_ALL, 5, 'a', 'b', 'c', 'd', 'e');
+        printf("[%s]: %zd chars long. %s\n", s->contained ? s->contained : "NULL", s->size(s), s->empty(s) ? "EMPTY" : "NON EMPTY");
+        printf("Finding substring bite: [%s]\n", s->find_str(s, "bite"));
+        s->insert_at(s, '6', 3);
+        s->push_back(s, '7');
+        s->delete_at(s, 0);
+        s->dump(s, "String: ");
+        printf("[%s] [%s] [%s]\n", s->front(s), s->back(s), s->at(s, 3));
+        delete(s);
+    }
     (void)ac;
     (void)av;
     return (1);

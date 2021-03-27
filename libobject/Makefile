@@ -15,18 +15,20 @@ CFLAGS	+=	-I./includes/
 
 VPATH	=	src/
 
-SRCS    =	types               \
-	    	new                 \
-	    	utils               \
-	    	containers_methods  \
-	    	lists_design        \
-	    	lists_methods       \
-	    	arrays_design       \
-	    	arrays_methods      \
-	    	dicts_design        \
-	    	dicts_methods       \
-	    	iterators_design    \
-	    	iterators_methods
+SRCS    =	types                   \
+		new                     \
+		utils                   \
+		strings_design          \
+		strings_methods         \
+		containers_methods      \
+		lists_design            \
+		lists_methods           \
+		arrays_design           \
+		arrays_methods          \
+		dicts_design            \
+		dicts_methods           \
+		iterators_design        \
+		iterators_methods
 
 SRCS	:=	$(addsuffix .$(EXT), $(SRCS))
 
