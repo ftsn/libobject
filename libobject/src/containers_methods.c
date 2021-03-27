@@ -76,7 +76,7 @@ t_bool          _container_push_back(Object *self, void *data, t_type type)
 ** Basic function provided to the user to allow him to print the container
 ** without having to create his own function
 */
-static void _typed_basic_print(ssize_t i, const t_data *elem, const char *prefix)
+void typed_basic_print(ssize_t i, const t_data *elem, const char *prefix)
 {
     switch (elem->type)
     {
@@ -152,12 +152,12 @@ void            _container_print(const Object *container,
                 recursion_title = "Sub list";
             else if (is_of_type(cur, TYPE_DICT))
                 recursion_title = "Sub dict";
-            else if (is_of_type(cur, TYPE_DICT))
-                recursion_title = "Sub dict";
+            else if (is_of_type(cur, TYPE_STRING))
+                recursion_title = "Sub string";
             else
-                title = "Undefined container";
+                recursion_title = "Undefined container";
             printf("%s%d:\n", concat_prefix, (int)i);
-            _container_print(cur->data, recursion_title, _typed_basic_print, concat_prefix);
+            _container_print(cur->data, recursion_title, typed_basic_print, concat_prefix);
         }
         else
             f(i, cur, concat_prefix);
@@ -293,4 +293,24 @@ Object  *_container_begin(const Object *self)
 Object  *_container_last(const Object *self)
 {
     return (generate_it(self, REVERSE));
+}
+
+t_bool      ctn_copy_ctor(Container *ctn, void **copy, ssize_t size)
+{
+    ssize_t i;
+
+    i = 0;
+    if (size == COPY_ALL)
+    {
+        size = 0;
+        while (copy[size])
+            ++size;
+    }
+    while (i < size)
+    {
+        if (ctn->push_back(ctn, ((t_data *)copy[i])->data, ((t_data *)copy[i])->type) == FALSE)
+            return (FALSE);
+        ++i;
+    }
+    return (TRUE);
 }

@@ -32,6 +32,7 @@ typedef Object  *(*t_rand_access)(const Object *contained, ssize_t pos);
 
 typedef void    (*t_dump)(const Object *self, const char *title, void (*f)(ssize_t i, const t_data *elem, const char *prefix), const char *prefix);
 void            _container_print(const Object *container, const char *title, void (*f)(ssize_t i, const t_data *elem, const char *prefix), const char *prefix);
+void            typed_basic_print(ssize_t i, const t_data *elem, const char *prefix);
 
 typedef Object  *(*t_converter)(Object *self, Class *type);
 Object          *_container_to_type(Object *self, Class *type);
@@ -75,5 +76,7 @@ typedef struct {
     t_it_create     first;
     t_it_create     last;
 } Container;
+
+t_bool  ctn_copy_ctor(Container *ctn, void **copy, ssize_t size);
 
 #endif /* !CONTAINERS_H_ */

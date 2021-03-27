@@ -3,26 +3,6 @@
 #include "arrays.h"
 #include "iterators.h"
 
-static      t_bool copy_ctor(Container *dict, void **copy, ssize_t size)
-{
-    ssize_t i;
-
-    i = 0;
-    if (size == COPY_ALL)
-    {
-        size = 0;
-        while (copy[size])
-            ++size;
-    }
-    while (i < size)
-    {
-        if (dict->push_back(dict, ((t_data *)copy[i])->data, ((t_data *)copy[i])->type) == FALSE)
-            return (FALSE);
-        ++i;
-    }
-    return (TRUE);
-}
-
 static t_bool   _dict_ctor(Object *self, va_list *args)
 {
     Container   *dict;
@@ -33,7 +13,7 @@ static t_bool   _dict_ctor(Object *self, va_list *args)
     if (!(dict->contained = calloc(1, sizeof(void *))))
         return (FALSE);
     if ((copy = va_arg(*args, void *)))
-        if (copy_ctor(dict, copy, va_arg(*args, ssize_t)) == FALSE)
+        if (ctn_copy_ctor(dict, copy, va_arg(*args, ssize_t)) == FALSE)
             return (FALSE);
     nb_args = va_arg(*args, ssize_t);
     while (nb_args > 0)

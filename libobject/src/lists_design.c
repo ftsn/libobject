@@ -1,25 +1,6 @@
 #include <stdlib.h>
 #include "lists.h"
-
-static t_bool   copy_ctor(Container *list, void **copy, ssize_t size)
-{
-    ssize_t     i;
-
-    i = 0;
-    if (size == COPY_ALL)
-    {
-        size = 0;
-        while (copy[size])
-            ++size;
-    }
-    while (i < size)
-    {
-        if (list->push_back(list, copy[i], TYPE_CHAR) == FALSE)
-            return (FALSE);
-        ++i;
-    }
-    return (TRUE);
-}
+#include "iterators.h"
 
 static t_bool   _list_ctor(Object *self, va_list *args)
 {
@@ -29,7 +10,7 @@ static t_bool   _list_ctor(Object *self, va_list *args)
 
     list = self;
     if ((copy = va_arg(*args, void *)))
-        if (copy_ctor(list, copy, va_arg(*args, ssize_t)) == FALSE)
+        if (ctn_copy_ctor(list, copy, va_arg(*args, ssize_t)) == FALSE)
             return (FALSE);
     nb_args = va_arg(*args, ssize_t);
     while (nb_args > 0)
@@ -43,15 +24,29 @@ static t_bool   _list_ctor(Object *self, va_list *args)
 
 static void     _list_dtor(Object *self, va_list *args)
 {
+    Iterator    *it;
+    t_data      *cur;
     Container   *list;
 
+    it = ((Container *)self)->first(self);
+    if (it)
+    {
+        while ((cur = it->rvalue(it)) != NULL)
+        {
+            free(cur);
+            it->incr(it);
+        }
+    }
+    free(it);
     list = self;
     while (list->contained)
     {
         if (list->delete_at(list, 0) == FALSE)
             return;
     }
-    (void)args;
+    ((Container *)self)->contained = NULL;
+    ((Container *)self)->contained_size = 0;
+    (void)args; 
 }
 
 static Spl_list _spl_list_descr =

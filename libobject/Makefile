@@ -10,7 +10,7 @@ OBJDIR	=	build
 
 LIBSDIR	=	libs
 
-CFLAGS	=	-Wall -Wextra -Werror -std=c99 -pedantic -g3
+CFLAGS	=	-Wall -Wextra -Werror -std=c99 -g3
 CFLAGS	+=	-I./includes/
 
 VPATH	=	src/
