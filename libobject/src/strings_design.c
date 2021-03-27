@@ -78,7 +78,8 @@ static String _string_descr =
         &_string_lfind,
         &_string_match,
         &_string_nmatch,
-        &_string_split
+        &_string_split,
+        &_string_sub
     };
 
 Class *_string = (Class *)&_string_descr;

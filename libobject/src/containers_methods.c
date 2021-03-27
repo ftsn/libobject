@@ -207,8 +207,11 @@ Object          *_container_sub(Object *self, Class *type, ssize_t begin, ssize_
     i = 0;
     self_c = (Container *)self;
     if (begin < 0)
-        begin = self_c->contained_size - (-begin);
+        if ((begin = self_c->contained_size + begin) < 0)
+            return (NULL);
     if (self_c->contained_size > 0 && begin >= 0 && begin >= self_c->contained_size)
+        return (NULL);
+    if (begin + len > self_c->contained_size)
         return (NULL);
     if (!(ctn = new (type, NULL, 0)))
         return (NULL);
@@ -218,7 +221,7 @@ Object          *_container_sub(Object *self, Class *type, ssize_t begin, ssize_
         return (NULL);
     }
     it->jump(it, begin);
-    while (i < len && begin + i < self_c->contained_size)
+    while (i < len)
     {
         if (ctn->push_back(ctn, ((t_data *)it->rvalue(it))->data, ((t_data *)it->rvalue(it))->type) == FALSE)
         {

@@ -9,6 +9,7 @@ int     main(int ac, char **av)
     Container *a, *b, *c;
     t_data **data_array1, **data_array2;
     String *s;
+    char *sub;
     int nb;
 
     data_array2 = init_typed_array(2);
@@ -37,6 +38,9 @@ int     main(int ac, char **av)
 
     if (ac == 2) {
         s = new(_string, av[1], COPY_ALL, 5, 'a', 'b', 'c', 'd', 'e');
+        sub = s->sub(s, -5, 3);
+        printf("Generating substring from [%s]: [%s]\n", s->cstr(s), sub ? sub : "NULL");
+        free(sub);
         printf("[%s]: %zd chars long. %s\n", s->contained ? s->contained : "NULL", s->size(s), s->empty(s) ? "EMPTY" : "NON EMPTY");
         printf("Finding substring bite: [%s]\n", s->find_str(s, "bite"));
         s->insert_at(s, '6', 3);

@@ -50,6 +50,9 @@ size_t          _string_nmatch(const String *self, const char *compare);
 typedef Object  *(*t_str_split)(const String *self, const Class *type, const char *sep);
 Object          *_string_split(const String *self, const Class *type, const char *sep);
 
+typedef char    *(*t_str_sub)(const String *self, ssize_t begin, ssize_t len);
+char            *_string_sub(const String *self, ssize_t begin, ssize_t len);
+
 struct s_string
 {
     Class               base;
@@ -80,6 +83,7 @@ struct s_string
     t_str_match         match;
     t_str_nmatch        nmatch;
     t_str_split         split;
+    t_str_sub           sub;
 };
 
 extern Class *_string;

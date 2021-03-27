@@ -143,3 +143,27 @@ Object          *_string_split(const String *self, const Class *type, const char
     free(strdump);
     return (container);
 }
+
+char        *_string_sub(const String *self, ssize_t begin, ssize_t len)
+{
+    char    *s;
+    ssize_t i;
+
+    i = 0;
+    if (begin < 0)
+        if ((begin = self->contained_size  + begin) < 0)
+            return (NULL);
+    if (self->contained_size > 0 && begin >= 0 && begin >= self->contained_size)
+        return (NULL);
+    if (begin + len > self->contained_size)
+        return (NULL);
+    if (!(s = malloc(sizeof(char) * len + 1)))
+        return (NULL);
+    s[len] = '\0';
+    while (i < len)
+    {
+        s[i] = self->contained[begin + i];
+        ++i;
+    }
+    return (s);
+}
