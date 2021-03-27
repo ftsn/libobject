@@ -14,10 +14,11 @@ ssize_t		    _container_size(const Object *self);
 typedef t_bool  (*t_empty)(const Object *self);
 t_bool          _container_empty(const Object *self);
 
-typedef t_bool  (*t_rand_insert)(Object *self, void *data, ssize_t pos);
+typedef t_bool  (*t_rand_insert)(Object *self, void *data, t_type type, ssize_t pos);
+t_bool          _container_insert_at(Object *self, void *data, t_type type, ssize_t pos);
 
-typedef t_bool  (*t_insert)(Object *self, void *data);
-t_bool          _container_push_back(Object *self, void *data);
+typedef t_bool  (*t_insert)(Object *self, void *data, t_type type);
+t_bool          _container_push_back(Object *self, void *data, t_type type);
 
 typedef t_bool  (*t_rand_delete)(Object *self, ssize_t pos);
 

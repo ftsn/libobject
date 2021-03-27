@@ -22,7 +22,7 @@ typedef enum	e_type
     TYPE_UINT64,
     TYPE_DOUBLE,
     TYPE_FLOAT,
-        TYPE_PTR,
+    TYPE_PTR,
 
     /* Bool type defined below */
     TYPE_BOOL,
@@ -63,6 +63,11 @@ static inline t_bool    is_primary(Object *tested)
 static inline t_bool    is_container(Object *tested)
 {
   return (*(t_type *)tested > _TYPE_CONTAINER_BEGIN && *(t_type *)tested < _TYPE_CONTAINER_END ? TRUE : FALSE);
+}
+
+static inline t_bool    is_list(Object *tested)
+{
+  return (*(t_type *)tested >= TYPE_LINKED_LIST && *(t_type *)tested <= TYPE_CIRCULAR_DOUBLY_LINKED_LIST ? TRUE : FALSE);
 }
 
 t_data  *raw_data_to_typed(void *raw, t_type type);

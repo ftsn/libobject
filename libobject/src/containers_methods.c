@@ -21,19 +21,62 @@ t_bool  _container_empty(const Object *container)
     return (((Container *)container)->contained_size == 0 ? TRUE : FALSE);
 }
 
-t_bool          _container_push_back(Object *self, void *data)
+static void copy_array(void **dest, void **src, t_data *typed_data, ssize_t pos)
+{
+    ssize_t i;
+    ssize_t j;
+
+    i = 0;
+    if (!dest || !src)
+        return;
+    while (src[i] && i < pos)
+    {
+        dest[i] = src[i];
+        ++i;
+    }
+    j = i;
+    dest[i++] = typed_data;
+    while (src[j])
+        dest[i++] = src[j++];
+}
+
+t_bool          _container_insert_at(Object *container, void *data, t_type type, ssize_t pos)
+{
+    void        **res;
+    Container   *self;
+    t_data      *typed_data;
+
+    self = container;
+    if (!(typed_data = malloc(sizeof(t_data))))
+        return (FALSE);
+    typed_data->type = type;
+    typed_data->data = data;
+    if (!(res = malloc(sizeof(t_data *) * (self->contained_size + 2))))
+    {
+        free(typed_data);
+        return (FALSE);
+    }
+    copy_array(res, self->contained, typed_data, pos);
+    res[self->contained_size + 1] = NULL;
+    free(self->contained);
+    self->contained = res;
+    ++self->contained_size;
+    return (TRUE);
+}
+
+t_bool          _container_push_back(Object *self, void *data, t_type type)
 {
     Container   *self_c;
 
     self_c = self;
-    return (self_c->insert_at(self_c, data, self_c->contained_size));
+    return (self_c->insert_at(self_c, data, type, self_c->contained_size));
 }
 
 /*
 ** Basic function provided to the user to allow him to print the container
 ** without having to create his own function
 */
-static void _array_basic_print(ssize_t i, const t_data *elem, const char *prefix)
+static void _typed_basic_print(ssize_t i, const t_data *elem, const char *prefix)
 {
     switch (elem->type)
     {
@@ -88,6 +131,7 @@ void            _container_print(const Object *container,
     Iterator    *it;
     char        *concat_prefix;
     t_data      *cur;
+    char        *recursion_title;
     ssize_t     i;
 
     if (!(it = ((const Container *)container)->first(container)))
@@ -100,10 +144,20 @@ void            _container_print(const Object *container,
     printf("%s[\n", prefix);
     while ((cur = it->rvalue(it)) != NULL)
     {
-        if (is_of_type(cur, TYPE_ARRAY))
+        if (is_container(cur))
         {
+            if (is_of_type(cur, TYPE_ARRAY))
+                recursion_title = "Sub array";
+            else if (is_list(cur))
+                recursion_title = "Sub list";
+            else if (is_of_type(cur, TYPE_DICT))
+                recursion_title = "Sub dict";
+            else if (is_of_type(cur, TYPE_DICT))
+                recursion_title = "Sub dict";
+            else
+                title = "Undefined container";
             printf("%s%d:\n", concat_prefix, (int)i);
-            _container_print(cur->data, "Sub array", _array_basic_print, concat_prefix);
+            _container_print(cur->data, recursion_title, _typed_basic_print, concat_prefix);
         }
         else
             f(i, cur, concat_prefix);
@@ -131,7 +185,7 @@ Object          *_container_to_type(Object *self, Class *type)
     }
     while (it->rvalue(it) != NULL)
     {
-        if (ctn->push_back(ctn, it->rvalue(it)) == FALSE)
+        if (ctn->push_back(ctn, ((t_data *)it->rvalue(it))->data, ((t_data *)it->rvalue(it))->type) == FALSE)
         {
             delete (ctn);
             delete (it);
@@ -166,7 +220,7 @@ Object          *_container_sub(Object *self, Class *type, ssize_t begin, ssize_
     it->jump(it, begin);
     while (i < len && begin + i < self_c->contained_size)
     {
-        if (ctn->push_back(ctn, it->rvalue(it)) == FALSE)
+        if (ctn->push_back(ctn, ((t_data *)it->rvalue(it))->data, ((t_data *)it->rvalue(it))->type) == FALSE)
         {
             delete (ctn);
             delete (it);
@@ -184,6 +238,7 @@ Object          *_container_map(Object *self, Class *type, void *(*fptr)(ssize_t
     Container   *ctn;
     Iterator    *it;
     ssize_t     i;
+    t_data      *typed_data;
 
     if (!(ctn = new (type, NULL, 0)))
         return (NULL);
@@ -195,7 +250,8 @@ Object          *_container_map(Object *self, Class *type, void *(*fptr)(ssize_t
     i = 0;
     while (it->rvalue(it) != NULL)
     {
-        if (ctn->push_back(ctn, fptr(i, it->rvalue(it))) == FALSE)
+        typed_data = fptr(i, it->rvalue(it));
+        if (ctn->push_back(ctn, typed_data->data, typed_data-> type) == FALSE)
         {
             delete (it);
             delete (ctn);

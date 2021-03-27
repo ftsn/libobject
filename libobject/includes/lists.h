@@ -32,10 +32,10 @@ typedef enum    e_list_type
     CIRC_DOUBLE
 } t_list_type;
 
-t_bool  _spl_list_add(Object *list, void *data, ssize_t pos);
-t_bool  _spl_clist_add(Object *list, void *data, ssize_t pos);
-t_bool  _dbl_list_add(Object *list, void *data, ssize_t pos);
-t_bool  _dbl_clist_add(Object *list, void *data, ssize_t pos);
+t_bool  _spl_list_add(Object *list, void *data, t_type type, ssize_t pos);
+t_bool  _spl_clist_add(Object *list, void *data, t_type type, ssize_t pos);
+t_bool  _dbl_list_add(Object *list, void *data, t_type type, ssize_t pos);
+t_bool  _dbl_clist_add(Object *list, void *data, t_type type, ssize_t pos);
 
 t_bool  _spl_list_del(Object *list, ssize_t pos);
 t_bool  _spl_clist_del(Object *list, ssize_t pos);

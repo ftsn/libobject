@@ -34,7 +34,7 @@ typedef struct
     t_str_split     split;
 } String;
 
-t_bool  _string_insert_at(Object *self, void *data, ssize_t pos);
+t_bool  _string_insert_at(Object *string, void *data, ssize_t pos);
 t_bool  _string_delete_at(Object *self, ssize_t pos);
 t_bool  _string_erase(Object *self);
 void    _string_affect(Object *self, void *data);

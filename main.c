@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include "arrays.h"
 
 int     main(int ac, char **av)
@@ -22,14 +23,11 @@ int     main(int ac, char **av)
     a = new (_array, data_array1, COPY_ALL, 0);
     a->dump(a, "Array a", array_basic_print, "");
 
-    free_typed_array(data_array1);
-    free_typed_array(data_array2);
-
     delete (a);
     delete (b);
-
+    free_typed_array(data_array1);
+    free_typed_array(data_array2);
     (void)ac;
     (void)av;
-
     return (1);
 }

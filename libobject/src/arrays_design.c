@@ -1,5 +1,7 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include "arrays.h"
+#include "iterators.h"
 
 static t_bool   copy_ctor(Container *array, void **copy, ssize_t size)
 {
@@ -14,7 +16,7 @@ static t_bool   copy_ctor(Container *array, void **copy, ssize_t size)
     }
     while (i < size)
     {
-        if (array->push_back(array, copy[i]) == FALSE)
+        if (array->push_back(array, ((t_data *)copy[i])->data, ((t_data *)copy[i])->type) == FALSE)
             return (FALSE);
         ++i;
     }
@@ -36,19 +38,32 @@ static t_bool   _array_ctor(Object *self, va_list *args)
     nb_args = va_arg(*args, ssize_t);
     while (nb_args > 0)
     {
-        if (array->push_back(array, va_arg(*args, void *)) == FALSE)
+        if (array->push_back(array, va_arg(*args, void *), va_arg(*args, t_type)) == FALSE)
             return (FALSE);
         --nb_args;
     }
     return (TRUE);
 }
 
-static void _array_dtor(Object *self, va_list *args)
+static void     _array_dtor(Object *self, va_list *args)
 {
-    (void)args;
+    Iterator    *it;
+    t_data      *cur;
+
+    it = ((Container *)self)->first(self);
+    if (it)
+    {
+        while ((cur = it->rvalue(it)) != NULL)
+        {
+            free(cur);
+            it->incr(it);
+        }
+    }
+    free(it);
     free(((Container *)self)->contained);
     ((Container *)self)->contained = NULL;
     ((Container *)self)->contained_size = 0;
+    (void)args;
 }
 
 static Array _array_descr =
@@ -67,7 +82,7 @@ static Array _array_descr =
             &_container_size,
             &_container_empty,
 
-            &_array_insert_at,
+            &_container_insert_at,
             &_container_push_back,
             &_array_delete_at,
             &_array_erase,

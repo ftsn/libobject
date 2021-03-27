@@ -15,12 +15,10 @@ CFLAGS	+=	-I./includes/
 
 VPATH	=	src/
 
-SRCS    =   	types               \
+SRCS    =	types               \
 	    	new                 \
 	    	utils               \
 	    	containers_methods  \
-	    	strings_design      \
-	    	strings_methods     \
 	    	lists_design        \
 	    	lists_methods       \
 	    	arrays_design       \

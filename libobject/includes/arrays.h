@@ -8,7 +8,6 @@ typedef struct
     Container   base;
 } Array;
 
-t_bool  _array_insert_at(Object *self, void *data, ssize_t pos);
 t_bool  _array_delete_at(Object *self, ssize_t pos);
 t_bool  _array_erase(Object *self);
 

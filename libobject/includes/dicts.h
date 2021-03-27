@@ -12,8 +12,8 @@ typedef struct  s_pair
 typedef Object  *(*t_obj_by_key)(const Object *dict, const char *key);
 Object          *_get_obj_by_key(const Object *dict, const char *key);
 
-typedef t_bool  (*t_map_push)(Object *self, char *key, void *data);
-t_bool          _dict_push_back(Object *self, char *key, void *data);
+typedef t_bool  (*t_map_push)(Object *self, char *key, void *data, t_type type);
+t_bool          _dict_push_back(Object *self, char *key, void *data, t_type type);
 
 typedef struct
 {

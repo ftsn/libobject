@@ -3,41 +3,6 @@
 #include "arrays.h"
 #include "iterators.h"
 
-static void copy_array(void **dest, void **src, void *data, ssize_t pos)
-{
-    ssize_t i;
-    ssize_t j;
-
-    i = 0;
-    if (!dest || !src)
-        return;
-    while (src[i] && i < pos)
-    {
-        dest[i] = src[i];
-        ++i;
-    }
-    j = i;
-    dest[i++] = data;
-    while (src[j])
-        dest[i++] = src[j++];
-}
-
-t_bool          _array_insert_at(Object *container, void *data, ssize_t pos)
-{
-    void        **res;
-    Container   *self;
-
-    self = container;
-    if (!(res = malloc(sizeof(void *) * (self->contained_size + 2))))
-        return (FALSE);
-    copy_array(res, self->contained, data, pos);
-    res[self->contained_size + 1] = NULL;
-    free(self->contained);
-    self->contained = res;
-    ++self->contained_size;
-    return (TRUE);
-}
-
 t_bool          _array_delete_at(Object *container, ssize_t pos)
 {
     Container   *self;

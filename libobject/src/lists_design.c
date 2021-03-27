@@ -14,7 +14,7 @@ static t_bool   copy_ctor(Container *list, void **copy, ssize_t size)
     }
     while (i < size)
     {
-        if (list->push_back(list, copy[i]) == FALSE)
+        if (list->push_back(list, copy[i], TYPE_CHAR) == FALSE)
             return (FALSE);
         ++i;
     }
@@ -34,7 +34,7 @@ static t_bool   _list_ctor(Object *self, va_list *args)
     nb_args = va_arg(*args, ssize_t);
     while (nb_args > 0)
     {
-        if (list->push_back(list, va_arg(*args, void *)) == FALSE)
+        if (list->push_back(list, va_arg(*args, void *), va_arg(*args, t_type)) == FALSE)
             return (FALSE);
         --nb_args;
     }

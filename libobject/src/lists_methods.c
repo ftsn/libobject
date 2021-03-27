@@ -120,9 +120,15 @@ static t_bool   list_del(t_list_data **list, ssize_t pos, t_list_type type)
     return (TRUE);
 }
 
-t_bool  _spl_list_add(Object *list, void *data, ssize_t pos)
+t_bool      _spl_list_add(Object *list, void *data, t_type type, ssize_t pos)
 {
-    if (list_add((t_list_data **)&((Container *)list)->contained, data, pos, SIMPLE) == TRUE)
+    t_data  *typed_data;
+
+    if (!(typed_data = malloc(sizeof(t_data))))
+        return (FALSE);
+    typed_data->type = type;
+    typed_data->data = data;
+    if (list_add((t_list_data **)&((Container *)list)->contained, typed_data, pos, SIMPLE) == TRUE)
     {
         ++((Container *)list)->contained_size;
         return (TRUE);
@@ -130,9 +136,15 @@ t_bool  _spl_list_add(Object *list, void *data, ssize_t pos)
     return (FALSE);
 }
 
-t_bool  _spl_clist_add(Object *list, void *data, ssize_t pos)
+t_bool      _spl_clist_add(Object *list, void *data, t_type type, ssize_t pos)
 {
-    if (list_add((t_list_data **)&((Container *)list)->contained, data, pos, CIRC_SIMPLE) == TRUE)
+    t_data  *typed_data;
+
+    if (!(typed_data = malloc(sizeof(t_data))))
+        return (FALSE);
+    typed_data->type = type;
+    typed_data->data = data;
+    if (list_add((t_list_data **)&((Container *)list)->contained, typed_data, pos, CIRC_SIMPLE) == TRUE)
     {
         ++((Container *)list)->contained_size;
         return (TRUE);
@@ -140,9 +152,15 @@ t_bool  _spl_clist_add(Object *list, void *data, ssize_t pos)
     return (FALSE);
 }
 
-t_bool  _dbl_list_add(Object *list, void *data, ssize_t pos)
+t_bool      _dbl_list_add(Object *list, void *data, t_type type, ssize_t pos)
 {
-    if (list_add((t_list_data **)&((Container *)list)->contained, data, pos, DOUBLE) == TRUE)
+    t_data  *typed_data;
+
+    if (!(typed_data = malloc(sizeof(t_data))))
+        return (FALSE);
+    typed_data->type = type;
+    typed_data->data = data;
+    if (list_add((t_list_data **)&((Container *)list)->contained, typed_data, pos, DOUBLE) == TRUE)
     {
         ++((Container *)list)->contained_size;
         return (TRUE);
@@ -150,9 +168,15 @@ t_bool  _dbl_list_add(Object *list, void *data, ssize_t pos)
     return (FALSE);
 }
 
-t_bool  _dbl_clist_add(Object *list, void *data, ssize_t pos)
+t_bool      _dbl_clist_add(Object *list, void *data, t_type type, ssize_t pos)
 {
-    if (list_add((t_list_data **)&((Container *)list)->contained, data, pos, CIRC_DOUBLE) == TRUE)
+    t_data  *typed_data;
+
+    if (!(typed_data = malloc(sizeof(t_data))))
+        return (FALSE);
+    typed_data->type = type;
+    typed_data->data = data;
+    if (list_add((t_list_data **)&((Container *)list)->contained, typed_data, pos, CIRC_DOUBLE) == TRUE)
     {
         ++((Container *)list)->contained_size;
         return (TRUE);
