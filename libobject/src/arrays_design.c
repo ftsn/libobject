@@ -10,8 +10,9 @@ static t_bool   _array_ctor(Object *self, va_list *args)
     void        *copy;
 
     array = self;
-    if (!(array->contained = calloc(1, sizeof(void *))))
+    if (!(array->contained = calloc(CHUNK_SIZE, sizeof(void *))))
         return (FALSE);
+    ((Array *)array)->total_size = ARRAY_ALLOC_SIZE(array->contained_size);
     if ((copy = va_arg(*args, void *)))
         if (ctn_copy_ctor(array, copy, va_arg(*args, ssize_t)) == FALSE)
             return (FALSE);
@@ -62,7 +63,7 @@ static Array _array_descr =
             &_container_size,
             &_container_empty,
 
-            &_container_insert_at,
+            &_array_insert_at,
             &_container_push_back,
             &_array_delete_at,
             &_array_erase,
@@ -79,8 +80,9 @@ static Array _array_descr =
             &_container_map,
 
             &_container_begin,
-            &_container_last
-        }
+            &_container_last,
+        },
+        0
     };
 
 Class *_array = (Class *)&_array_descr;

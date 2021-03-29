@@ -3,31 +3,103 @@
 #include "arrays.h"
 #include "iterators.h"
 
-t_bool          _array_delete_at(Object *container, ssize_t pos)
+static void copy_performs_addition(void **dest, void **src, t_data *typed_data, ssize_t pos, ssize_t total_size)
 {
-    Container   *self;
-    void        **res;
+    ssize_t i;
+    ssize_t j;
+
+    i = -1;
+    if (!dest || !src)
+        return;
+    while (++i < pos)
+        dest[i] = src[i];
+    j = i;
+    dest[i++] = typed_data;
+    while (j < total_size)
+        dest[i++] = src[j++];
+}
+
+static void     copy_performs_deletion(void **dest, void **src, ssize_t pos, ssize_t total_size)
+{
     ssize_t     i;
     ssize_t     j;
 
-    self = container;
-    if (self->empty(self) == TRUE)
-        return (FALSE);
-    if (pos >= self->contained_size)
-        pos = self->contained_size - 1;
-    if (!(res = malloc(self->contained_size * sizeof(void *))))
-        return (FALSE);
     i = -1;
-    while (((void **)self->contained)[++i] && i < pos)
-        res[i] = ((void **)self->contained)[i];
+    if (!dest || !src)
+        return;
+    while (++i < pos)
+        dest[i] = src[i];
     j = i;
     ++i;
-    while (((void **)self->contained)[i])
-        res[j++] = ((void **)self->contained)[i++];
-    res[j] = NULL;
-    free(self->contained);
-    self->contained = res;
-    --self->contained_size;
+    while (j < total_size)
+        dest[j++] = src[i++];
+}
+
+t_bool      array_alloc(Container *array, ssize_t size, t_array_opr operation, ...)
+{
+    ssize_t new_size;
+    ssize_t i;
+    void    **contained;
+    va_list ap;
+
+    (void)size;
+    va_start(ap, operation);
+    if (operation == ADDITION)
+        new_size = ARRAY_ALLOC_SIZE(array->contained_size + 1);
+    else if (operation == DELETION)
+        new_size = ARRAY_ALLOC_SIZE(array->contained_size - 1);
+    else
+        new_size = ARRAY_ALLOC_SIZE(array->contained_size);
+    if (!(contained = malloc(sizeof(void *) * (new_size + 1))))
+        return (FALSE);
+    contained[new_size] = NULL;
+    ((Array *)array)->total_size = new_size;
+    if (operation == ADDITION)
+    {
+        array->contained_size += 1;
+        copy_performs_addition(contained, array->contained, va_arg(ap, t_data *), va_arg(ap, ssize_t), array->contained_size);
+    }
+    else if (operation == DELETION)
+    {
+        array->contained_size -= 1;
+        copy_performs_deletion(contained, array->contained, va_arg(ap, ssize_t), array->contained_size);
+    }
+    i = array->contained_size - 1;
+    while (++i < new_size)
+        contained[i] = NULL;
+    free(array->contained);
+    array->contained = contained;
+    va_end(ap);
+    return (TRUE);
+}
+
+t_bool          _array_insert_at(Object *container, void *data, t_type type, ssize_t pos)
+{
+    Container   *self;
+    t_data      *typed_data;
+
+    self = container;
+    if (!(typed_data = malloc(sizeof(t_data))))
+        return (FALSE);
+    typed_data->type = type;
+    typed_data->data = data;
+    if (array_alloc(self, 666, ADDITION, typed_data, pos) == FALSE)
+    {
+        free(typed_data);
+        return (FALSE);
+    }
+    return (TRUE);
+}
+
+t_bool          _array_delete_at(Object *container, ssize_t pos)
+{
+    Container   *self;
+
+    self = container;
+    if (self->contained_size == 0 || pos >= self->contained_size)
+        return (FALSE);
+    if (array_alloc(self, 666, DELETION, pos) == FALSE)
+        return (FALSE);
     return (TRUE);
 }
 
