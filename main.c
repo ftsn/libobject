@@ -1,8 +1,17 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "arrays.h"
 #include "lists.h"
 #include "stringsdef.h"
+
+#pragma pack(push,1)
+typedef struct  s_toto {
+    void        (*fptr)();
+    int         *n;
+    char        *c;
+} t_toto;
+#pragma pack(pop)
 
 int     main(int ac, char **av)
 {
@@ -25,6 +34,8 @@ int     main(int ac, char **av)
     data_array1[2] = raw_data_to_typed(&nb, TYPE_INT);
     data_array1[3] = raw_data_to_typed("!", TYPE_CHAR);
     a = new (_array, data_array1, COPY_ALL, 0);
+    a->delete_at(a, 0);
+    a->delete_at(a, 2);
     a->dump(a, "Array a", typed_basic_print, "");
 
     c = new(_dbl_clist, data_array1, COPY_ALL, 0);
@@ -50,6 +61,17 @@ int     main(int ac, char **av)
         printf("[%s] [%s] [%s]\n", s->front(s), s->back(s), s->at(s, 3));
         delete(s);
     }
+
+
+    char *p1 = av[0];
+    char *p2 = av[1];
+    if (p1 == p2)
+        printf("EQUALS\n");
+    else
+        printf("NOPE\n");
+    //(void)toto1;
+    //(void)toto2;
+    //(void)tata;
     (void)ac;
     (void)av;
     return (1);

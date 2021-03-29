@@ -148,11 +148,7 @@ void            _container_print(const Object *container,
         if (is_container(cur))
         {
             if (is_of_type(cur, TYPE_ARRAY) == TRUE)
-            {
-                printf("%stype:%d %s", concat_prefix, ((Class *)cur)->__type__, is_of_type(cur, TYPE_ARRAY) ? "YES ARRAY" : "NOT AN ARRAY");
-                printf("%stotal size: [%zd]\n", concat_prefix, ((const Array *)container)->total_size);
                 recursion_title = "Sub array";
-            }
             else if (is_list(cur) == TRUE)
                 recursion_title = "Sub list";
             else if (is_of_type(cur, TYPE_DICT) == TRUE)

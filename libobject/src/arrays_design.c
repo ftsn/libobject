@@ -10,9 +10,8 @@ static t_bool   _array_ctor(Object *self, va_list *args)
     void        *copy;
 
     array = self;
-    if (!(array->contained = calloc(CHUNK_SIZE, sizeof(void *))))
+    if (array_alloc(array, 666, NO_OPERATION) == FALSE)
         return (FALSE);
-    ((Array *)array)->total_size = ARRAY_ALLOC_SIZE(array->contained_size);
     if ((copy = va_arg(*args, void *)))
         if (ctn_copy_ctor(array, copy, va_arg(*args, ssize_t)) == FALSE)
             return (FALSE);
