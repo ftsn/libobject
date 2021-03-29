@@ -152,8 +152,6 @@ void            _container_print(const Object *container,
                 recursion_title = "Sub list";
             else if (is_of_type(cur, TYPE_DICT))
                 recursion_title = "Sub dict";
-            else if (is_of_type(cur, TYPE_STRING))
-                recursion_title = "Sub string";
             else
                 recursion_title = "Undefined container";
             printf("%s%d:\n", concat_prefix, (int)i);

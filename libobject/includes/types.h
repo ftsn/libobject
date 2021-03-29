@@ -1,13 +1,13 @@
 #ifndef TYPES_H_
 # define TYPES_H_
 
-typedef void Object;
+typedef void    Object;
 
 typedef char    t_bool;
 # define TRUE   1
 # define FALSE  (!TRUE)
 
-typedef enum	e_type
+typedef enum e_type
 {
     /* Primary types */
     _TYPE_PRIMARY_BEGIN = 0,
@@ -29,8 +29,9 @@ typedef enum	e_type
     _TYPE_PRIMARY_END,
 
     /* Classes types */
+
+    /* Containers */
     _TYPE_CONTAINER_BEGIN,
-    TYPE_STRING,
     TYPE_ARRAY,
     TYPE_DICT,
     TYPE_LINKED_LIST,
@@ -41,33 +42,36 @@ typedef enum	e_type
     TYPE_STRING_ITERATOR,
     TYPE_DICT_ITERATOR,
     TYPE_LIST_ITERATOR,
-    _TYPE_CONTAINER_END
+    _TYPE_CONTAINER_END,
+
+    /* Other classes */
+    TYPE_STRING,
 } t_type;
 
 typedef struct
 {
-    t_type    type;
-    void      *data;
+    t_type  type;
+    void    *data;
 } t_data;
 
 static inline t_bool    is_of_type(Object *tested, t_type type)
 {
-  return (*(t_type *)tested == type ? TRUE : FALSE);
+    return (*(t_type *)tested == type ? TRUE : FALSE);
 }
 
 static inline t_bool    is_primary(Object *tested)
 {
-  return (*(t_type *)tested > _TYPE_PRIMARY_BEGIN && *(t_type *)tested < _TYPE_PRIMARY_END ? TRUE : FALSE);
+    return (*(t_type *)tested > _TYPE_PRIMARY_BEGIN && *(t_type *)tested < _TYPE_PRIMARY_END ? TRUE : FALSE);
 }
 
 static inline t_bool    is_container(Object *tested)
 {
-  return (*(t_type *)tested > _TYPE_CONTAINER_BEGIN && *(t_type *)tested < _TYPE_CONTAINER_END ? TRUE : FALSE);
+    return (*(t_type *)tested > _TYPE_CONTAINER_BEGIN && *(t_type *)tested < _TYPE_CONTAINER_END ? TRUE : FALSE);
 }
 
 static inline t_bool    is_list(Object *tested)
 {
-  return (*(t_type *)tested >= TYPE_LINKED_LIST && *(t_type *)tested <= TYPE_CIRCULAR_DOUBLY_LINKED_LIST ? TRUE : FALSE);
+    return (*(t_type *)tested >= TYPE_LINKED_LIST && *(t_type *)tested <= TYPE_CIRCULAR_DOUBLY_LINKED_LIST ? TRUE : FALSE);
 }
 
 t_data  *raw_data_to_typed(void *raw, t_type type);
