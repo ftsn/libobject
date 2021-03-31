@@ -27,16 +27,23 @@ static t_bool   _array_ctor(Object *self, va_list *args)
 
 static void     _array_dtor(Object *self, va_list *args)
 {
-    Iterator    *it;
-    t_data      *cur;
+    Iterator    *it, *end;
 
-    it = ((Container *)self)->first(self);
+    printf("test/n");
+    if ((it = ((Container *)self)->begin(self)) == NULL)
+        return ;
+    if ((end = ((Container *)self)->end(self)) == NULL)
+    {
+        delete(it);
+        return ;
+    }
     if (it)
     {
-        while ((cur = it->rvalue(it)) != NULL)
+        while (it->equals(it, end) == FALSE)
         {
-            free(cur);
-            it->incr(it);
+            printf("stuck ici probablement\n");
+            free(it->dereference(it));
+            it->next(it);
         }
     }
     free(it);
@@ -79,7 +86,7 @@ static Array _array_descr =
             &_container_map,
 
             &_container_begin,
-            &_container_last,
+            &_container_end,
         },
         0
     };

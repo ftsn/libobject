@@ -2,117 +2,76 @@
 #include "iterators.h"
 #include "lists.h"
 
-/*
-** Random access methods
-*/
-void            _ra_incr(Object *self)
+inline t_bool  _it_equals(Iterator *it1, Iterator *it2)
 {
-    Iterator    *it;
-
-    it = self;
-    ++it->pos;
-    it->cur = it->container.at((Container *)it, it->pos);
+    return (it1->dereference(it1) == it2->dereference(it2) ? TRUE : FALSE);
 }
 
-void            _ra_decr(Object *self)
+t_bool  _list_it_previous(Iterator *it)
 {
-    Iterator    *it;
-
-    it = self;
-    --it->pos;
-    it->cur = it->container.at((Container *)it, it->pos);
-}
-
-void            _ra_jump(Object *self, ssize_t pos)
-{
-    Iterator    *it;
-
-    it = self;
-    it->pos += pos;
-    it->cur = it->container.at((Container *)it, it->pos);
-}
-
-Object          *_ra_rvalue(Object *self)
-{
-    Iterator    *it;
-
-    it = self;
-    if (it->pos >= 0 && it->pos < it->container.contained_size)
-        return (it->cur);
-    return (NULL);
-}
-
-Object          *_ra_jmp_rvalue(Object *self, ssize_t pos)
-{
-    Iterator    *it;
-
-    it = self;
-    it->jump(it, pos);
-    return (it->rvalue(it));
-}
-
-/*
-** List methods
-*/
-void            _list_incr(Object *self)
-{
-    Iterator    *it;
-
-    it = self;
-    ++it->pos;
-    it->cur = ((t_list_data *)it->cur)->next;
-}
-
-void            _list_decr(Object *self)
-{
-    Iterator    *it;
-
-    it = self;
-    --it->pos;
+    if(((t_list_data *)it->cur)->prev == NULL)
+        return (FALSE);
+    --it->it_idx;
     it->cur = ((t_list_data *)it->cur)->prev;
+    return (TRUE);
 }
 
-void            _list_jump(Object *self, ssize_t pos)
+t_bool  _list_it_next(Iterator *it)
 {
-    Iterator    *it;
-    ssize_t     i;
-
-    i = 0;
-    it = self;
-    it->pos += pos;
-    if (pos < 0)
-    {
-        while (i > pos)
-        {
-            it->cur = ((t_list_data *)it->cur)->prev;
-            --i;
-        }
-    }
-    else
-    {
-        while (i < pos)
-        {
-            it->cur = ((t_list_data *)it->cur)->next;
-            ++i;
-        }
-    }
+    if(((t_list_data *)it->cur)->next == NULL)
+        return (FALSE);
+    ++it->it_idx;
+    it->cur = ((t_list_data *)it->cur)->next;
+    return (TRUE);
 }
 
-Object          *_list_rvalue(Object *self)
+inline t_bool   _ra_it_previous(Iterator *it)
 {
-    Iterator    *it;
-
-    it = self;
-    if (it->pos >= 0 && it->pos < it->container.contained_size)
-        return (((t_list_data *)it->cur)->data);
-    return (NULL);
+    return (_ra_it_jump((RandomAccessIterator *)it, -1));
 }
 
-Object          *_list_jmp_rvalue(Object *self, ssize_t pos)
+inline t_bool   _ra_it_next(Iterator *it)
 {
-    Iterator    *it;
+    return (_ra_it_jump((RandomAccessIterator *)it, 1));
+}
 
-    it = self;
-    it->jump(it, pos);
-    return (it->rvalue(it));
+
+Object  *_list_it_dereference(Iterator *it)
+{
+    return (((t_list_data *)it->cur)->data);
+}
+
+inline Object  *_ra_it_dereference(Iterator *it)
+{
+    return (it->cur);
+}
+
+inline t_bool  _ra_it_lt(RandomAccessIterator *it1, RandomAccessIterator *it2)
+{
+    return (it1 < it2 ? TRUE : FALSE);
+}
+
+inline t_bool  _ra_it_gt(RandomAccessIterator *it1, RandomAccessIterator *it2)
+{
+    return (it1 > it2 ? TRUE : FALSE);
+}
+
+t_bool          _ra_it_jump(RandomAccessIterator *it, ssize_t idx)
+{
+    Container   *ctn;
+
+    ctn = ((Iterator *)it)->iterated_obj;
+    if (it->ra_idx + idx >= ctn->contained_size)
+        return (FALSE);
+    it->ra_idx += idx;
+    ((Iterator *)it)->it_idx += idx;
+    return (TRUE);
+}
+
+Object          *_ra_it_at(RandomAccessIterator *it, ssize_t idx)
+{
+    Container   *ctn;
+
+    ctn = ((Iterator *)it)->iterated_obj;
+    return (ctn->at(ctn, idx));
 }

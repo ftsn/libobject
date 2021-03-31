@@ -24,8 +24,11 @@ int     main(int ac, char **av)
     data_array2 = init_typed_array(2);
     data_array2[0] = raw_data_to_typed("Giga recursed test", TYPE_CSTRING);
     data_array2[1] = raw_data_to_typed("?", TYPE_CHAR);
+    printf("stuck ici probablement 1\n");
     b = new (_array, data_array2, COPY_ALL, 0);
-    b->dump(b, "Array b", typed_basic_print, "");
+    printf("stuck ici probablement 2\n");
+    //b->dump(b, "Array b", typed_basic_print, "");
+    printf("stuck ici probablement 3\n");
 
     nb = 666;
     data_array1 = init_typed_array(4);
@@ -34,18 +37,27 @@ int     main(int ac, char **av)
     data_array1[2] = raw_data_to_typed(&nb, TYPE_INT);
     data_array1[3] = raw_data_to_typed("!", TYPE_CHAR);
     a = new (_array, data_array1, COPY_ALL, 0);
+    printf("stuck ici probablement 4\n");
     a->delete_at(a, 0);
     a->delete_at(a, 2);
-    a->dump(a, "Array a", typed_basic_print, "");
+    printf("stuck ici probablement 5\n");
+    //a->dump(a, "Array a", typed_basic_print, "");
 
     c = new(_dbl_clist, data_array1, COPY_ALL, 0);
-    c->dump(c, "Circular doubly linked list c", typed_basic_print, "");
+    printf("stuck ici probablement 6\n");
+    //c->dump(c, "Circular doubly linked list c", typed_basic_print, "");
+    printf("stuck ici probablement 7\n");
 
     delete (a);
+    printf("stuck ici probablement 8\n");
     delete (b);
+    printf("stuck ici probablement 9\n");
     delete(c);
+    printf("stuck ici probablement 10\n");
     free_typed_array(data_array1);
+    printf("stuck ici probablement 11\n");
     free_typed_array(data_array2);
+    printf("stuck ici probablement 12\n");
 
     if (ac == 2) {
         s = new(_string, av[1], COPY_ALL, 5, 'a', 'b', 'c', 'd', 'e');
@@ -57,7 +69,7 @@ int     main(int ac, char **av)
         s->insert_at(s, '6', 3);
         s->push_back(s, '7');
         s->delete_at(s, 0);
-        s->dump(s, "String: ");
+        //s->dump(s, "String: ");
         printf("[%s] [%s] [%s]\n", s->front(s), s->back(s), s->at(s, 3));
         delete(s);
     }

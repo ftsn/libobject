@@ -38,11 +38,16 @@ typedef enum e_type
     TYPE_CIRCULAR_LINKED_LIST,
     TYPE_DOUBLY_LINKED_LIST,
     TYPE_CIRCULAR_DOUBLY_LINKED_LIST,
-    TYPE_ARRAY_ITERATOR,
-    TYPE_STRING_ITERATOR,
-    TYPE_DICT_ITERATOR,
-    TYPE_LIST_ITERATOR,
     _TYPE_CONTAINER_END,
+
+    /* Iterators */
+    _TYPE_ITERATOR_BEGIN,
+    TYPE_ARRAY_RA_ITERATOR,
+    TYPE_STRING_RA_ITERATOR,
+    TYPE_DICT_RA_ITERATOR,
+    TYPE_SPL_LIST_FORWARD_ITERATOR,
+    TYPE_DBL_LIST_BIDIRECTIONAL_ITERATOR,
+    _TYPE_ITERATOR_END,
 
     /* Other classes */
     TYPE_STRING,
@@ -54,12 +59,12 @@ typedef struct
     void    *data;
 } t_data;
 
-static inline t_bool    is_of_type(Object *tested, t_type type)
+static inline t_bool    is_of_type(const Object *tested, t_type type)
 {
     return (*(t_type *)tested == type ? TRUE : FALSE);
 }
 
-static inline t_bool    is_primary(Object *tested)
+static inline t_bool    is_primary(const Object *tested)
 {
     return (*(t_type *)tested > _TYPE_PRIMARY_BEGIN && *(t_type *)tested < _TYPE_PRIMARY_END ? TRUE : FALSE);
 }
@@ -69,9 +74,24 @@ static inline t_bool    is_container(Object *tested)
     return (*(t_type *)tested > _TYPE_CONTAINER_BEGIN && *(t_type *)tested < _TYPE_CONTAINER_END ? TRUE : FALSE);
 }
 
-static inline t_bool    is_list(Object *tested)
+static inline t_bool    is_list(const Object *tested)
 {
     return (*(t_type *)tested >= TYPE_LINKED_LIST && *(t_type *)tested <= TYPE_CIRCULAR_DOUBLY_LINKED_LIST ? TRUE : FALSE);
+}
+
+static inline t_bool    is_spl_list(const Object *tested)
+{
+    return (*(t_type *)tested == TYPE_LINKED_LIST || *(t_type *)tested <= TYPE_CIRCULAR_LINKED_LIST ? TRUE : FALSE);
+}
+
+static inline t_bool    is_dbl_list(const Object *tested)
+{
+    return (*(t_type *)tested == TYPE_DOUBLY_LINKED_LIST || *(t_type *)tested <= TYPE_CIRCULAR_DOUBLY_LINKED_LIST ? TRUE : FALSE);
+}
+
+static inline t_bool    is_iterator(const Object *tested)
+{
+    return (*(t_type *)tested >= _TYPE_ITERATOR_BEGIN && *(t_type *)tested <= _TYPE_ITERATOR_END ? TRUE : FALSE);
 }
 
 t_data  *raw_data_to_typed(void *raw, t_type type);

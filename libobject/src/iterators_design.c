@@ -3,20 +3,44 @@
 #include "iterators.h"
 #include "lists.h"
 
+static t_bool   _list_iterator_ctor(Object *self, va_list *args)
+{
+    Container   *iterated_obj;
+    Iterator    *it;
+    ssize_t     idx_start;
+    ssize_t     i;
+
+    it = self;
+    iterated_obj = va_arg(*args, void *);
+    it->iterated_obj = iterated_obj;
+    it->cur = iterated_obj->front(iterated_obj);
+    if (it->cur == NULL)
+        return (TRUE);
+    idx_start = va_arg(*args, ssize_t);
+    if (idx_start == END)
+        idx_start = iterated_obj->contained_size - 1;
+    i = 0;
+    while (i < idx_start)
+    {
+        it->next(it);
+        ++i;
+    }
+    return (TRUE);
+}
+
 static t_bool   _ra_iterator_ctor(Object *self, va_list *args)
 {
-    Container   *container;
+    Container   *iterated_obj;
+    Iterator    *it;
     ssize_t     idx_start;
 
-    container = va_arg(*args, void *);
-    memcpy((char *)self + sizeof(Class),
-           (char *)container + sizeof(Class),
-           sizeof(Container) - sizeof(Class));
+    it = self;
+    iterated_obj = va_arg(*args, void *);
     idx_start = va_arg(*args, ssize_t);
-    if (idx_start == REVERSE)
-        idx_start = container->contained_size - 1;
-    ((Iterator *)self)->pos = idx_start;
-    ((Iterator *)self)->cur = container->at(container, idx_start);
+    if (idx_start == END)
+        idx_start = iterated_obj->contained_size ? iterated_obj->contained_size - 1 : 0;
+    ((RandomAccessIterator *)it)->jump((RandomAccessIterator *)it, idx_start);
+    it->iterated_obj = ((RandomAccessIterator *)it)->at((RandomAccessIterator *)it, idx_start);
     return (TRUE);
 }
 
@@ -26,186 +50,141 @@ static void _iterator_dtor(Object *self, va_list *args)
     (void)args;
 }
 
-static ArrayIt _array_it_descr =
+static RandomAccessIterator _array_ra_it_descr =
     {
         {
             {
-                TYPE_ARRAY_ITERATOR,
-                sizeof(Iterator),
+                TYPE_ARRAY_RA_ITERATOR,
+                sizeof(RandomAccessIterator),
                 &_ra_iterator_ctor,
                 &_iterator_dtor
             },
+            &_it_equals,
+
+            &_ra_it_previous,
+            &_ra_it_next,
+
+            &_ra_it_dereference,
+
+            NULL,
             NULL,
             0,
-
-            NULL,
-            NULL,
-            NULL,
-
-            NULL,
-            NULL,
-            NULL,
-            NULL,
-            NULL,
-
-            NULL,
-            NULL,
-            NULL,
-
-            NULL,
-
-            NULL,
-            NULL,
-            NULL,
-
-            NULL,
-            NULL
         },
-        NULL,
-        &_ra_incr,
-        &_ra_decr,
-        &_ra_jump,
-        &_ra_rvalue,
-        &_ra_jmp_rvalue,
+        &_ra_it_lt,
+        &_ra_it_gt,
+
+        &_ra_it_jump,
+
+        &_ra_it_at,
+
         0
     };
 
-Class *_array_it = (Class *)&_array_it_descr;
+Class *_array_ra_it = (Class *)&_array_ra_it_descr;
 
-static StringIt _string_it_descr =
+static RandomAccessIterator _string_ra_it_descr =
     {
         {
             {
-                TYPE_STRING_ITERATOR,
-                sizeof(Iterator),
+                TYPE_STRING_RA_ITERATOR,
+                sizeof(RandomAccessIterator),
                 &_ra_iterator_ctor,
                 &_iterator_dtor
             },
+            &_it_equals,
+
+            &_ra_it_previous,
+            &_ra_it_next,
+
+            &_ra_it_dereference,
+
+            NULL,
             NULL,
             0,
-
-            NULL,
-            NULL,
-            NULL,
-
-            NULL,
-            NULL,
-            NULL,
-            NULL,
-            NULL,
-
-            NULL,
-            NULL,
-            NULL,
-
-            NULL,
-
-            NULL,
-            NULL,
-            NULL,
-
-            NULL,
-            NULL
         },
-        NULL,
-        &_ra_incr,
-        &_ra_decr,
-        &_ra_jump,
-        &_ra_rvalue,
-        &_ra_jmp_rvalue,
+        &_ra_it_lt,
+        &_ra_it_gt,
+
+        &_ra_it_jump,
+
+        &_ra_it_at,
+
         0
     };
 
-Class *_string_it = (Class *)&_string_it_descr;
+Class *_string_ra_it = (Class *)&_string_ra_it_descr;
 
-static DictIt _dict_it_descr =
+static RandomAccessIterator _dict_ra_it_descr =
     {
         {
             {
-                TYPE_DICT_ITERATOR,
-                sizeof(Iterator),
+                TYPE_DICT_RA_ITERATOR,
+                sizeof(RandomAccessIterator),
                 &_ra_iterator_ctor,
                 &_iterator_dtor
             },
+            &_it_equals,
+
+            &_ra_it_previous,
+            &_ra_it_next,
+
+            &_ra_it_dereference,
+
+            NULL,
             NULL,
             0,
-
-            NULL,
-            NULL,
-            NULL,
-
-            NULL,
-            NULL,
-            NULL,
-            NULL,
-            NULL,
-
-            NULL,
-            NULL,
-            NULL,
-
-            NULL,
-
-            NULL,
-            NULL,
-            NULL,
-
-            NULL,
-            NULL
         },
-        NULL,
-        &_ra_incr,
-        &_ra_decr,
-        &_ra_jump,
-        &_ra_rvalue,
-        &_ra_jmp_rvalue,
+        &_ra_it_lt,
+        &_ra_it_gt,
+
+        &_ra_it_jump,
+
+        &_ra_it_at,
+
         0
     };
 
-Class *_dict_it = (Class *)&_dict_it_descr;
+Class *_dict_ra_it = (Class *)&_dict_ra_it_descr;
 
-static ListIt _list_it_descr =
+static ForwardIterator _spl_list_forward_it_descr =
     {
         {
-            {
-                TYPE_LIST_ITERATOR,
-                sizeof(Iterator),
-                &_ra_iterator_ctor,
-                &_iterator_dtor
-            },
-            NULL,
-            0,
-
-            NULL,
-            NULL,
-            NULL,
-
-            NULL,
-            NULL,
-            NULL,
-            NULL,
-            NULL,
-
-            NULL,
-            NULL,
-            NULL,
-
-            NULL,
-
-            NULL,
-            NULL,
-            NULL,
-
-            NULL,
-            NULL
+            TYPE_SPL_LIST_FORWARD_ITERATOR,
+            sizeof(ForwardIterator),
+            &_list_iterator_ctor,
+            &_iterator_dtor
         },
+        &_it_equals,
+
+        &_list_it_next,
+
+        &_list_it_dereference,
+
         NULL,
-        &_list_incr,
-        &_list_decr,
-        &_list_jump,
-        &_list_rvalue,
-        &_list_jmp_rvalue,
-        0
+        NULL,
+        0,
     };
 
-Class *_list_it = (Class *)&_list_it_descr;
+Class *_spl_list_forward_it = (Class *)&_spl_list_forward_it_descr;
+
+static BidirectionalIterator _dbl_list_bidirectional_it_descr =
+    {
+        {
+            TYPE_DBL_LIST_BIDIRECTIONAL_ITERATOR,
+            sizeof(BidirectionalIterator),
+            &_list_iterator_ctor,
+            &_iterator_dtor
+        },
+        &_it_equals,
+
+        &_list_it_previous,
+        &_list_it_next,
+
+        &_list_it_dereference,
+
+        NULL,
+        NULL,
+        0,
+    };
+
+Class *_dbl_list_bidirectional_it = (Class *)&_dbl_list_bidirectional_it_descr;

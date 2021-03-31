@@ -45,7 +45,7 @@ Object          *_container_map(Object *self, Class *type, void *(*fptr)(ssize_t
 
 typedef Object  *(*t_it_create)(const Object *self);
 Object          *_container_begin(const Object *self);
-Object          *_container_last(const Object *self);
+Object          *_container_end(const Object *self);
 
 typedef struct {
     Class           base;
@@ -73,8 +73,8 @@ typedef struct {
     t_sub           sub;
     t_map           map;
 
-    t_it_create     first;
-    t_it_create     last;
+    t_it_create     begin;
+    t_it_create     end;
 } Container;
 
 t_bool  ctn_copy_ctor(Container *ctn, void **copy, ssize_t size);

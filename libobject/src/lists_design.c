@@ -24,17 +24,22 @@ static t_bool   _list_ctor(Object *self, va_list *args)
 
 static void     _list_dtor(Object *self, va_list *args)
 {
-    Iterator    *it;
-    t_data      *cur;
+    Iterator    *it, *end;
     Container   *list;
 
-    it = ((Container *)self)->first(self);
+    if ((it = ((Container *)self)->begin(self)) == NULL)
+        return ;
+    if ((end = ((Container *)self)->end(self)) == NULL)
+    {
+        delete(it);
+        return ;
+    }
     if (it)
     {
-        while ((cur = it->rvalue(it)) != NULL)
+        while (it->equals(it, end) == FALSE)
         {
-            free(cur);
-            it->incr(it);
+            free(it->dereference(it));
+            it->next(it);
         }
     }
     free(it);
@@ -82,7 +87,7 @@ static Spl_list _spl_list_descr =
             &_container_map,
 
             &_container_begin,
-            &_container_last
+            &_container_end
         },
         &get_nth_node
     };
@@ -120,7 +125,7 @@ static Spl_clist _spl_clist_descr =
             &_container_map,
 
             &_container_begin,
-            &_container_last
+            &_container_end
         },
         &get_nth_node
     };
@@ -158,7 +163,7 @@ static Dbl_list _dbl_list_descr =
             &_container_map,
 
             &_container_begin,
-            &_container_last
+            &_container_end
         },
         &get_nth_node
     };
@@ -196,7 +201,7 @@ static Dbl_clist _dbl_clist_descr =
             &_container_map,
 
             &_container_begin,
-            &_container_last
+            &_container_end
         },
         &get_nth_node
     };

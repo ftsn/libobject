@@ -129,22 +129,28 @@ void            _container_print(const Object *container,
                                  void (*f)(ssize_t i, const t_data *elem, const char *prefix),
                                  const char *prefix)
 {
-    Iterator    *it;
+    Iterator    *it, *end;
     char        *concat_prefix;
     t_data      *cur;
     char        *recursion_title;
     ssize_t     i;
 
-    if (!(it = ((const Container *)container)->first(container)))
+    if (!(it = ((const Container *)container)->begin(container)))
         return;
+    if (!(end = ((const Container *)container)->end(container)))
+    {
+        delete(it);
+        return;
+    }
     i = 0;
     if (!(concat_prefix = concat(prefix, "  ")))
         return;
     if (title)
         printf("%s%s\n", prefix, title);
     printf("%s[\n", prefix);
-    while ((cur = it->rvalue(it)) != NULL)
+    while (it->equals(it, end) == FALSE)
     {
+        cur = it->dereference(it);
         if (is_container(cur))
         {
             if (is_of_type(cur, TYPE_ARRAY) == TRUE)
@@ -161,10 +167,11 @@ void            _container_print(const Object *container,
         else
             f(i, cur, concat_prefix);
         ++i;
-        it->incr(it);
+        it->next(it);
     }
     printf("%s]\n", prefix);
     delete(it);
+    delete(end);
     free(concat_prefix);
 }
 
@@ -172,27 +179,32 @@ Object          *_container_to_type(Object *self, Class *type)
 {
     Container   *self_c;
     Container   *ctn;
-    Iterator    *it;
+    Iterator    *it, *end;
 
     self_c = self;
-    if (!(ctn = new (type, NULL, 0)))
+    if (!(ctn = new(type, NULL, 0)))
         return (NULL);
-    if (!(it = self_c->first(self_c)))
+    if (!(it = self_c->begin(self_c)))
     {
-        delete (ctn);
+        delete(ctn);
         return (NULL);
     }
-    while (it->rvalue(it) != NULL)
+    if (!(end = ((const Container *)self_c)->end(self_c)))
     {
-        if (ctn->push_back(ctn, ((t_data *)it->rvalue(it))->data, ((t_data *)it->rvalue(it))->type) == FALSE)
+        delete(ctn);
+        delete(it);
+    }
+    while (it->equals(it, end) == FALSE)
+    {
+        if (ctn->push_back(ctn, ((t_data *)it->dereference(it))->data, ((t_data *)it->dereference(it))->type) == FALSE)
         {
-            delete (ctn);
-            delete (it);
+            delete(ctn);
+            delete(it);
             return (NULL);
         }
-        it->incr(it);
+        it->next(it);
     }
-    delete (it);
+    delete(it);
     return (ctn);
 }
 
@@ -212,24 +224,29 @@ Object          *_container_sub(Object *self, Class *type, ssize_t begin, ssize_
         return (NULL);
     if (begin + len > self_c->contained_size)
         return (NULL);
-    if (!(ctn = new (type, NULL, 0)))
+    if (!(ctn = new(type, NULL, 0)))
         return (NULL);
-    if (!(it = self_c->first(self_c)))
+    if (!(it = self_c->begin(self_c)))
     {
-        delete (ctn);
+        delete(ctn);
         return (NULL);
     }
-    it->jump(it, begin);
+    while (i < begin)
+    {
+        it->next(it);
+        ++i;
+    }
+    i = 0;
     while (i < len)
     {
-        if (ctn->push_back(ctn, ((t_data *)it->rvalue(it))->data, ((t_data *)it->rvalue(it))->type) == FALSE)
+        if (ctn->push_back(ctn, ((t_data *)it->dereference(it))->data, ((t_data *)it->dereference(it))->type) == FALSE)
         {
             delete (ctn);
             delete (it);
             return (NULL);
         }
         ++i;
-        it->incr(it);
+        it->next(it);
     }
     delete (it);
     return (ctn);
@@ -238,21 +255,26 @@ Object          *_container_sub(Object *self, Class *type, ssize_t begin, ssize_
 Object          *_container_map(Object *self, Class *type, void *(*fptr)(ssize_t i, void *cur))
 {
     Container   *ctn;
-    Iterator    *it;
+    Iterator    *it, *end;
     ssize_t     i;
     t_data      *typed_data;
 
     if (!(ctn = new (type, NULL, 0)))
         return (NULL);
-    if (!(it = ((Container *)self)->first(self)))
+    if (!(it = ((Container *)self)->begin(self)))
     {
         delete (ctn);
         return (NULL);
     }
-    i = 0;
-    while (it->rvalue(it) != NULL)
+    if (!(end = ((const Container *)ctn)->end(ctn)))
     {
-        typed_data = fptr(i, it->rvalue(it));
+        delete(ctn);
+        delete(it);
+    }
+    i = 0;
+    while (it->equals(it, end) == FALSE)
+    {
+        typed_data = fptr(i, it->dereference(it));
         if (ctn->push_back(ctn, typed_data->data, typed_data-> type) == FALSE)
         {
             delete (it);
@@ -260,7 +282,7 @@ Object          *_container_map(Object *self, Class *type, void *(*fptr)(ssize_t
             return (NULL);
         }
         ++i;
-        it->incr(it);
+        it->next(it);
     }
     delete (it);
     return (ctn);
@@ -273,28 +295,27 @@ static Object       *generate_it(const Object *self, t_it_type type)
 
     ctn = self;
     it = NULL;
-    if (ctn->base.__type__ == TYPE_LINKED_LIST ||
-        ctn->base.__type__ == TYPE_CIRCULAR_LINKED_LIST ||
-        ctn->base.__type__ == TYPE_DOUBLY_LINKED_LIST ||
-        ctn->base.__type__ == TYPE_CIRCULAR_DOUBLY_LINKED_LIST)
-        it = new (_list_it, self, type);
-    if (ctn->base.__type__ == TYPE_ARRAY)
-        it = new (_array_it, self, type);
-    if (ctn->base.__type__ == TYPE_DICT)
-        it = new (_dict_it, self, type);
-    if (ctn->base.__type__ == TYPE_STRING)
-        it = new (_string_it, self, type);
+    if (is_spl_list(ctn) == TRUE)
+        it = new(_spl_list_forward_it, self, type);
+    else if (is_dbl_list(ctn) == TRUE)
+        it = new(_dbl_list_bidirectional_it, self, type);
+    else if (is_of_type(ctn, TYPE_ARRAY) == TRUE)
+        it = new(_array_ra_it, self, type);
+    else if (is_of_type(ctn, TYPE_DICT) == TRUE)
+        it = new(_dict_ra_it, self, type);
+    else if (is_of_type(ctn, TYPE_STRING) == TRUE)
+        it = new(_string_ra_it, self, type);
     return (it);
 }
 
 Object  *_container_begin(const Object *self)
 {
-    return (generate_it(self, BASIC));
+    return (generate_it(self, BEGIN));
 }
 
-Object  *_container_last(const Object *self)
+Object  *_container_end(const Object *self)
 {
-    return (generate_it(self, REVERSE));
+    return (generate_it(self, END));
 }
 
 t_bool      ctn_copy_ctor(Container *ctn, void **copy, ssize_t size)
