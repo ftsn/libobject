@@ -15,7 +15,7 @@ typedef struct  s_toto {
 
 int     main(int ac, char **av)
 {
-    Container *a, *b, *c;
+    Container a, *b, *c;
     t_data **data_array1, **data_array2;
     String *s;
     char *sub;
@@ -33,15 +33,15 @@ int     main(int ac, char **av)
     data_array1[1] = raw_data_to_typed(b, TYPE_ARRAY);
     data_array1[2] = raw_data_to_typed(&nb, TYPE_INT);
     data_array1[3] = raw_data_to_typed("!", TYPE_CHAR);
-    a = new (_array, data_array1, COPY_ALL, 0);
-    a->delete_at(a, 0);
-    a->delete_at(a, 2);
-    a->dump(a, "Array a", typed_basic_print, "");
+    static_new(_array, (Class *)&a, data_array1, COPY_ALL, 0);
+    a.delete_at(&a, 0);
+    a.delete_at(&a, 2);
+    a.dump(&a, "Array a", typed_basic_print, "");
 
     c = new(_dbl_clist, data_array1, COPY_ALL, 0);
     c->dump(c, "Circular doubly linked list c", typed_basic_print, "");
 
-    delete (a);
+    static_delete(&a);
     delete (b);
     delete(c);
     free_typed_array(data_array1);

@@ -16,6 +16,8 @@ typedef struct
   dtor_t        __del__;
 } Class;
 
+t_bool  static_new(const Class *class, Class *dest, ...);
+void    static_delete(Object *ptr, ...);
 Object  *new(const Class *class, ...);
 void    delete(Object *ptr, ...);
 
