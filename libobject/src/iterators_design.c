@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 #include "iterators.h"
 #include "lists.h"
 
@@ -16,9 +17,9 @@ static t_bool   _list_iterator_ctor(Object *self, va_list *args)
     it->cur = iterated_obj->front(iterated_obj);
     if (it->cur == NULL)
         return (TRUE);
-    idx_start = va_arg(*args, ssize_t);
+    idx_start = va_arg(*args, int);
     if (idx_start == END)
-        idx_start = iterated_obj->contained_size - 1;
+        idx_start = iterated_obj->contained_size ? iterated_obj->contained_size - 1 : 0;
     i = 0;
     while (i < idx_start)
     {
@@ -28,19 +29,23 @@ static t_bool   _list_iterator_ctor(Object *self, va_list *args)
     return (TRUE);
 }
 
-static t_bool   _ra_iterator_ctor(Object *self, va_list *args)
+static t_bool               _ra_iterator_ctor(Object *self, va_list *args)
 {
-    Container   *iterated_obj;
-    Iterator    *it;
-    ssize_t     idx_start;
+    Container               *iterated_obj;
+    Iterator                *it;
+    RandomAccessIterator    *ra_it;
+    ssize_t                 idx_start;
 
     it = self;
+    ra_it = (RandomAccessIterator *)it;
     iterated_obj = va_arg(*args, void *);
-    idx_start = va_arg(*args, ssize_t);
+    it->iterated_obj = iterated_obj;
+    idx_start = va_arg(*args, int);
     if (idx_start == END)
         idx_start = iterated_obj->contained_size ? iterated_obj->contained_size - 1 : 0;
-    ((RandomAccessIterator *)it)->jump((RandomAccessIterator *)it, idx_start);
-    it->iterated_obj = ((RandomAccessIterator *)it)->at((RandomAccessIterator *)it, idx_start);
+    ra_it->jump(ra_it, idx_start);
+    if (is_of_type(((Iterator *)it)->iterated_obj, TYPE_ARRAY) == TRUE)
+        it->cur = ra_it->at(ra_it, idx_start);
     return (TRUE);
 }
 
@@ -73,7 +78,7 @@ static RandomAccessIterator _array_ra_it_descr =
         &_ra_it_lt,
         &_ra_it_gt,
 
-        &_ra_it_jump,
+        &_array_ra_it_jump,
 
         &_ra_it_at,
 
@@ -105,7 +110,7 @@ static RandomAccessIterator _string_ra_it_descr =
         &_ra_it_lt,
         &_ra_it_gt,
 
-        &_ra_it_jump,
+        &_array_ra_it_jump,
 
         &_ra_it_at,
 
@@ -137,7 +142,7 @@ static RandomAccessIterator _dict_ra_it_descr =
         &_ra_it_lt,
         &_ra_it_gt,
 
-        &_ra_it_jump,
+        &_array_ra_it_jump,
 
         &_ra_it_at,
 
@@ -156,6 +161,7 @@ static ForwardIterator _spl_list_forward_it_descr =
         },
         &_it_equals,
 
+        NULL,
         &_list_it_next,
 
         &_list_it_dereference,

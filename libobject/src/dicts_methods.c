@@ -2,7 +2,6 @@
 #include <string.h>
 #include <stdio.h>
 #include "dicts.h"
-#include "iterators.h"
 
 void    dict_basic_print(ssize_t i, const t_data *elem, const char *prefix)
 {

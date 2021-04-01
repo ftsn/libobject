@@ -129,7 +129,7 @@ void            _container_print(const Object *container,
                                  void (*f)(ssize_t i, const t_data *elem, const char *prefix),
                                  const char *prefix)
 {
-    Iterator    *it, *end;
+    Iterator    *it;
     char        *concat_prefix;
     t_data      *cur;
     char        *recursion_title;
@@ -137,18 +137,13 @@ void            _container_print(const Object *container,
 
     if (!(it = ((const Container *)container)->begin(container)))
         return;
-    if (!(end = ((const Container *)container)->end(container)))
-    {
-        delete(it);
-        return;
-    }
     i = 0;
     if (!(concat_prefix = concat(prefix, "  ")))
         return;
     if (title)
         printf("%s%s\n", prefix, title);
     printf("%s[\n", prefix);
-    while (it->equals(it, end) == FALSE)
+    do
     {
         cur = it->dereference(it);
         if (is_container(cur))
@@ -167,11 +162,9 @@ void            _container_print(const Object *container,
         else
             f(i, cur, concat_prefix);
         ++i;
-        it->next(it);
-    }
+    } while (it->next(it) == TRUE);
     printf("%s]\n", prefix);
     delete(it);
-    delete(end);
     free(concat_prefix);
 }
 
@@ -179,7 +172,7 @@ Object          *_container_to_type(Object *self, Class *type)
 {
     Container   *self_c;
     Container   *ctn;
-    Iterator    *it, *end;
+    Iterator    *it;
 
     self_c = self;
     if (!(ctn = new(type, NULL, 0)))
@@ -189,12 +182,7 @@ Object          *_container_to_type(Object *self, Class *type)
         delete(ctn);
         return (NULL);
     }
-    if (!(end = ((const Container *)self_c)->end(self_c)))
-    {
-        delete(ctn);
-        delete(it);
-    }
-    while (it->equals(it, end) == FALSE)
+    do
     {
         if (ctn->push_back(ctn, ((t_data *)it->dereference(it))->data, ((t_data *)it->dereference(it))->type) == FALSE)
         {
@@ -202,8 +190,7 @@ Object          *_container_to_type(Object *self, Class *type)
             delete(it);
             return (NULL);
         }
-        it->next(it);
-    }
+    } while (it->next(it) == TRUE);
     delete(it);
     return (ctn);
 }
@@ -255,7 +242,7 @@ Object          *_container_sub(Object *self, Class *type, ssize_t begin, ssize_
 Object          *_container_map(Object *self, Class *type, void *(*fptr)(ssize_t i, void *cur))
 {
     Container   *ctn;
-    Iterator    *it, *end;
+    Iterator    *it;
     ssize_t     i;
     t_data      *typed_data;
 
@@ -266,13 +253,8 @@ Object          *_container_map(Object *self, Class *type, void *(*fptr)(ssize_t
         delete (ctn);
         return (NULL);
     }
-    if (!(end = ((const Container *)ctn)->end(ctn)))
-    {
-        delete(ctn);
-        delete(it);
-    }
     i = 0;
-    while (it->equals(it, end) == FALSE)
+    do
     {
         typed_data = fptr(i, it->dereference(it));
         if (ctn->push_back(ctn, typed_data->data, typed_data-> type) == FALSE)
@@ -282,30 +264,9 @@ Object          *_container_map(Object *self, Class *type, void *(*fptr)(ssize_t
             return (NULL);
         }
         ++i;
-        it->next(it);
-    }
+    } while (it->next(it) == TRUE);
     delete (it);
     return (ctn);
-}
-
-static Object       *generate_it(const Object *self, t_it_type type)
-{
-    Iterator        *it;
-    const Container *ctn;
-
-    ctn = self;
-    it = NULL;
-    if (is_spl_list(ctn) == TRUE)
-        it = new(_spl_list_forward_it, self, type);
-    else if (is_dbl_list(ctn) == TRUE)
-        it = new(_dbl_list_bidirectional_it, self, type);
-    else if (is_of_type(ctn, TYPE_ARRAY) == TRUE)
-        it = new(_array_ra_it, self, type);
-    else if (is_of_type(ctn, TYPE_DICT) == TRUE)
-        it = new(_dict_ra_it, self, type);
-    else if (is_of_type(ctn, TYPE_STRING) == TRUE)
-        it = new(_string_ra_it, self, type);
-    return (it);
 }
 
 Object  *_container_begin(const Object *self)

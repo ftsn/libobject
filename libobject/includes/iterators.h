@@ -34,7 +34,7 @@ t_bool          _ra_it_lt(RandomAccessIterator *it1, RandomAccessIterator *it2);
 t_bool          _ra_it_gt(RandomAccessIterator *it1, RandomAccessIterator *it2); // OK
 
 typedef t_bool  (*t_ra_it_move)(RandomAccessIterator *it, ssize_t idx);
-t_bool          _ra_it_jump(RandomAccessIterator *it, ssize_t idx); // OK
+t_bool          _array_ra_it_jump(RandomAccessIterator *it, ssize_t idx); // OK
 
 typedef Object  *(*t_ra_it_data_access)(RandomAccessIterator *it, ssize_t idx);
 Object          *_ra_it_at(RandomAccessIterator *it, ssize_t idx); // OK
@@ -74,6 +74,7 @@ struct s_forward_iterator {
 
     t_it_compare        equals;
 
+    t_it_move           previous;
     t_it_move           next;
 
     t_it_data_access    dereference;
@@ -97,6 +98,8 @@ struct s_ra_iterator {
 
     ssize_t             ra_idx;
 };
+
+Object  *generate_it(const Object *self, t_it_type type);
 
 extern Class *_array_ra_it;
 extern Class *_string_ra_it;
