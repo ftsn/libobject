@@ -52,6 +52,8 @@ struct s_iterator {
     Object              *iterated_obj;
     Object              *cur;
     ssize_t             it_idx;
+    size_t              reached_the_end;
+    size_t              reached_the_beginning;
 };
 
 struct s_bidirectional_iterator {
@@ -67,6 +69,8 @@ struct s_bidirectional_iterator {
     Object              *iterated_obj;
     Object              *cur;
     ssize_t             it_idx;
+    size_t              reached_the_end;
+    size_t              reached_the_beginning;
 };
 
 struct s_forward_iterator {
@@ -82,6 +86,8 @@ struct s_forward_iterator {
     Object              *iterated_obj;
     Object              *cur;
     ssize_t             it_idx;
+    size_t              reached_the_end;
+    size_t              reached_the_beginning;
 };
 
 

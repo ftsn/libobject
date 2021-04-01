@@ -74,6 +74,8 @@ static RandomAccessIterator _array_ra_it_descr =
             NULL,
             NULL,
             0,
+            0,
+            0
         },
         &_ra_it_lt,
         &_ra_it_gt,
@@ -106,6 +108,8 @@ static RandomAccessIterator _string_ra_it_descr =
             NULL,
             NULL,
             0,
+            0,
+            0
         },
         &_ra_it_lt,
         &_ra_it_gt,
@@ -138,6 +142,8 @@ static RandomAccessIterator _dict_ra_it_descr =
             NULL,
             NULL,
             0,
+            0,
+            0
         },
         &_ra_it_lt,
         &_ra_it_gt,
@@ -169,6 +175,8 @@ static ForwardIterator _spl_list_forward_it_descr =
         NULL,
         NULL,
         0,
+        0,
+        0
     };
 
 Class *_spl_list_forward_it = (Class *)&_spl_list_forward_it_descr;
@@ -191,6 +199,8 @@ static BidirectionalIterator _dbl_list_bidirectional_it_descr =
         NULL,
         NULL,
         0,
+        0,
+        0
     };
 
 Class *_dbl_list_bidirectional_it = (Class *)&_dbl_list_bidirectional_it_descr;

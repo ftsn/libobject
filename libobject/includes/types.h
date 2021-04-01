@@ -89,6 +89,11 @@ static inline t_bool    is_dbl_list(const Object *tested)
     return (*(t_type *)tested == TYPE_DOUBLY_LINKED_LIST || *(t_type *)tested == TYPE_CIRCULAR_DOUBLY_LINKED_LIST ? TRUE : FALSE);
 }
 
+static inline t_bool    is_clist(const Object *tested)
+{
+    return (*(t_type *)tested == TYPE_CIRCULAR_LINKED_LIST || *(t_type *)tested == TYPE_CIRCULAR_DOUBLY_LINKED_LIST ? TRUE : FALSE);
+}
+
 static inline t_bool    is_iterator(const Object *tested)
 {
     return (*(t_type *)tested >= _TYPE_ITERATOR_BEGIN && *(t_type *)tested <= _TYPE_ITERATOR_END ? TRUE : FALSE);

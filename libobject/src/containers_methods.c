@@ -143,7 +143,7 @@ void            _container_print(const Object *container,
     if (title)
         printf("%s%s\n", prefix, title);
     printf("%s[\n", prefix);
-    do
+    while (!it->reached_the_end)
     {
         cur = it->dereference(it);
         if (is_container(cur))
@@ -161,8 +161,9 @@ void            _container_print(const Object *container,
         }
         else
             f(i, cur, concat_prefix);
+        it->next(it);
         ++i;
-    } while (it->next(it) == TRUE);
+    }
     printf("%s]\n", prefix);
     delete(it);
     free(concat_prefix);
