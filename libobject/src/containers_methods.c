@@ -183,7 +183,7 @@ Object          *_container_to_type(Object *self, Class *type)
         delete(ctn);
         return (NULL);
     }
-    do
+    while (!it->reached_the_end)
     {
         if (ctn->push_back(ctn, ((t_data *)it->dereference(it))->data, ((t_data *)it->dereference(it))->type) == FALSE)
         {
@@ -191,7 +191,8 @@ Object          *_container_to_type(Object *self, Class *type)
             delete(it);
             return (NULL);
         }
-    } while (it->next(it) == TRUE);
+        it->next(it);
+    }
     delete(it);
     return (ctn);
 }
@@ -255,7 +256,7 @@ Object          *_container_map(Object *self, Class *type, void *(*fptr)(ssize_t
         return (NULL);
     }
     i = 0;
-    do
+    while (!it->reached_the_end)
     {
         typed_data = fptr(i, it->dereference(it));
         if (ctn->push_back(ctn, typed_data->data, typed_data-> type) == FALSE)
@@ -265,7 +266,8 @@ Object          *_container_map(Object *self, Class *type, void *(*fptr)(ssize_t
             return (NULL);
         }
         ++i;
-    } while (it->next(it) == TRUE);
+        it->next(it);
+    }
     delete (it);
     return (ctn);
 }

@@ -59,12 +59,6 @@ t_bool          _list_it_next(Iterator *it)
         ++it->it_idx;
         it->cur = ((t_list_data *)it->cur)->next;
     }
-
-
-    if (it->it_idx + 1 >= ((Container *)it->iterated_obj)->contained_size)
-        return (FALSE);
-    ++it->it_idx;
-    it->cur = ((t_list_data *)it->cur)->next;
     return (TRUE);
 }
 

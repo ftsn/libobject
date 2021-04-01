@@ -29,10 +29,11 @@ static void     _list_dtor(Object *self, va_list *args)
 
     if ((it = ((Container *)self)->begin(self)) == NULL)
         return ;
-    do
+    while (!it->reached_the_end)
     {
         free(it->dereference(it));
-    } while (it->next(it) == TRUE);
+        it->next(it);
+    }
     delete(it);
     list = self;
     while (list->contained)
