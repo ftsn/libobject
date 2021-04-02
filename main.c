@@ -4,6 +4,7 @@
 #include "arrays.h"
 #include "lists.h"
 #include "stringsdef.h"
+#include "iterators.h"
 
 #pragma pack(push,1)
 typedef struct  s_toto {
@@ -15,9 +16,12 @@ typedef struct  s_toto {
 
 int     main(int ac, char **av)
 {
-    Container a, *b, *c;
+    Container *b, *c;
+    Object  *cast_a;
+    Array a;
     t_data **data_array1, **data_array2;
     String *s;
+    String *t;
     char *sub;
     int nb;
 
@@ -33,10 +37,13 @@ int     main(int ac, char **av)
     data_array1[1] = raw_data_to_typed(b, TYPE_ARRAY);
     data_array1[2] = raw_data_to_typed(&nb, TYPE_INT);
     data_array1[3] = raw_data_to_typed("!", TYPE_CHAR);
+    
     static_new(_array, (Class *)&a, data_array1, COPY_ALL, 0);
-    a.delete_at(&a, 0);
-    a.delete_at(&a, 2);
-    a.dump(&a, "Array a", typed_basic_print, "");
+    cast_a = &a;
+    ((Container *)cast_a)->delete_at(cast_a, 0);
+    ((Container *)cast_a)->delete_at(cast_a, 2);
+    ((Container *)cast_a)->dump(cast_a, "Array a", typed_basic_print, "");
+
 
     c = new(_dbl_clist, data_array1, COPY_ALL, 0);
     c->dump(c, "Circular doubly linked list c", typed_basic_print, "");
@@ -47,8 +54,17 @@ int     main(int ac, char **av)
     free_typed_array(data_array1);
 
     if (ac == 2) {
+        Iterator    *it;
+
         s = new(_string, av[1], COPY_ALL, 5, 'a', 'b', 'c', 'd', 'e');
-        /*
+        it = generate_it(s, END);
+        while (!it->reached_the_beginning)
+        {
+            printf("%c", *(char *)it->dereference(it));
+            it->previous(it);
+        }
+        delete(it);
+        printf("\n");
         sub = s->sub(s, -5, 3);
         printf("Generating substring from [%s]: [%s]\n", s->cstr(s), sub ? sub : "NULL");
         free(sub);
@@ -60,21 +76,18 @@ int     main(int ac, char **av)
         s->dump(s, "String: ");
         printf("[%s] [%s] [%s]\n", s->front(s), s->back(s), s->at(s, 3));
         delete(s);
-        */
     }
 
-    //(void)toto1;
-    //(void)toto2;
-    //(void)tata;
-
-    (void)ac;
-    (void)av;
     (void)nb;
     (void)c;
+    (void)t;
     (void)sub;
     (void)s;
     (void)a;
     (void)data_array1;
+    (void)c;
+    (void)data_array2;
+    (void)b;
     free_typed_array(data_array2);
     return (1);
 }
