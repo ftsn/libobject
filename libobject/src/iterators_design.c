@@ -66,8 +66,8 @@ static RandomAccessIterator _array_ra_it_descr =
             },
             &_it_equals,
 
-            &_ra_it_previous,
-            &_ra_it_next,
+            &_array_ra_it_previous,
+            &_array_ra_it_next,
 
             &_ra_it_dereference,
 
@@ -82,7 +82,7 @@ static RandomAccessIterator _array_ra_it_descr =
 
         &_array_ra_it_jump,
 
-        &_ra_it_at,
+        &_array_ra_it_at,
 
         0
     };
@@ -100,8 +100,8 @@ static RandomAccessIterator _string_ra_it_descr =
             },
             &_it_equals,
 
-            &_ra_it_previous,
-            &_ra_it_next,
+            &_string_ra_it_previous,
+            &_string_ra_it_next,
 
             &_ra_it_dereference,
 
@@ -114,9 +114,9 @@ static RandomAccessIterator _string_ra_it_descr =
         &_ra_it_lt,
         &_ra_it_gt,
 
-        &_array_ra_it_jump,
+        &_string_ra_it_jump,
 
-        &_ra_it_at,
+        &_string_ra_it_at,
 
         0
     };
@@ -134,8 +134,8 @@ static RandomAccessIterator _dict_ra_it_descr =
             },
             &_it_equals,
 
-            &_ra_it_previous,
-            &_ra_it_next,
+            &_array_ra_it_previous,
+            &_array_ra_it_next,
 
             &_ra_it_dereference,
 
@@ -150,7 +150,7 @@ static RandomAccessIterator _dict_ra_it_descr =
 
         &_array_ra_it_jump,
 
-        &_ra_it_at,
+        &_array_ra_it_at,
 
         0
     };

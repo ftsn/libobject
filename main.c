@@ -46,9 +46,9 @@ int     main(int ac, char **av)
     delete(c);
     free_typed_array(data_array1);
 
-/*
     if (ac == 2) {
         s = new(_string, av[1], COPY_ALL, 5, 'a', 'b', 'c', 'd', 'e');
+        /*
         sub = s->sub(s, -5, 3);
         printf("Generating substring from [%s]: [%s]\n", s->cstr(s), sub ? sub : "NULL");
         free(sub);
@@ -60,8 +60,9 @@ int     main(int ac, char **av)
         s->dump(s, "String: ");
         printf("[%s] [%s] [%s]\n", s->front(s), s->back(s), s->at(s, 3));
         delete(s);
+        */
     }
-*/
+
     //(void)toto1;
     //(void)toto2;
     //(void)tata;
