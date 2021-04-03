@@ -65,16 +65,13 @@ static void     copy_performs_deletion(void **dest, void **src, ssize_t pos, ssi
     }
 }
 
-t_bool      array_alloc(Container *array, ssize_t size, t_array_opr operation, ...)
+t_bool      array_alloc(Container *array, ssize_t new_size, t_array_opr operation, ...)
 {
-    ssize_t new_size;
     ssize_t i;
     void    **contained;
     t_bool  same_dest_src;
     va_list ap;
 
-    (void)size;
-    new_size = -1;
     contained = NULL;
     va_start(ap, operation);
     if ((operation == ADDITION && array->contained_size < ((Array *)array)->total_size) ||
@@ -86,12 +83,6 @@ t_bool      array_alloc(Container *array, ssize_t size, t_array_opr operation, .
     else
     {
         same_dest_src = FALSE;
-        if (operation == ADDITION)
-            new_size = ARRAY_ALLOC_SIZE(array->contained_size + 1);
-        else if (operation == DELETION)
-            new_size = ARRAY_ALLOC_SIZE(array->contained_size - 1);
-        else
-            new_size = ARRAY_ALLOC_SIZE(array->contained_size);
         if (!(contained = malloc(sizeof(void *) * (new_size + 1))))
             return (FALSE);
         contained[new_size] = NULL;
@@ -109,7 +100,7 @@ t_bool      array_alloc(Container *array, ssize_t size, t_array_opr operation, .
     }
     if (same_dest_src == FALSE)
     {
-        i = array->contained_size - 1;
+        i = operation == NO_OPERATION ? -1 : array->contained_size - 1;
         while (++i < new_size)
             contained[i] = NULL;
         free(array->contained);
@@ -131,7 +122,7 @@ t_bool          _array_insert_at(Object *container, void *data, t_type type, ssi
         return (FALSE);
     typed_data->type = type;
     typed_data->data = data;
-    if (array_alloc(self, 666, ADDITION, typed_data, pos) == FALSE)
+    if (array_alloc(self, ARRAY_ALLOC_SIZE(self->contained_size + 1), ADDITION, typed_data, pos) == FALSE)
     {
         free(typed_data);
         return (FALSE);
@@ -146,7 +137,7 @@ t_bool          _array_delete_at(Object *container, ssize_t pos)
     self = container;
     if (self->contained_size <= 0 || pos >= self->contained_size)
         return (FALSE);
-    if (array_alloc(self, 666, DELETION, pos) == FALSE)
+    if (array_alloc(self, ARRAY_ALLOC_SIZE(self->contained_size - 1), DELETION, pos) == FALSE)
         return (FALSE);
     return (TRUE);
 }
