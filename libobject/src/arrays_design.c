@@ -10,7 +10,7 @@ static t_bool   _array_ctor(Object *self, va_list *args)
     void        *copy;
 
     array = self;
-    if (array_alloc(array, 666, NO_OPERATION) == FALSE)
+    if (array_alloc(array, ARRAY_ALLOC_SIZE(array->contained_size), ARRAY_NO_OPERATION) == FALSE)
         return (FALSE);
     if ((copy = va_arg(*args, void *)))
         if (ctn_copy_ctor(array, copy, va_arg(*args, ssize_t)) == FALSE)

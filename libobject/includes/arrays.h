@@ -8,9 +8,9 @@
 
 typedef enum e_array_opr
 {
-    NO_OPERATION = 0,
-    ADDITION,
-    DELETION,
+    ARRAY_NO_OPERATION = 0,
+    ARRAY_ADDITION,
+    ARRAY_DELETION,
 } t_array_opr;
 
 typedef struct

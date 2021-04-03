@@ -6,22 +6,11 @@
 static t_bool   _dict_ctor(Object *self, va_list *args)
 {
     Container   *dict;
-    ssize_t     nb_args;
-    void        *copy;
 
+    (void)args;
     dict = self;
-    if (!(dict->contained = calloc(1, sizeof(void *))))
+    if (dict_alloc(dict, DICT_ALLOC_SIZE(dict->contained_size)) == FALSE)
         return (FALSE);
-    if ((copy = va_arg(*args, void *)))
-        if (ctn_copy_ctor(dict, copy, va_arg(*args, ssize_t)) == FALSE)
-            return (FALSE);
-    nb_args = va_arg(*args, ssize_t);
-    while (nb_args > 0)
-    {
-        if (dict->push_back(dict, va_arg(*args, void *), va_arg(*args, t_type)) == FALSE)
-            return (FALSE);
-        --nb_args;
-    }
     return (TRUE);
 }
 
@@ -59,15 +48,15 @@ static Dict _dict_descr =
             &_container_size,
             &_container_empty,
 
-            &_container_insert_at,
-            &_container_push_back,
-            &_array_delete_at,
-            &_array_erase,
+            NULL, // insert_at
+            NULL, // push_back
+            NULL, // delete_at
+            NULL, // erase
             NULL,
 
-            &_array_front,
-            &_array_back,
-            &_array_at,
+            NULL, // front
+            NULL, // back
+            NULL, // at
 
             &_container_print,
 
@@ -78,6 +67,7 @@ static Dict _dict_descr =
             &_container_begin,
             &_container_end
         },
+        0,
         &_get_obj_by_key,
         &_dict_push_back
     };

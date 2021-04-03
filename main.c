@@ -5,6 +5,7 @@
 #include "lists.h"
 #include "stringsdef.h"
 #include "iterators.h"
+#include "dicts.h"
 
 #pragma pack(push,1)
 typedef struct  s_toto {
@@ -16,12 +17,13 @@ typedef struct  s_toto {
 
 int     main(int ac, char **av)
 {
-    Container *b, *c;
+    Container *b, *c, *dict;
     Object  *cast_a;
     Array a;
     t_data **data_array1, **data_array2;
     String *s;
     String *t;
+    ssize_t i;
     char *sub;
     int nb;
 
@@ -76,6 +78,13 @@ int     main(int ac, char **av)
         s->dump(s, "String: ");
         printf("[%s] [%s] [%s]\n", s->front(s), s->back(s), s->at(s, 3));
         delete(s);
+    }
+
+    dict = new(_dict);
+    i = -1;
+    while (++i < ((Dict *)dict)->total_size)
+    {
+        printf("%zd:\t[%p]\n", i, ((void **)dict->contained)[i]);
     }
 
     (void)nb;

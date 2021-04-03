@@ -27,6 +27,26 @@ Object              *_get_obj_by_key(const Object *dict_obj, const char *key)
     return (NULL);
 }
 
+t_bool      dict_alloc(Container *dict, ssize_t new_size)
+{
+    ssize_t i;
+    void    **contained;
+
+    if (!(contained = malloc(sizeof(void *) * (new_size + 1))))
+        return (FALSE);
+    contained[new_size] = NULL;
+    i = -1;
+    while (++i < ((Dict *)dict)->total_size)
+        contained[i] = ((void **)dict->contained)[i];
+    i = ((Dict *)dict)->total_size - 1;
+    while (++i < new_size)
+        contained[i] = NULL;
+    ((Dict *)dict)->total_size = new_size;
+    free(dict->contained);
+    dict->contained = contained;
+    return (TRUE);
+}
+
 t_bool          _dict_push_back(Object *self, char *key, void *data, t_type type)
 {
     Container   *self_c;
