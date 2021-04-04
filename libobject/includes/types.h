@@ -51,6 +51,7 @@ typedef enum e_type
 
     /* Other classes */
     TYPE_STRING,
+    TYPE_PAIR,
 } t_type;
 
 typedef struct

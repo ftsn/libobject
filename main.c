@@ -82,9 +82,23 @@ int     main(int ac, char **av)
 
     dict = new(_dict);
     i = -1;
+    while (++i < ac)
+        ((Dict *)dict)->push(dict, (unsigned char *)av[i], &i, TYPE_INT);
+    i = -1;
+    Container *list;
+    t_data *front;
+    t_pair *pair;
     while (++i < ((Dict *)dict)->total_size)
     {
-        printf("%zd:\t[%p]\n", i, ((void **)dict->contained)[i]);
+        list = ((void **)dict->contained)[i];
+        if (list != NULL)
+        {
+            front = ((t_list_data *)list->front(list))->data;
+            pair = front->data;
+            printf("%zd: [%s] => [%d]\n", i, pair->key, *(int *)(pair->data.data));
+        }
+        else
+            printf("%zd: [%p]\n", i, list);
     }
 
     (void)nb;

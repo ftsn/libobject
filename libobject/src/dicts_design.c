@@ -69,7 +69,8 @@ static Dict _dict_descr =
         },
         0,
         &_get_obj_by_key,
-        &_dict_push_back
+        &_dict_push,
+        &_dict_remove,
     };
 
 Class   *_dict = (Class *)&_dict_descr;

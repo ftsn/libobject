@@ -2,14 +2,31 @@
 #include <string.h>
 #include <stdio.h>
 #include "dicts.h"
+#include "lists.h"
+#include "iterators.h"
+
+static unsigned long    djb2a_hash(unsigned char *str)
+{
+    unsigned long       hash;
+    int                 c;
+
+    hash = 5381;
+    while ((c = *str++))
+        hash = hash * 33 ^ c;
+    return hash;
+}
 
 void    dict_basic_print(ssize_t i, const t_data *elem, const char *prefix)
 {
-    printf("%s%d)key: [%s]\tvalue: [%s]\n", prefix, (int)i, ((t_pair *)elem)->key, (char *)((t_pair *)elem)->data);
+    (void)i;
+    (void)elem;
+    (void)prefix;
+    //printf("%s%d)key: [%s]\tvalue: [%s]\n", prefix, (int)i, ((t_pair *)elem)->key, (char *)((t_pair *)elem)->data);
 }
 
 Object              *_get_obj_by_key(const Object *dict_obj, const char *key)
 {
+    /*
     const Container *dict;
     t_data          **typed_pairs;
     ssize_t         i;
@@ -24,6 +41,9 @@ Object              *_get_obj_by_key(const Object *dict_obj, const char *key)
             return (((t_pair *)typed_pairs[i])->data);
         ++i;
     }
+    */
+   (void)dict_obj;
+   (void)key;
     return (NULL);
 }
 
@@ -47,15 +67,69 @@ t_bool      dict_alloc(Container *dict, ssize_t new_size)
     return (TRUE);
 }
 
-t_bool          _dict_push_back(Object *self, char *key, void *data, t_type type)
+static t_pair   *get_pair_by_key_at_idx(Container *list, unsigned char *key)
 {
-    Container   *self_c;
+    ssize_t     i;
+    t_list_data *cur;
+
+    i = -1;
+    cur = list->contained;
+    while (++i < list->contained_size)
+    {
+        if (!strcmp((char *)((t_pair *)cur->data)->key, (char *)key))
+        {
+            printf("Found a duplicate key: %s\n", (char *)key);
+            return (((t_data *)(cur->data))->data);
+        }
+        cur = cur->next;
+        ++i;
+    }
+    return (NULL);
+}
+
+t_bool          _dict_push(Object *self, unsigned char *key, void *data, t_type type)
+{
+    Container   *self_c, *list;
+    ssize_t     idx;
     t_pair      *pair;
 
+
     self_c = self;
-    if (!(pair = malloc(1 * sizeof(*pair))))
-        return (FALSE);
+    idx = djb2a_hash(key) % ((Dict *)self)->total_size;
+    if ((list = ((void **)self_c->contained)[idx]) == NULL)
+    {
+        if (!(list = new(_dbl_list, NULL, 0)))
+            return (FALSE);
+    }
+    if (!(pair = get_pair_by_key_at_idx(list, key)))
+    {
+        if ((pair = malloc(sizeof(t_pair))) == NULL)
+        {
+            delete(list);
+            return (FALSE);
+        }
+    }
     pair->key = key;
-    pair->data = data;
-    return (self_c->insert_at(self_c, pair, type, self_c->contained_size));
+    pair->data.type = type;
+    pair->data.data = data;
+
+    // Check if there isn't already an entry with the same key -> malloc a t_pair and push it instead of data
+    if (list->push_back(list, pair, TYPE_PAIR) == FALSE)
+    {
+        free(pair);
+        delete(list);
+        return (FALSE);
+    }
+    ((void **)self_c->contained)[idx] = list;
+    return (TRUE);
+}
+
+t_bool          _dict_remove(Object *self, unsigned char *key)
+{
+    Container   *self_c;
+    ssize_t     idx;
+
+    self_c = self;
+    idx = djb2a_hash(key) % ((Dict *)self)->total_size;
+    return (TRUE);
 }
