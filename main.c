@@ -95,7 +95,7 @@ int     main(int ac, char **av)
         {
             front = ((t_list_data *)list->front(list))->data;
             pair = front->data;
-            printf("%zd: [%s] => [%d]\n", i, pair->key, *(int *)(pair->data.data));
+            printf("%zd: [%s] => [%d]; list size: %zd\n", i, pair->key, *(int *)(pair->data.data), list->contained_size);
         }
         else
             printf("%zd: [%p]\n", i, list);

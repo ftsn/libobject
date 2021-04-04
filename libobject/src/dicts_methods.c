@@ -67,7 +67,7 @@ t_bool      dict_alloc(Container *dict, ssize_t new_size)
     return (TRUE);
 }
 
-static t_pair   *get_pair_by_key_at_idx(Container *list, unsigned char *key)
+static t_pair   *get_pair_from_list(Container *list, unsigned char *key)
 {
     ssize_t     i;
     t_list_data *cur;
@@ -76,11 +76,8 @@ static t_pair   *get_pair_by_key_at_idx(Container *list, unsigned char *key)
     cur = list->contained;
     while (++i < list->contained_size)
     {
-        if (!strcmp((char *)((t_pair *)cur->data)->key, (char *)key))
-        {
-            printf("Found a duplicate key: %s\n", (char *)key);
+        if (!strcmp((char *)((t_pair *)((t_data *)cur->data)->data)->key, (char *)key))
             return (((t_data *)(cur->data))->data);
-        }
         cur = cur->next;
         ++i;
     }
@@ -92,6 +89,7 @@ t_bool          _dict_push(Object *self, unsigned char *key, void *data, t_type 
     Container   *self_c, *list;
     ssize_t     idx;
     t_pair      *pair;
+    t_bool      existed;
 
 
     self_c = self;
@@ -101,7 +99,9 @@ t_bool          _dict_push(Object *self, unsigned char *key, void *data, t_type 
         if (!(list = new(_dbl_list, NULL, 0)))
             return (FALSE);
     }
-    if (!(pair = get_pair_by_key_at_idx(list, key)))
+    pair = get_pair_from_list(list, key);
+    existed = pair ? TRUE : FALSE;
+    if (existed == FALSE)
     {
         if ((pair = malloc(sizeof(t_pair))) == NULL)
         {
@@ -112,13 +112,14 @@ t_bool          _dict_push(Object *self, unsigned char *key, void *data, t_type 
     pair->key = key;
     pair->data.type = type;
     pair->data.data = data;
-
-    // Check if there isn't already an entry with the same key -> malloc a t_pair and push it instead of data
-    if (list->push_back(list, pair, TYPE_PAIR) == FALSE)
+    if (existed == FALSE)
     {
-        free(pair);
-        delete(list);
-        return (FALSE);
+        if (list->push_back(list, pair, TYPE_PAIR) == FALSE)
+        {
+            free(pair);
+            delete(list);
+            return (FALSE);
+        }
     }
     ((void **)self_c->contained)[idx] = list;
     return (TRUE);
