@@ -127,10 +127,31 @@ t_bool          _dict_push(Object *self, unsigned char *key, void *data, t_type 
 
 t_bool          _dict_remove(Object *self, unsigned char *key)
 {
-    Container   *self_c;
-    ssize_t     idx;
+    Container   *self_c, *list;
+    t_list_data *cur;
+    ssize_t     i, idx;
 
     self_c = self;
     idx = djb2a_hash(key) % ((Dict *)self)->total_size;
+    if ((list = ((void **)self_c->contained)[idx]) == NULL)
+        return (FALSE);
+    i = -1;
+    cur = list->contained;
+    while (++i < list->contained_size)
+    {
+        if (!strcmp((char *)((t_pair *)((t_data *)cur->data)->data)->key, (char *)key))
+        {
+            free(((t_data *)cur->data)->data);
+            list->delete_at(list, i);
+            if (list->contained_size == 0)
+            {
+                delete(list);
+                ((void **)self_c->contained)[idx] = NULL;
+            }
+            return (TRUE);
+        }
+        cur = cur->next;
+        ++i;
+    }
     return (TRUE);
 }

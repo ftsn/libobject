@@ -11,10 +11,10 @@ typedef enum
     BEGIN
 } t_it_type;
 
-typedef struct s_iterator               Iterator;
-typedef struct s_forward_iterator       ForwardIterator;
-typedef struct s_bidirectional_iterator BidirectionalIterator;
-typedef struct s_ra_iterator            RandomAccessIterator;
+typedef struct s_iterator       Iterator;
+typedef struct s_iterator       ForwardIterator;
+typedef struct s_iterator       BidirectionalIterator;
+typedef struct s_ra_iterator    RandomAccessIterator;
 
 typedef t_bool  (*t_it_compare)(Iterator *it1, Iterator *it2);
 t_bool          _it_equals(Iterator *it1, Iterator *it2);
@@ -26,6 +26,8 @@ t_bool          _array_ra_it_previous(Iterator *it);
 t_bool          _array_ra_it_next(Iterator *it);
 t_bool          _string_ra_it_previous(Iterator *it);
 t_bool          _string_ra_it_next(Iterator *it);
+t_bool          _dict_bidirectional_it_previous(Iterator *it);
+t_bool          _dict_bidirectional_it_next(Iterator *it);
 
 typedef Object  *(*t_it_data_access)(Iterator *it);
 Object          *_list_it_dereference(Iterator *it);
@@ -60,39 +62,11 @@ struct s_iterator {
     size_t              reached_the_beginning;
 };
 
-struct s_bidirectional_iterator {
-    Class               base;
+typedef struct s_dict_bidirectional_iterator {
+    Iterator    base;
 
-    t_it_compare        equals;
-
-    t_it_move           previous;
-    t_it_move           next;
-
-    t_it_data_access    dereference;
-
-    Object              *iterated_obj;
-    Object              *cur;
-    ssize_t             it_idx;
-    size_t              reached_the_end;
-    size_t              reached_the_beginning;
-};
-
-struct s_forward_iterator {
-    Class               base;
-
-    t_it_compare        equals;
-
-    t_it_move           previous;
-    t_it_move           next;
-
-    t_it_data_access    dereference;
-
-    Object              *iterated_obj;
-    Object              *cur;
-    ssize_t             it_idx;
-    size_t              reached_the_end;
-    size_t              reached_the_beginning;
-};
+    ssize_t     internal_idx;
+} DictBidirectionalIterator;
 
 
 

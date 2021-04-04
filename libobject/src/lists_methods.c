@@ -93,6 +93,7 @@ static void     list_unlink(t_list_data **list, t_list_data **tmp, t_list_data *
         if (next_node)
             next_node->prev = (type == CIRC_DOUBLE || type == DOUBLE) ? *tmp : NULL;
     }
+    free((*list)->data);
     free(*list);
     *list = NULL;
 }

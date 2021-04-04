@@ -24,17 +24,8 @@ static t_bool   _list_ctor(Object *self, va_list *args)
 
 static void     _list_dtor(Object *self, va_list *args)
 {
-    Iterator    *it;
     Container   *list;
 
-    if ((it = ((Container *)self)->begin(self)) == NULL)
-        return ;
-    while (!it->reached_the_end)
-    {
-        free(it->dereference(it));
-        it->next(it);
-    }
-    delete(it);
     list = self;
     while (list->contained)
     {

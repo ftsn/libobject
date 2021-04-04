@@ -84,6 +84,7 @@ int     main(int ac, char **av)
     i = -1;
     while (++i < ac)
         ((Dict *)dict)->push(dict, (unsigned char *)av[i], &i, TYPE_INT);
+    ((Dict *)dict)->remove(dict, (unsigned char *)"hello");
     i = -1;
     Container *list;
     t_data *front;
@@ -99,6 +100,16 @@ int     main(int ac, char **av)
         }
         else
             printf("%zd: [%p]\n", i, list);
+    }
+
+    Iterator *it;
+
+    it = dict->begin(dict);
+    while (!it->reached_the_end)
+    {
+        pair = it->dereference(it);
+        printf("%zd: [%s] => %d\n", it->it_idx, (char *)pair->key, *(int *)(pair->data.data));
+        it->next(it);
     }
 
     (void)nb;

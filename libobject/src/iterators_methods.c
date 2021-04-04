@@ -2,6 +2,7 @@
 #include "iterators.h"
 #include "lists.h"
 #include "stringsdef.h"
+#include "dicts.h"
 
 inline t_bool  _it_equals(Iterator *it1, Iterator *it2)
 {
@@ -63,9 +64,9 @@ t_bool          _list_it_next(Iterator *it)
     return (TRUE);
 }
 
-Object  *_list_it_dereference(Iterator *it)
+inline Object  *_list_it_dereference(Iterator *it)
 {
-    return (((t_list_data *)it->cur)->data);
+    return (it->cur ? ((t_list_data *)it->cur)->data : NULL);
 }
 
 inline Object  *_ra_it_dereference(Iterator *it)
@@ -191,6 +192,56 @@ Object      *_string_ra_it_at(RandomAccessIterator *it, ssize_t idx)
 
     s = ((Iterator *)it)->iterated_obj;
     return (s->at(s, idx));
+}
+
+t_bool                          _dict_bidirectional_it_next(Iterator *it)
+{
+    DictBidirectionalIterator   *dict_it;
+    void                        **contained;
+
+    dict_it = (DictBidirectionalIterator *)it;
+    contained = ((Container *)it->iterated_obj)->contained;
+    if (it->cur && ((t_list_data *)it->cur)->next)
+    {
+        ++it->it_idx;
+        it->cur = ((t_list_data *)it->cur)->next;
+        return (TRUE);
+    }
+    while (dict_it->internal_idx < ((Dict *)it->iterated_obj)->total_size && contained[dict_it->internal_idx] == NULL)
+        ++dict_it->internal_idx;
+    if (dict_it->internal_idx == ((Dict *)it->iterated_obj)->total_size)
+    {
+        it->reached_the_end = 1;
+        return (FALSE);
+    }
+    ++it->it_idx;
+    it->cur = contained[dict_it->internal_idx];
+    return (TRUE);
+}
+
+t_bool                          _dict_bidirectional_it_previous(Iterator *it)
+{
+    DictBidirectionalIterator   *dict_it;
+    void                        **contained;
+
+    dict_it = (DictBidirectionalIterator *)it;
+    contained = ((Container *)it->iterated_obj)->contained;
+    if (it->cur && ((t_list_data *)it->cur)->prev)
+    {
+        --it->it_idx;
+        it->cur = ((t_list_data *)it->cur)->prev;
+        return (TRUE);
+    }
+    while (dict_it->internal_idx > 0 && contained[dict_it->internal_idx] == NULL)
+        --dict_it->internal_idx;
+    if (dict_it->internal_idx == 0 && (contained[dict_it->internal_idx] == NULL || ((Container *)contained[0])->contained == it->cur))
+    {
+        it->reached_the_beginning = 1;
+        return (FALSE);
+    }
+    --it->it_idx;
+    it->cur = contained[dict_it->internal_idx];
+    return (TRUE);
 }
 
 Object              *generate_it(const Object *self, t_it_type type)
