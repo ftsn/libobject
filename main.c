@@ -103,14 +103,17 @@ int     main(int ac, char **av)
     }
 
     Iterator *it;
+    t_pair *cur;
 
-    it = dict->begin(dict);
-    while (!it->reached_the_end)
+    it = dict->end(dict);
+    while (!it->reached_the_beginning)
     {
-        pair = it->dereference(it);
-        printf("%zd: [%s] => %d\n", it->it_idx, (char *)pair->key, *(int *)(pair->data.data));
-        it->next(it);
+        cur = it->dereference(it);
+        printf("%zd %zd: [%s] => %d\n", it->it_idx, ((DictBidirectionalIterator *)it)->internal_idx, cur->key, *(int *)cur->data.data);
+        it->previous(it);
     }
+    delete(it);
+    delete(dict);
 
     (void)nb;
     (void)c;

@@ -32,6 +32,7 @@ t_bool          _dict_bidirectional_it_next(Iterator *it);
 typedef Object  *(*t_it_data_access)(Iterator *it);
 Object          *_list_it_dereference(Iterator *it);
 Object          *_ra_it_dereference(Iterator *it);
+Object          *_dict_bidirectional_it_dereference(Iterator *it);
 
 typedef t_bool  (*t_ra_it_compare)(RandomAccessIterator *it1, RandomAccessIterator *it2);
 t_bool          _ra_it_lt(RandomAccessIterator *it1, RandomAccessIterator *it2);

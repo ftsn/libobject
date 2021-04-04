@@ -201,21 +201,31 @@ t_bool                          _dict_bidirectional_it_next(Iterator *it)
 
     dict_it = (DictBidirectionalIterator *)it;
     contained = ((Container *)it->iterated_obj)->contained;
+    if (it->it_idx == 0 && ((Dict *)it->iterated_obj)->total_size && contained[0])
+    {
+        ++it->it_idx;
+        it->cur = ((Container *)contained[0])->contained;
+        return (TRUE);
+    }
     if (it->cur && ((t_list_data *)it->cur)->next)
     {
         ++it->it_idx;
         it->cur = ((t_list_data *)it->cur)->next;
         return (TRUE);
     }
-    while (dict_it->internal_idx < ((Dict *)it->iterated_obj)->total_size && contained[dict_it->internal_idx] == NULL)
+    while (dict_it->internal_idx < ((Dict *)it->iterated_obj)->total_size)
+    {
         ++dict_it->internal_idx;
+        if (contained[dict_it->internal_idx] != NULL)
+            break;
+    }
     if (dict_it->internal_idx == ((Dict *)it->iterated_obj)->total_size)
     {
         it->reached_the_end = 1;
         return (FALSE);
     }
     ++it->it_idx;
-    it->cur = contained[dict_it->internal_idx];
+    it->cur = ((Container *)contained[dict_it->internal_idx])->contained;
     return (TRUE);
 }
 
@@ -228,20 +238,29 @@ t_bool                          _dict_bidirectional_it_previous(Iterator *it)
     contained = ((Container *)it->iterated_obj)->contained;
     if (it->cur && ((t_list_data *)it->cur)->prev)
     {
-        --it->it_idx;
+        ++it->it_idx;
         it->cur = ((t_list_data *)it->cur)->prev;
         return (TRUE);
     }
-    while (dict_it->internal_idx > 0 && contained[dict_it->internal_idx] == NULL)
+    while (dict_it->internal_idx > 0)
+    {
         --dict_it->internal_idx;
+        if (contained[dict_it->internal_idx] != NULL)
+            break;
+    }
     if (dict_it->internal_idx == 0 && (contained[dict_it->internal_idx] == NULL || ((Container *)contained[0])->contained == it->cur))
     {
         it->reached_the_beginning = 1;
         return (FALSE);
     }
-    --it->it_idx;
-    it->cur = contained[dict_it->internal_idx];
+    ++it->it_idx;
+    it->cur = ((Container *)contained[dict_it->internal_idx])->contained;
     return (TRUE);
+}
+
+inline Object  *_dict_bidirectional_it_dereference(Iterator *it)
+{
+    return (it->cur ? ((t_data *)((t_list_data *)it->cur)->data)->data : NULL);
 }
 
 Object              *generate_it(const Object *self, t_it_type type)

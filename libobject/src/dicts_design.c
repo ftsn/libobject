@@ -16,16 +16,27 @@ static t_bool   _dict_ctor(Object *self, va_list *args)
 
 static void     _dict_dtor(Object *self, va_list *args)
 {
+    ssize_t     i;
+    void        **contained;
     Iterator    *it;
 
-    if ((it = ((Container *)self)->begin(self)) == NULL)
-        return ;
-    while (!it->reached_the_end)
+    i = 0;
+    contained = ((Container *)self)->contained;
+    while (i < ((Dict *)self)->total_size)
     {
-        free(it->dereference(it));
-        it->next(it);
+        if (contained[i])
+        {
+            it = ((Container *)contained[i])->begin(contained[i]);
+            while (!it->reached_the_end)
+            {
+                free(((t_data *)it->dereference(it))->data);
+                it->next(it);
+            }
+            delete(it);
+            delete(contained[i]);
+        }
+        ++i;
     }
-    delete(it);
     free(((Container *)self)->contained);
     ((Container *)self)->contained = NULL;
     ((Container *)self)->contained_size = 0;

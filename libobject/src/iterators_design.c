@@ -206,7 +206,7 @@ static DictBidirectionalIterator _dict_ra_it_descr =
             &_dict_bidirectional_it_previous,
             &_dict_bidirectional_it_next,
 
-            &_list_it_dereference,
+            &_dict_bidirectional_it_dereference,
 
             NULL,
             NULL,
