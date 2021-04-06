@@ -259,7 +259,7 @@ Object          *_container_map(Object *self, Class *type, void *(*fptr)(ssize_t
     while (!it->reached_the_end)
     {
         typed_data = fptr(i, it->dereference(it));
-        if (ctn->push_back(ctn, typed_data->data, typed_data-> type) == FALSE)
+        if (ctn->push_back(ctn, typed_data->data, typed_data->type) == FALSE)
         {
             delete (it);
             delete (ctn);

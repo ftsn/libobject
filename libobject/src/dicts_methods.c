@@ -47,23 +47,58 @@ Object              *_get_obj_by_key(const Object *dict_obj, const char *key)
     return (NULL);
 }
 
-t_bool      dict_alloc(Container *dict, ssize_t new_size)
+static void     release_contained(void **contained, ssize_t size)
 {
-    ssize_t i;
-    void    **contained;
+    ssize_t     i;
+    Container   *list;
 
-    if (!(contained = malloc(sizeof(void *) * (new_size + 1))))
-        return (FALSE);
-    contained[new_size] = NULL;
     i = -1;
-    while (++i < ((Dict *)dict)->total_size)
-        contained[i] = ((void **)dict->contained)[i];
-    i = ((Dict *)dict)->total_size - 1;
-    while (++i < new_size)
-        contained[i] = NULL;
-    ((Dict *)dict)->total_size = new_size;
-    free(dict->contained);
+    while (++i < size)
+    {
+        list = contained[i];
+        if (list)
+            delete(list);
+    }
+    free(contained);
+}
+
+t_bool          dict_alloc(Container *dict, ssize_t new_size)
+{
+    ssize_t     old_ctn_size, old_total_size;
+    void        **contained, **old_contained;
+    Iterator    *it;
+    t_data      *data;
+    t_pair      *pair;
+
+    if (!(contained = calloc(new_size + 1, sizeof(void *))))
+        return (FALSE);
+    old_contained = dict->contained;
+    old_ctn_size = dict->contained_size;
+    old_total_size = ((Dict *)dict)->total_size;
+    if (!(it = dict->begin(dict)))
+    {
+        free(contained);
+        return (FALSE);
+    }
     dict->contained = contained;
+    dict->contained_size = 0;
+    ((Dict *)dict)->total_size = new_size;
+    while (!it->reached_the_end)
+    {
+        data = it->dereference(it);
+        pair = data->data;
+        if (((Dict *)dict)->push(dict, pair->key, pair->data.data, pair->data.type) == FALSE)
+        {
+            release_contained(dict->contained, new_size);
+            dict->contained = old_contained;
+            dict->contained_size = old_ctn_size;
+            ((Dict *)dict)->total_size = old_total_size;
+            return (FALSE);
+        }
+        it->next(it);
+    }
+    release_contained(old_contained, old_total_size);
+    ((Dict *)dict)->total_size = new_size;
     return (TRUE);
 }
 
@@ -91,8 +126,12 @@ t_bool          _dict_push(Object *self, unsigned char *key, void *data, t_type 
     t_pair      *pair;
     t_bool      existed;
 
-
     self_c = self;
+    if ((float)(self_c->contained_size / ((Dict *)self)->total_size) > (float)0.05)
+        {
+            if (dict_alloc(self, ((Dict *)self)->total_size * 2) == FALSE)
+                return (FALSE);
+        }
     idx = djb2a_hash(key) % ((Dict *)self)->total_size;
     if ((list = ((void **)self_c->contained)[idx]) == NULL)
     {
@@ -121,6 +160,7 @@ t_bool          _dict_push(Object *self, unsigned char *key, void *data, t_type 
             return (FALSE);
         }
     }
+    ++self_c->contained_size;
     ((void **)self_c->contained)[idx] = list;
     return (TRUE);
 }
