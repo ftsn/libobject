@@ -6,6 +6,7 @@
 #include "iterators.h"
 #include "utils.h"
 #include "arrays.h"
+#include "dicts.h"
 
 Object  *_container_data(const Object *self)
 {
@@ -77,56 +78,62 @@ t_bool          _container_push_back(Object *self, void *data, t_type type)
 ** Basic function provided to the user to allow him to print the container
 ** without having to create his own function
 */
-void typed_basic_print(ssize_t i, const t_data *elem, const char *prefix)
+void typed_basic_print(const t_data *elem, const char *prefix)
 {
     switch (elem->type)
     {
         case TYPE_CHAR:
-            printf("%s%d: [%c]\n", prefix, (int)i, *(char *)elem->data);
+            printf("[%c]\n", *(char *)elem->data);
             break;
         case TYPE_UCHAR:
-            printf("%s%d: [%hhu]\n", prefix, (int)i, *(unsigned char *)elem->data);
+            printf("[%hhu]\n", *(unsigned char *)elem->data);
             break;
         case TYPE_CSTRING:
-            printf("%s%d: [%s]\n", prefix, (int)i, (char *)elem->data);
+            printf("[%s]\n", (char *)elem->data);
             break;
         case TYPE_INT:
-            printf("%s%d: [%d]\n", prefix, (int)i, *(int *)elem->data);
+            printf("[%d]\n", *(int *)elem->data);
             break;
         case TYPE_UINT:
-            printf("%s%d: [%u]\n", prefix, (int)i, *(unsigned int *)elem->data);
+            printf("[%u]\n", *(unsigned int *)elem->data);
             break;
         case TYPE_LONG:
-            printf("%s%d: [%ld]\n", prefix, (int)i, *(long *)elem->data);
+            printf("[%ld]\n", *(long *)elem->data);
             break;
         case TYPE_ULONG:
-            printf("%s%d: [%lu]\n", prefix, (int)i, *(unsigned long *)elem->data);
+            printf("[%lu]\n", *(unsigned long *)elem->data);
             break;
         case TYPE_INT64:
-            printf("%s%d: [%" PRId64 "]\n", prefix, (int)i, *(int64_t *)elem->data);
+            printf("[%" PRId64 "]\n", *(int64_t *)elem->data);
             break;
         case TYPE_UINT64:
-            printf("%s%d: [%" PRIu64 "]\n", prefix, (int)i, *(uint64_t *)elem->data);
+            printf("[%" PRIu64 "]\n", *(uint64_t *)elem->data);
             break;
         case TYPE_DOUBLE:
-            printf("%s%d: [%f]\n", prefix, (int)i, *(double *)elem->data);
+            printf("[%f]\n", *(double *)elem->data);
             break;
         case TYPE_FLOAT:
-            printf("%s%d: [%f]\n", prefix, (int)i, *(float *)elem->data);
+            printf("[%f]\n", *(float *)elem->data);
             break;
         case TYPE_PTR:
-            printf("%s%d: [%p]\n", prefix, (int)i, elem->data);
+            printf("[%p]\n", elem->data);
             break;
         case TYPE_BOOL:
-            printf("%s%d: [%s]\n", prefix, (int)i, *(t_bool *)elem->data == TRUE ? "True" : "False");
+            printf("[%s]\n", *(t_bool *)elem->data == TRUE ? "True" : "False");
             break;
+        case TYPE_PAIR:
+            printf("[%s] => ", ((const t_pair *)elem->data)->key);
+            if (is_container(elem->data) == TRUE)
+                _container_print(elem->data, "Sub dict", typed_basic_print, "");
+            else
+                typed_basic_print(elem->data, prefix);
         default:;
     }
 }
 
 void            _container_print(const Object *container,
                                  const char *title,
-                                 void (*f)(ssize_t i, const t_data *elem, const char *prefix),
+                                 void (*f)(const t_data *elem, const char *prefix),
                                  const char *prefix)
 {
     Iterator    *it;
@@ -141,12 +148,14 @@ void            _container_print(const Object *container,
     if (!(concat_prefix = concat(prefix, "  ")))
         return;
     if (title)
-        printf("%s%s\n", prefix, title);
+        printf("%s\n", title);
     printf("%s[\n", prefix);
+    if (is_of_type(container, TYPE_DICT) == TRUE)
+        printf("%sContained size: %zd / In memory size: %zd\n", concat_prefix, ((const Container *)container)->contained_size, ((const Dict *)container)->total_size);
     while (!it->reached_the_end)
     {
         cur = it->dereference(it);
-        if (is_container(cur))
+        if (is_container(cur) == TRUE)
         {
             if (is_of_type(cur, TYPE_ARRAY) == TRUE)
                 recursion_title = "Sub array";
@@ -156,11 +165,14 @@ void            _container_print(const Object *container,
                 recursion_title = "Sub dict";
             else
                 recursion_title = "Undefined container";
-            printf("%s%d:\n", concat_prefix, (int)i);
+            printf("%s%zd: ", concat_prefix, i);
             _container_print(cur->data, recursion_title, typed_basic_print, concat_prefix);
         }
         else
-            f(i, cur, concat_prefix);
+        {
+            printf("%s%zd: ", concat_prefix, i);
+            f(cur, concat_prefix);
+        }
         it->next(it);
         ++i;
     }

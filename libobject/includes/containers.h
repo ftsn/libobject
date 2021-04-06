@@ -30,9 +30,9 @@ typedef Object  *(*t_access)(const Object *container);
 
 typedef Object  *(*t_rand_access)(const Object *contained, ssize_t pos);
 
-typedef void    (*t_dump)(const Object *self, const char *title, void (*f)(ssize_t i, const t_data *elem, const char *prefix), const char *prefix);
-void            _container_print(const Object *container, const char *title, void (*f)(ssize_t i, const t_data *elem, const char *prefix), const char *prefix);
-void            typed_basic_print(ssize_t i, const t_data *elem, const char *prefix);
+typedef void    (*t_dump)(const Object *self, const char *title, void (*f)(const t_data *elem, const char *prefix), const char *prefix);
+void            _container_print(const Object *container, const char *title, void (*f)(const t_data *elem, const char *prefix), const char *prefix);
+void            typed_basic_print(const t_data *elem, const char *prefix);
 
 typedef Object  *(*t_converter)(Object *self, Class *type);
 Object          *_container_to_type(Object *self, Class *type);

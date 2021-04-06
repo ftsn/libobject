@@ -27,6 +27,8 @@ static void     _dict_dtor(Object *self, va_list *args)
         if (contained[i])
         {
             it = ((Container *)contained[i])->begin(contained[i]);
+            if (it == NULL)
+                return ;
             while (!it->reached_the_end)
             {
                 free(((t_data *)it->dereference(it))->data);

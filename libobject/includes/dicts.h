@@ -5,11 +5,14 @@
 
 # define CHUNK_SIZE 50
 # define DICT_ALLOC_SIZE(s) (((s) / CHUNK_SIZE + 1) * CHUNK_SIZE)
+# define DICT_REALLOC_SIZE(s) ((s) * 2)
+# define MAX_LOAD_BEFORE_REALLOC ((float)0.05)
+# define MIN_LOAD_BEFORE_REALLOC ((float)0.40)
 
 typedef struct  s_pair
 {
-    unsigned char   *key;
     t_data          data;
+    unsigned char   *key;
 } t_pair;
 
 typedef Object  *(*t_obj_by_key)(const Object *dict, const char *key);

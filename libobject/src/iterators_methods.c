@@ -260,7 +260,7 @@ t_bool                          _dict_bidirectional_it_previous(Iterator *it)
 
 inline Object  *_dict_bidirectional_it_dereference(Iterator *it)
 {
-    return (it->cur ? ((t_data *)((t_list_data *)it->cur)->data)->data : NULL);
+    return (it->cur ? ((t_list_data *)it->cur)->data : NULL);
 }
 
 Object              *generate_it(const Object *self, t_it_type type)
