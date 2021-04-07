@@ -7,6 +7,8 @@ OBJDIR	=	build
 LIB	=	libobject.a
 LIBDIR	=	libobject
 
+TESTDIR =       tests
+
 CFLAGS	=	-Wall -Wextra -Werror -g3 -D_GNU_SOURCE
 CFLAGS	+=	-I./srcs/includes/	\
 		-I./$(LIBDIR)/includes/
@@ -40,16 +42,21 @@ $(OBJDIR)/%.o:	%.$(EXT)
 		@$(CC) -o $@ -c $< $(CFLAGS)
 		-@echo " [OK]"
 
+test:           $(LIB)
+		@$(MAKE) -C $(TESTDIR)
+
 clean:
 		-@$(MAKE) clean -C $(LIBDIR)
+		-@$(MAKE) clean -C $(TESTDIR)
 		-@$(RM) -r $(OBJDIR)
 		-@echo Cleaning objects files ... [OK]
 
 fclean:		clean
 		-@$(MAKE) fclean -C $(LIBDIR)
+		-@$(MAKE) fclean -C $(TESTDIR)
 		-@$(RM) $(EXEC)
 		-@echo Cleaning the executable ... [OK]
 
 re:		fclean all
 
-.PHONY:		all clean fclean re
+.PHONY:		all clean fclean re test

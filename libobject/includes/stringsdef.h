@@ -18,8 +18,8 @@ t_bool          _string_delete_at(String *self, ssize_t pos);
 typedef t_bool  (*t_str_delete)(String *self);
 t_bool          _string_erase(String *self);
 
-typedef void    (*t_str_affect)(String *self, void *data);
-void            _string_affect(String *self, void *data);
+typedef t_bool  (*t_str_affect)(String *self, void *data);
+t_bool          _string_affect(String *self, void *data);
 
 typedef char    *(*t_str_access)(const String *self);
 char            *_string_front(const String *self);
@@ -57,8 +57,8 @@ struct s_string
 {
     Class               base;
     char                *contained;
-
     ssize_t             contained_size;
+
     t_get_data          cstr;
 
     t_size              size;

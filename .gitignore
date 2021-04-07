@@ -3,3 +3,6 @@ a.out.dSYM/
 build/
 libobject/build/
 libobject/libobject.a
+.vscode/
+tests/test
+tests/build/

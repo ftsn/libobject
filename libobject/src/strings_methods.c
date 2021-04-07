@@ -8,7 +8,7 @@ t_bool      _string_insert_at(String *self, char c, ssize_t pos)
 {
     char    *res;
 
-    if (!(res = calloc(self->contained_size + 2, sizeof(char))))
+    if (pos < 0 || pos > self->contained_size || !(res = calloc(self->contained_size + 2, sizeof(char))))
         return (FALSE);
     if (pos > 0)
         memcpy(res, self->contained, pos);
@@ -29,7 +29,7 @@ t_bool      _string_delete_at(String *self, ssize_t pos)
 {
     char    *res;
 
-    if (!(res = calloc(self->contained_size, sizeof(char))))
+    if (pos < 0 || pos >= self->contained_size || !(res = calloc(self->contained_size, sizeof(char))))
         return (FALSE);
     memcpy(res, self->contained, pos);
     memcpy(&res[pos], &(self->contained[pos + 1]), self->contained_size - pos - 1);
@@ -42,15 +42,25 @@ t_bool      _string_delete_at(String *self, ssize_t pos)
 t_bool  _string_erase(String *self)
 {
     free(self->contained);
+    self->contained_size = 0;
     self->contained = NULL;
     return (TRUE);
 }
 
-void    _string_affect(String *self, void *data)
+t_bool      _string_affect(String *self, void *data)
 {
-    free(self->contained);
-    self->contained = data;
-    self->contained_size = strlen(data);
+    char    *tmp;
+
+    tmp = self->contained;
+    self->contained = str_dup(data);
+    if (!self->contained && data)
+    {
+        self->contained = tmp;
+        return (FALSE);
+    }
+    free(tmp);
+    self->contained_size = data == NULL ? 0 : strlen(data);
+    return (TRUE);
 }
 
 char    *_string_front(const String *self)
