@@ -27,16 +27,19 @@ static t_bool   _array_ctor(Object *self, va_list *args)
 
 static void     _array_dtor(Object *self, va_list *args)
 {
-    Iterator    *it;
+    ssize_t     i;
+    void        **contained;
 
-    if ((it = ((Container *)self)->begin(self)) == NULL)
-        return ;
-    while (!it->reached_the_end)
+    contained = ((Container *)self)->contained;
+    i = -1;
+    if (contained)
     {
-        free(it->dereference(it));
-        it->next(it);
+        while (contained[++i])
+        {
+            free(contained[i]);
+            contained[i] = NULL;
+        }
     }
-    delete(it);
     free(((Container *)self)->contained);
     ((Container *)self)->contained = NULL;
     ((Container *)self)->contained_size = 0;

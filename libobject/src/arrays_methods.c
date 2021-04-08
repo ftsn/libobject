@@ -3,7 +3,7 @@
 #include "arrays.h"
 #include "iterators.h"
 
-static void copy_performs_addition(void **dest, void **src, t_data *typed_data, ssize_t pos, ssize_t total_size)
+static void copy_performs_addition(void **dest, void **src, t_data *typed_data, ssize_t pos, ssize_t ctn_size)
 {
     ssize_t i;
     ssize_t j;
@@ -20,19 +20,23 @@ static void copy_performs_addition(void **dest, void **src, t_data *typed_data, 
         }
         j = i;
         dest[i++] = typed_data;
-        while (j < total_size)
+        while (j < ctn_size)
             dest[i++] = src[j++];
     }
     else
     {
-        i = total_size;
-        while (--i > pos)
+        // We are getting ctn_size + 1 in arg and ctn_size starts at 1 when non empty
+        i = ctn_size - 2;
+        while (i >= pos)
+        {
             dest[i + 1] = dest[i];
+            --i;
+        }
         dest[pos] = typed_data;
     }
 }
 
-static void     copy_performs_deletion(void **dest, void **src, ssize_t pos, ssize_t total_size)
+static void     copy_performs_deletion(void **dest, void **src, ssize_t pos, ssize_t ctn_size)
 {
     ssize_t     i;
     ssize_t     j;
@@ -50,7 +54,7 @@ static void     copy_performs_deletion(void **dest, void **src, ssize_t pos, ssi
         free(dest[pos]);
         j = i;
         ++i;
-        while (j < total_size)
+        while (j < ctn_size)
             dest[j++] = src[i++];
         dest[j] = NULL;
     }
@@ -59,7 +63,7 @@ static void     copy_performs_deletion(void **dest, void **src, ssize_t pos, ssi
         free(dest[pos]);
         i = j = pos;
         ++i;
-        while (j < total_size)
+        while (j < ctn_size)
             dest[j++] = src[i++];
         dest[j] = NULL;
     }
@@ -83,9 +87,8 @@ t_bool      array_alloc(Container *array, ssize_t new_size, t_array_opr operatio
     else
     {
         same_dest_src = FALSE;
-        if (!(contained = malloc(sizeof(void *) * (new_size + 1))))
+        if (!(contained = calloc(new_size + 1, sizeof(void *))))
             return (FALSE);
-        contained[new_size] = NULL;
         ((Array *)array)->total_size = new_size;
     }
     if (operation == ARRAY_ADDITION)
@@ -106,9 +109,6 @@ t_bool      array_alloc(Container *array, ssize_t new_size, t_array_opr operatio
             while (++i < array->contained_size)
                 contained[i] = ((void **)array->contained)[i];
         }
-        i = array->contained_size - 1;
-        while (++i < new_size)
-            contained[i] = NULL;
         free(array->contained);
         array->contained = contained;
     }
