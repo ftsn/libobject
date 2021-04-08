@@ -141,7 +141,7 @@ t_bool          _array_delete_at(Object *container, ssize_t pos)
     Container   *self;
 
     self = container;
-    if (self->contained_size <= 0 || pos >= self->contained_size)
+    if (pos < 0 || self->contained_size == 0 || pos >= self->contained_size)
         return (FALSE);
     if (array_alloc(self, ARRAY_ALLOC_SIZE(self->contained_size - 1), ARRAY_DELETION, pos) == FALSE)
         return (FALSE);
@@ -151,11 +151,16 @@ t_bool          _array_delete_at(Object *container, ssize_t pos)
 t_bool          _array_erase(Object *container)
 {
     Container   *self;
+    ssize_t     i;
 
     self = container;
-    if (self->empty(self) == TRUE || self->delete_at(self, 0) == FALSE)
-        return (FALSE);
-    self->erase(self);
+    i = -1;
+    while (++i < self->contained_size)
+        {
+            free(((t_data **)self->contained)[i]);
+            ((t_data **)self->contained)[i] = NULL;
+        }
+    self->contained_size = 0;
     return (TRUE);
 }
 
