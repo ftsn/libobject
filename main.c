@@ -42,13 +42,15 @@ int     main(int ac, char **av)
     delete(dict);
     //printf("%d\n", ARG_LENGTH(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
 
-    Container   *ctn;
+    Container   *ctn, *converted;
     t_data      **data_tab;
 
     data_tab = cstrings_to_data_array((char *[]){"foo", "bar", NULL});
     ctn = new(_array, data_tab, COPY_ALL, 0);
-    ctn->insert_at(ctn, "foobar", TYPE_CSTRING, 1);
     ctn->dump(ctn, "array inserted item at pos 1", typed_basic_print, "");
+    converted = ctn->convert(ctn, _array);
+    converted->dump(converted, "converted array", typed_basic_print, "");
+    delete(converted);
     free_typed_array(data_tab);
     delete(ctn);
     return (1);

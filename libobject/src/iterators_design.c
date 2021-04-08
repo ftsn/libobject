@@ -45,6 +45,11 @@ static t_bool               _ra_iterator_ctor(Object *self, va_list *args)
     if (idx_start == END)
         idx_start = iterated_obj->contained_size ? iterated_obj->contained_size - 1 : 0;
     ra_it->jump(ra_it, idx_start);
+    if (iterated_obj->contained_size == 0)
+    {
+        it->reached_the_beginning = 1;
+        it->reached_the_end = 1;
+    }
     return (TRUE);
 }
 
