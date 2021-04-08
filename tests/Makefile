@@ -16,8 +16,8 @@ LDFLAGS	+=	-L$(LIBDIR) -lobject -lcmocka
 VPATH	=	./
 
 SRCS    =	main		\
-		string_tests
-#		array_tests	\
+		string_tests	\
+		array_tests
 #		list_tests	\
 #		dict_tests	\
 #		iterator_tests

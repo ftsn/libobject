@@ -1,0 +1,231 @@
+#include <stdint.h>
+#include <stdarg.h>
+#include <stddef.h>
+#include <setjmp.h>
+#include <cmocka.h>
+#include <stdlib.h>
+#include "tests.h"
+#include "arrays.h"
+
+static int setup_foo_bar_typed_array(void **state)
+{
+    t_data  **data_tab;
+
+    data_tab = cstrings_to_data_array((char *[]){"foo", "bar", NULL});
+    *state = data_tab;
+    return (0);
+}
+
+static int teardown_foo_bar_array(void **state)
+{
+    free(*state);
+    *state = NULL;
+    return (0);
+}
+
+static void     array_alloc_obj_no_args(void **state)
+{
+    Container   *ctn;
+
+    ctn = new(_array, NULL, 0);
+    assert_non_null(ctn);
+    assert_non_null(ctn->contained);
+    assert_int_equal(ctn->contained_size, 0);
+    assert_int_not_equal(((Array *)ctn)->total_size, 0);
+    delete(ctn);
+    (void)state;
+}
+
+static void     array_alloc_obj_fully_copy_string_table(void **state)
+{
+    Container   *ctn;
+
+    ctn = new(_array, *state, COPY_ALL, 0);
+    assert_non_null(ctn);
+    assert_non_null(ctn->contained);
+    assert_int_equal(ctn->contained_size, 2);
+    assert_string_equal(((t_data **)ctn->contained)[0]->data, "foo");
+    assert_string_equal(((t_data **)ctn->contained)[1]->data, "bar");
+    assert_int_not_equal(((Array *)ctn)->total_size, 0);
+    delete(ctn);
+    (void)state;
+}
+
+static void     array_alloc_obj_partially_copy_string_table(void **state)
+{
+    Container   *ctn;
+
+    ctn = new(_array, *state, 1, 0);
+    assert_non_null(ctn);
+    assert_non_null(ctn->contained);
+    assert_int_equal(ctn->contained_size, 1);
+    assert_string_equal(((t_data **)ctn->contained)[0]->data, "foo");
+    assert_int_not_equal(((Array *)ctn)->total_size, 0);
+    delete(ctn);
+    (void)state;
+}
+
+static void     array_alloc_obj_fully_copy_string_table_plus_additional_args(void **state)
+{
+    Container   *ctn;
+    int         nb;
+
+    nb = 666;
+    ctn = new(_array, *state, COPY_ALL, 2, "a", TYPE_CHAR, &nb, TYPE_INT);
+    assert_non_null(ctn);
+    assert_non_null(ctn->contained);
+    assert_int_equal(ctn->contained_size, 4);
+    assert_string_equal(((t_data **)ctn->contained)[0]->data, "foo");
+    assert_string_equal(((t_data **)ctn->contained)[1]->data, "bar");
+    assert_string_equal(((t_data **)ctn->contained)[2]->data, "a");
+    assert_int_equal(*(int *)((t_data **)ctn->contained)[3]->data, 666);
+    assert_int_not_equal(((Array *)ctn)->total_size, 0);
+    delete(ctn);
+    (void)state;
+}
+
+static void     array_alloc_obj_partially_copy_string_table_plus_additional_args(void **state)
+{
+    Container   *ctn;
+    int         nb;
+
+    nb = 666;
+    ctn = new(_array, *state, 1, 2, "a", TYPE_CHAR, &nb, TYPE_INT);
+    assert_non_null(ctn);
+    assert_non_null(ctn->contained);
+    assert_int_equal(ctn->contained_size, 3);
+    assert_string_equal(((t_data **)ctn->contained)[0]->data, "foo");
+    assert_string_equal(((t_data **)ctn->contained)[1]->data, "a");
+    assert_int_equal(*(int *)((t_data **)ctn->contained)[2]->data, 666);
+    assert_int_not_equal(((Array *)ctn)->total_size, 0);
+    delete(ctn);
+    (void)state;
+}
+
+static void     array_data(void **state)
+{
+    Container   *ctn;
+
+    ctn = new(_array, NULL, 0);
+    assert_non_null(ctn);
+    assert_ptr_equal(ctn->data(ctn), ctn->contained);
+    delete(ctn);
+    (void)state;
+}
+
+static void     array_empty_test_size(void **state)
+{
+    Container   *ctn;
+
+    ctn = new(_array, NULL, 0);
+    assert_non_null(ctn);
+    assert_int_equal(ctn->contained_size, 0);
+    assert_int_equal(ctn->size(ctn), 0);
+    delete(ctn);
+    (void)state;
+}
+
+static void     array_non_empty_test_size(void **state)
+{
+    Container   *ctn;
+
+    ctn = new(_array, *state, COPY_ALL, 0);
+    assert_non_null(ctn);
+    assert_int_equal(ctn->contained_size, 2);
+    assert_int_equal(ctn->size(ctn), 2);
+    delete(ctn);
+    (void)state;
+}
+
+static void     array_empty_test_empty(void **state)
+{
+    Container   *ctn;
+
+    ctn = new(_array, NULL, 0);
+    assert_non_null(ctn);
+    assert_int_equal(ctn->contained_size, 0);
+    assert_int_equal(ctn->empty(ctn), TRUE);
+    delete(ctn);
+    (void)state;
+}
+
+static void     array_non_empty_test_empty(void **state)
+{
+    Container   *ctn;
+
+    ctn = new(_array, *state, COPY_ALL, 0);
+    assert_non_null(ctn);
+    assert_int_equal(ctn->contained_size, 2);
+    assert_int_equal(ctn->empty(ctn), FALSE);
+    delete(ctn);
+    (void)state;
+}
+
+static void     array_empty_insert_at_negative_pos(void **state)
+{
+    Container   *ctn;
+
+    ctn = new(_array, NULL, 0);
+    assert_non_null(ctn);
+    assert_int_equal(ctn->insert_at(ctn, "foobar", TYPE_CSTRING, -1), FALSE);
+    assert_int_equal(ctn->contained_size, 0);
+    assert_null(((void **)ctn->contained)[0]);
+    delete(ctn);
+    (void)state;
+}
+
+static void     array_empty_insert_at_out_of_range_pos(void **state)
+{
+    Container   *ctn;
+
+    ctn = new(_array, NULL, 0);
+    assert_non_null(ctn);
+    assert_int_equal(ctn->insert_at(ctn, "foobar", TYPE_CSTRING, 666), FALSE);
+    assert_int_equal(ctn->contained_size, 0);
+    assert_null(((void **)ctn->contained)[0]);
+    delete(ctn);
+    (void)state;
+}
+
+static void     array_empty_insert_at_pos_0(void **state)
+{
+    Container   *ctn;
+
+    ctn = new(_array, NULL, 0);
+    assert_non_null(ctn);
+    assert_int_equal(ctn->insert_at(ctn, "foobar", TYPE_CSTRING, 0), TRUE);
+    assert_int_equal(ctn->contained_size, 1);
+    assert_string_equal(((t_data **)ctn->contained)[0]->data, "foobar");
+    delete(ctn);
+    (void)state;
+}
+
+static void     array_non_empty_insert_at_pos_0(void **state)
+{
+    Container   *ctn;
+
+    ctn = new(_array, *state, COPY_ALL, 0);
+    assert_non_null(ctn);
+    assert_int_equal(ctn->contained_size, 2);
+    assert_int_equal(ctn->insert_at(ctn, "foobar", TYPE_CSTRING, 0), TRUE);
+    assert_string_equal(((t_data **)ctn->contained)[0]->data, "foobar");
+    delete(ctn);
+    (void)state;
+}
+
+const struct CMUnitTest array_tests[] = {
+    cmocka_unit_test_setup_teardown(array_alloc_obj_no_args, setup_foo_bar_typed_array, teardown_foo_bar_array),
+    cmocka_unit_test_setup_teardown(array_alloc_obj_fully_copy_string_table, setup_foo_bar_typed_array, teardown_foo_bar_array),
+    cmocka_unit_test_setup_teardown(array_alloc_obj_partially_copy_string_table, setup_foo_bar_typed_array, teardown_foo_bar_array),
+    cmocka_unit_test_setup_teardown(array_alloc_obj_fully_copy_string_table_plus_additional_args, setup_foo_bar_typed_array, teardown_foo_bar_array),
+    cmocka_unit_test_setup_teardown(array_alloc_obj_partially_copy_string_table_plus_additional_args, setup_foo_bar_typed_array, teardown_foo_bar_array),
+    cmocka_unit_test_setup_teardown(array_data, setup_foo_bar_typed_array, teardown_foo_bar_array),
+    cmocka_unit_test_setup_teardown(array_empty_test_size, setup_foo_bar_typed_array, teardown_foo_bar_array),
+    cmocka_unit_test_setup_teardown(array_non_empty_test_size, setup_foo_bar_typed_array, teardown_foo_bar_array),
+    cmocka_unit_test_setup_teardown(array_empty_test_empty, setup_foo_bar_typed_array, teardown_foo_bar_array),
+    cmocka_unit_test_setup_teardown(array_non_empty_test_empty, setup_foo_bar_typed_array, teardown_foo_bar_array),
+    cmocka_unit_test_setup_teardown(array_empty_insert_at_negative_pos, setup_foo_bar_typed_array, teardown_foo_bar_array),
+    cmocka_unit_test_setup_teardown(array_empty_insert_at_out_of_range_pos, setup_foo_bar_typed_array, teardown_foo_bar_array),
+    cmocka_unit_test_setup_teardown(array_empty_insert_at_pos_0, setup_foo_bar_typed_array, teardown_foo_bar_array),
+    cmocka_unit_test_setup_teardown(array_non_empty_insert_at_pos_0, setup_foo_bar_typed_array, teardown_foo_bar_array),
+};

@@ -6,6 +6,7 @@
 #include "stringsdef.h"
 #include "iterators.h"
 #include "dicts.h"
+#include "lobj_vaargs.h"
 
 #pragma pack(push,1)
 typedef struct  s_toto {
@@ -40,5 +41,14 @@ int     main(int ac, char **av)
     ((Dict *)dict)->remove(dict, (unsigned char *)"add5");
     dict->dump(dict, "Dict dump", typed_basic_print, "");
     delete(dict);
+    printf("%d\n", ARG_LENGTH(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
+
+    Container   *ctn;
+    t_data      **data_tab;
+
+    data_tab = cstrings_to_data_array((char *[]){"foo", "bar", NULL});
+    ctn = new(_array, data_tab, COPY_ALL, 0);
+    ctn->insert_at(ctn, "foobar", TYPE_CSTRING, 0);
+    delete(ctn);
     return (1);
 }
