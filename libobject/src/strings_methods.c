@@ -65,17 +65,21 @@ t_bool      _string_affect(String *self, void *data)
 
 char    *_string_front(const String *self)
 {
-    return (self->contained ? &((char *)self->contained)[0] : NULL);
+    return (self->contained ? self->contained : NULL);
 }
 
 char    *_string_back(const String *self)
 {
-    return (self->contained ? &((char *)self->contained)[self->contained_size - 1] : NULL);
+    if (!self->contained)
+        return (NULL);
+    return (self->contained_size > 0 ? &((char *)self->contained)[self->contained_size - 1] : self->contained);
 }
 
 char    *_string_at(const String *self, ssize_t pos)
 {
-    return (pos < self->contained_size && self->contained ? &((char *)self->contained)[pos] : NULL);
+    if (!self->contained || pos < 0 || (pos >= self->contained_size && self->contained_size > 0))
+        return (NULL);
+    return (pos < self->contained_size ? &((char *)self->contained)[pos] : self->contained);
 }
 
 void    _string_print(const String *self, const char *title)
@@ -90,17 +94,18 @@ String  *_string_dup(const String *self)
 
 char    *_string_findstr(const String *self, const char *substr)
 {
-    return (strstr((char *)self->contained, substr));
+
+    return (self->contained && substr ? strstr((char *)self->contained, substr) : NULL);
 }
 
 char    *_string_find(const String *self, int c)
 {
-    return (strchr((char *)self->contained, c));
+    return (self->contained ? strchr((char *)self->contained, c) : NULL);
 }
 
 char    *_string_lfind(const String *self, int c)
 {
-    return (strrchr((char *)self->contained, c));
+    return (self->contained ? strrchr((char *)self->contained, c) : NULL);
 }
 
 static size_t   nmatch(const char *s1, const char *s2)
@@ -118,12 +123,12 @@ static size_t   nmatch(const char *s1, const char *s2)
 
 t_bool  _string_match(const String *self, const char *compare)
 {
-    return (nmatch((char *)self->contained, compare) ? TRUE : FALSE);
+    return (self->contained && compare && nmatch((char *)self->contained, compare) ? TRUE : FALSE);
 }
 
-size_t  _string_nmatch(const String *self, const char *compare)
+ssize_t  _string_nmatch(const String *self, const char *compare)
 {
-    return (nmatch((char *)self->contained, compare));
+    return (self->contained && compare ? nmatch((char *)self->contained, compare) : -1);
 }
 
 Object          *_string_split(const String *self, const Class *type, const char *sep)
@@ -132,11 +137,11 @@ Object          *_string_split(const String *self, const Class *type, const char
     char        *token;
     char        *strdump;
 
-    if (!(container = new (type, NULL, 0)))
+    if (!self->contained || !sep || !(container = new (type, NULL, 0)))
         return (NULL);
     if (!(strdump = str_dup((char *)self->contained)))
     {
-        delete (container);
+        delete(container);
         return (NULL);
     }
     token = strtok(strdump, sep);
@@ -145,7 +150,7 @@ Object          *_string_split(const String *self, const Class *type, const char
         if (container->push_back(container, token, TYPE_CSTRING) == FALSE)
         {
             free(strdump);
-            delete (container);
+            delete(container);
             return (NULL);
         }
         token = strtok(NULL, sep);
@@ -160,8 +165,10 @@ char        *_string_sub(const String *self, ssize_t begin, ssize_t len)
     ssize_t i;
 
     i = 0;
+    if (!self->contained)
+        return (NULL);
     if (begin < 0)
-        if ((begin = self->contained_size  + begin) < 0)
+        if ((begin = self->contained_size + begin) < 0)
             return (NULL);
     if (self->contained_size > 0 && begin >= 0 && begin >= self->contained_size)
         return (NULL);

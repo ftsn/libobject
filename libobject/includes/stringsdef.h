@@ -44,8 +44,8 @@ char            *_string_lfind(const String *self, int c);
 typedef t_bool  (*t_str_match)(const String *self, const char *compare);
 t_bool          _string_match(const String *self, const char *compare);
 
-typedef size_t  (*t_str_nmatch)(const String *self, const char *compare);
-size_t          _string_nmatch(const String *self, const char *compare);
+typedef ssize_t (*t_str_nmatch)(const String *self, const char *compare);
+ssize_t         _string_nmatch(const String *self, const char *compare);
 
 typedef Object  *(*t_str_split)(const String *self, const Class *type, const char *sep);
 Object          *_string_split(const String *self, const Class *type, const char *sep);
@@ -79,7 +79,7 @@ struct s_string
     t_dup               dup;
     t_str_findstr       find_str;
     t_str_find          find;
-    t_str_find          lfind;
+    t_str_find          rfind;
     t_str_match         match;
     t_str_nmatch        nmatch;
     t_str_split         split;
