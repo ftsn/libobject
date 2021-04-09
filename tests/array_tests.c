@@ -634,6 +634,8 @@ static void     array_non_empty_convert_to_array(void **state)
     assert_non_null(converted);
     assert_non_null(converted->contained);
     assert_int_equal(converted->contained_size, 2);
+    assert_string_equal(ARRAY_DATA_LOOKUP(converted, 0), "foo");
+    assert_string_equal(ARRAY_DATA_LOOKUP(converted, 1), "bar");
     delete(ctn);
     delete(converted);
     (void)state;

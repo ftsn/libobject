@@ -253,6 +253,8 @@ Object          *_list_at(const Object *list, ssize_t pos)
     t_list_data *begin;
     ssize_t     i;
 
+    if (pos < 0 || pos > ((Container *)list)->contained_size)
+        return (NULL);
     begin = list_data = (t_list_data *)((Container *)list)->contained;
     i = 0;
     if (list_data && i < pos)

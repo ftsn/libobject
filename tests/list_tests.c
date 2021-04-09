@@ -585,6 +585,151 @@ static void  lists_non_empty_back(void **state)
     (void)state;
 }
 
+static void  lists_empty_at_negative_pos(void **state)
+{
+    LOOP_OVER_ALL_KINDS(
+        Container   *ctn;
+
+        ctn = new(kinds[kinds_idx], NULL, 0);
+        assert_non_null(ctn);
+        assert_null(ctn->contained);
+        assert_int_equal(ctn->contained_size, 0);
+        assert_null(ctn->at(ctn, -1));
+        delete(ctn);
+    );
+    (void)state;
+}
+
+static void  lists_empty_at_out_of_range_pos(void **state)
+{
+    LOOP_OVER_ALL_KINDS(
+        Container   *ctn;
+
+        ctn = new(kinds[kinds_idx], NULL, 0);
+        assert_non_null(ctn);
+        assert_null(ctn->contained);
+        assert_int_equal(ctn->contained_size, 0);
+        assert_null(ctn->at(ctn, 666));
+        delete(ctn);
+    );
+    (void)state;
+}
+
+static void  lists_non_empty_at_negative_pos(void **state)
+{
+    LOOP_OVER_ALL_KINDS(
+        Container   *ctn;
+
+        ctn = new(kinds[kinds_idx], *state, COPY_ALL, 0);
+        assert_non_null(ctn);
+        assert_non_null(ctn->contained);
+        assert_int_equal(ctn->contained_size, 2);
+        assert_null(ctn->at(ctn, -1));
+        delete(ctn);
+    );
+    (void)state;
+}
+
+static void  lists_non_empty_at_out_of_range_pos(void **state)
+{
+    LOOP_OVER_ALL_KINDS(
+        Container   *ctn;
+
+        ctn = new(kinds[kinds_idx], *state, COPY_ALL, 0);
+        assert_non_null(ctn);
+        assert_non_null(ctn->contained);
+        assert_int_equal(ctn->contained_size, 2);
+        assert_null(ctn->at(ctn, 666));
+        delete(ctn);
+    );
+    (void)state;
+}
+
+static void  lists_empty_at_pos_0(void **state)
+{
+    LOOP_OVER_ALL_KINDS(
+        Container   *ctn;
+
+        ctn = new(kinds[kinds_idx], NULL, 0);
+        assert_non_null(ctn);
+        assert_null(ctn->contained);
+        assert_int_equal(ctn->contained_size, 0);
+        assert_null(ctn->at(ctn, 0));
+        delete(ctn);
+    );
+    (void)state;
+}
+
+static void  lists_non_empty_at_pos_0(void **state)
+{
+    LOOP_OVER_ALL_KINDS(
+        Container   *ctn;
+
+        ctn = new(kinds[kinds_idx], *state, COPY_ALL, 0);
+        assert_non_null(ctn);
+        assert_non_null(ctn->contained);
+        assert_int_equal(ctn->contained_size, 2);
+        assert_string_equal(NODE_TO_DATA(ctn->at(ctn, 0)), "foo");
+        delete(ctn);
+    );
+    (void)state;
+}
+
+static void  lists_non_empty_at_last_pos(void **state)
+{
+    LOOP_OVER_ALL_KINDS(
+        Container   *ctn;
+
+        ctn = new(kinds[kinds_idx], *state, COPY_ALL, 0);
+        assert_non_null(ctn);
+        assert_non_null(ctn->contained);
+        assert_int_equal(ctn->contained_size, 2);
+        assert_string_equal(NODE_TO_DATA(ctn->at(ctn, 1)), "bar");
+        delete(ctn);
+    );
+    (void)state;
+}
+
+static void  lists_empty_convert_to_lists(void **state)
+{
+    LOOP_OVER_ALL_KINDS(
+        Container   *ctn;
+        Container   *converted;
+
+        ctn = new(kinds[kinds_idx], NULL, 0);
+        assert_non_null(ctn);
+        assert_null(ctn->contained);
+        assert_int_equal(ctn->contained_size, 0);
+        converted = ctn->convert(ctn, kinds[kinds_idx]);
+        assert_non_null(converted);
+        assert_null(converted->contained);
+        assert_int_equal(converted->contained_size, 0);
+        delete(ctn);
+        delete(converted);
+    );
+    (void)state;
+}
+
+static void  lists_non_empty_convert_to_lists(void **state)
+{
+    LOOP_OVER_ALL_KINDS(
+        Container   *ctn;
+        Container   *converted;
+
+        ctn = new(kinds[kinds_idx], *state, COPY_ALL, 0);
+        assert_non_null(ctn);
+        assert_non_null(ctn->contained);
+        assert_int_equal(ctn->contained_size, 2);
+        converted = ctn->convert(ctn, kinds[kinds_idx]);
+        assert_non_null(converted);
+        assert_non_null(converted->contained);
+        assert_int_equal(converted->contained_size, 2);
+        delete(ctn);
+        delete(converted);
+    );
+    (void)state;
+}
+
 const struct CMUnitTest list_tests[] = {
     cmocka_unit_test_setup_teardown(lists_alloc_obj_no_args, setup_foo_bar_typed_array, teardown_foo_bar_array),
     cmocka_unit_test_setup_teardown(lists_alloc_obj_fully_copy_string_table, setup_foo_bar_typed_array, teardown_foo_bar_array),
@@ -619,6 +764,15 @@ const struct CMUnitTest list_tests[] = {
     cmocka_unit_test_setup_teardown(lists_non_empty_front, setup_foo_bar_typed_array, teardown_foo_bar_array),
     cmocka_unit_test_setup_teardown(lists_empty_back, setup_foo_bar_typed_array, teardown_foo_bar_array),
     cmocka_unit_test_setup_teardown(lists_non_empty_back, setup_foo_bar_typed_array, teardown_foo_bar_array),
+    cmocka_unit_test_setup_teardown(lists_empty_at_negative_pos, setup_foo_bar_typed_array, teardown_foo_bar_array),
+    cmocka_unit_test_setup_teardown(lists_empty_at_out_of_range_pos, setup_foo_bar_typed_array, teardown_foo_bar_array),
+    cmocka_unit_test_setup_teardown(lists_non_empty_at_negative_pos, setup_foo_bar_typed_array, teardown_foo_bar_array),
+    cmocka_unit_test_setup_teardown(lists_non_empty_at_out_of_range_pos, setup_foo_bar_typed_array, teardown_foo_bar_array),
+    cmocka_unit_test_setup_teardown(lists_empty_at_pos_0, setup_foo_bar_typed_array, teardown_foo_bar_array),
+    cmocka_unit_test_setup_teardown(lists_non_empty_at_pos_0, setup_foo_bar_typed_array, teardown_foo_bar_array),
+    cmocka_unit_test_setup_teardown(lists_non_empty_at_last_pos, setup_foo_bar_typed_array, teardown_foo_bar_array),
+    cmocka_unit_test_setup_teardown(lists_empty_convert_to_lists, setup_foo_bar_typed_array, teardown_foo_bar_array),
+    cmocka_unit_test_setup_teardown(lists_non_empty_convert_to_lists, setup_foo_bar_typed_array, teardown_foo_bar_array),
 };
 // cmocka_unit_test_setup_teardown(, setup_foo_bar_typed_array, teardown_foo_bar_array),
 /*

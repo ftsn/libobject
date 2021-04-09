@@ -7,10 +7,11 @@
 # define MAX_TEST_PER_GROUP  128
 
 // Array
-# define ARRAY_LOOKUP(ctn, pos)      (((t_data **)ctn->contained)[(pos)])
-# define ARRAY_DATA_LOOKUP(ctn, pos) (((t_data **)ctn->contained)[(pos)]->data)
+# define ARRAY_LOOKUP(ctn, pos)         (((t_data **)ctn->contained)[(pos)])
+# define ARRAY_DATA_LOOKUP(ctn, pos)    (((t_data **)ctn->contained)[(pos)]->data)
 
 // List
+# define NODE_TO_DATA(node)             (((t_data *)((t_list_data *)node)->data)->data)
 # define LOOP_OVER_ALL_KINDS(x)                                             \
 do {                                                                        \
     Class *kinds[] = {_spl_list, _spl_clist, _dbl_list, _dbl_clist, NULL};  \
