@@ -694,7 +694,7 @@ static void     array_empty_sub_to_array_out_of_range_pos_correct_length(void **
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
-    converted = ctn->sub(ctn, _array, 666, 1);
+    converted = ctn->sub(ctn, _array, 666, 0);
     assert_null(converted);
     delete(ctn);
     delete(converted);

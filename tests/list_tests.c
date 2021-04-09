@@ -730,6 +730,373 @@ static void  lists_non_empty_convert_to_lists(void **state)
     (void)state;
 }
 
+
+
+
+
+
+static void  lists_empty_sub_to_array_out_of_range_negative_pos_correct_length(void **state)
+{
+    LOOP_OVER_ALL_KINDS(
+        Container   *ctn;
+        Container   *converted;
+
+        ctn = new(kinds[kinds_idx], NULL, 0);
+        assert_non_null(ctn);
+        assert_null(ctn->contained);
+        assert_int_equal(ctn->contained_size, 0);
+        converted = ctn->sub(ctn, kinds[kinds_idx], -666, 0);
+        assert_null(converted);
+        delete(ctn);
+        delete(converted);
+    );
+    (void)state;
+}
+
+static void  lists_empty_sub_to_array_correct_pos_too_long_length(void **state)
+{
+    LOOP_OVER_ALL_KINDS(
+        Container   *ctn;
+        Container   *converted;
+
+        ctn = new(kinds[kinds_idx], NULL, 0);
+        assert_non_null(ctn);
+        assert_null(ctn->contained);
+        assert_int_equal(ctn->contained_size, 0);
+        converted = ctn->sub(ctn, kinds[kinds_idx], 0, 1);
+        assert_null(converted);
+        delete(ctn);
+        delete(converted);
+    );
+    (void)state;
+}
+
+static void  lists_empty_sub_to_array_out_of_range_negative_pos_too_long_length(void **state)
+{
+    LOOP_OVER_ALL_KINDS(
+        Container   *ctn;
+        Container   *converted;
+
+        ctn = new(kinds[kinds_idx], NULL, 0);
+        assert_non_null(ctn);
+        assert_null(ctn->contained);
+        assert_int_equal(ctn->contained_size, 0);
+        converted = ctn->sub(ctn, kinds[kinds_idx], -666, 1);
+        assert_null(converted);
+        delete(ctn);
+        delete(converted);
+    );
+    (void)state;
+}
+
+static void  lists_empty_sub_to_array_out_of_range_pos_correct_length(void **state)
+{
+    LOOP_OVER_ALL_KINDS(
+        Container   *ctn;
+        Container   *converted;
+
+        ctn = new(kinds[kinds_idx], NULL, 0);
+        assert_non_null(ctn);
+        assert_null(ctn->contained);
+        assert_int_equal(ctn->contained_size, 0);
+        converted = ctn->sub(ctn, kinds[kinds_idx], 666, 0);
+        assert_null(converted);
+        delete(ctn);
+        delete(converted);
+    );
+    (void)state;
+}
+
+static void lists_non_empty_sub_to_array_out_of_range_negative_pos_correct_length(void **state)
+{
+    LOOP_OVER_ALL_KINDS(
+        Container   *ctn;
+        Container   *converted;
+
+        ctn = new(kinds[kinds_idx], *state, COPY_ALL, 0);
+        assert_non_null(ctn);
+        assert_non_null(ctn->contained);
+        assert_int_equal(ctn->contained_size, 2);
+        converted = ctn->sub(ctn, kinds[kinds_idx], -666, 1);
+        assert_null(converted);
+        delete(ctn);
+        delete(converted);
+    );
+    (void)state;
+}
+
+static void lists_non_empty_sub_to_array_correct_pos_too_long_length(void **state)
+{
+    LOOP_OVER_ALL_KINDS(
+        Container   *ctn;
+        Container   *converted;
+
+        ctn = new(kinds[kinds_idx], *state, COPY_ALL, 0);
+        assert_non_null(ctn);
+        assert_non_null(ctn->contained);
+        assert_int_equal(ctn->contained_size, 2);
+        converted = ctn->sub(ctn, kinds[kinds_idx], 0, 3);
+        assert_null(converted);
+        delete(ctn);
+        delete(converted);
+    );
+    (void)state;
+}
+
+static void lists_non_empty_sub_to_array_out_of_range_negative_pos_too_long_length(void **state)
+{
+    LOOP_OVER_ALL_KINDS(
+        Container   *ctn;
+        Container   *converted;
+
+        ctn = new(kinds[kinds_idx], *state, COPY_ALL, 0);
+        assert_non_null(ctn);
+        assert_non_null(ctn->contained);
+        assert_int_equal(ctn->contained_size, 2);
+        converted = ctn->sub(ctn, kinds[kinds_idx], -666, 3);
+        assert_null(converted);
+        delete(ctn);
+        delete(converted);
+    );
+    (void)state;
+}
+
+static void lists_non_empty_sub_to_array_out_of_range_pos_correct_length(void **state)
+{
+    LOOP_OVER_ALL_KINDS(
+        Container   *ctn;
+        Container   *converted;
+
+        ctn = new(kinds[kinds_idx], *state, COPY_ALL, 0);
+        assert_non_null(ctn);
+        assert_non_null(ctn->contained);
+        assert_int_equal(ctn->contained_size, 2);
+        converted = ctn->sub(ctn, kinds[kinds_idx], 666, 1);
+        assert_null(converted);
+        delete(ctn);
+        delete(converted);
+    );
+    (void)state;
+}
+
+static void  lists_empty_sub_to_array_pos_0_len_0(void **state)
+{
+    LOOP_OVER_ALL_KINDS(
+        Container   *ctn;
+        Container   *converted;
+
+        ctn = new(kinds[kinds_idx], NULL, 0);
+        assert_non_null(ctn);
+        assert_null(ctn->contained);
+        assert_int_equal(ctn->contained_size, 0);
+        converted = ctn->sub(ctn, kinds[kinds_idx], 0, 0);
+        assert_non_null(converted);
+        assert_null(converted->contained);
+        delete(ctn);
+        delete(converted);
+    );
+    (void)state;
+}
+
+static void  lists_non_empty_sub_to_array_pos_0_len_0(void **state)
+{
+    LOOP_OVER_ALL_KINDS(
+        Container   *ctn;
+        Container   *converted;
+
+        ctn = new(kinds[kinds_idx], *state, COPY_ALL, 0);
+        assert_non_null(ctn);
+        assert_non_null(ctn->contained);
+        assert_int_equal(ctn->contained_size, 2);
+        converted = ctn->sub(ctn, kinds[kinds_idx], 0, 0);
+        assert_non_null(converted);
+        assert_null(converted->contained);
+        delete(ctn);
+        delete(converted);
+    );
+    (void)state;
+}
+
+static void  lists_non_empty_sub_to_array_pos_0_len_1(void **state)
+{
+    LOOP_OVER_ALL_KINDS(
+        Container   *ctn;
+        Container   *converted;
+
+        ctn = new(kinds[kinds_idx], *state, COPY_ALL, 0);
+        assert_non_null(ctn);
+        assert_non_null(ctn->contained);
+        assert_int_equal(ctn->contained_size, 2);
+        converted = ctn->sub(ctn, kinds[kinds_idx], 0, 1);
+        assert_non_null(converted);
+        assert_non_null(converted->contained);
+        assert_int_equal(converted->contained_size, 1);
+        assert_string_equal(list_data_lookup(converted, 0), "foo");
+        delete(ctn);
+        delete(converted);
+    );
+    (void)state;
+}
+
+static void  lists_non_empty_sub_to_array_pos_1_len_1(void **state)
+{
+    LOOP_OVER_ALL_KINDS(
+        Container   *ctn;
+        Container   *converted;
+
+        ctn = new(kinds[kinds_idx], *state, COPY_ALL, 0);
+        assert_non_null(ctn);
+        assert_non_null(ctn->contained);
+        assert_int_equal(ctn->contained_size, 2);
+        converted = ctn->sub(ctn, kinds[kinds_idx], 1, 1);
+        assert_non_null(converted);
+        assert_non_null(converted->contained);
+        assert_int_equal(converted->contained_size, 1);
+        assert_string_equal(list_data_lookup(converted, 0), "bar");
+        delete(ctn);
+        delete(converted);
+    );
+    (void)state;
+}
+
+static void  lists_non_empty_sub_to_array_copy_all(void **state)
+{
+    LOOP_OVER_ALL_KINDS(
+        Container   *ctn;
+        Container   *converted;
+
+        ctn = new(kinds[kinds_idx], *state, COPY_ALL, 0);
+        assert_non_null(ctn);
+        assert_non_null(ctn->contained);
+        assert_int_equal(ctn->contained_size, 2);
+        converted = ctn->sub(ctn, kinds[kinds_idx], 0, 2);
+        assert_non_null(converted);
+        assert_non_null(converted->contained);
+        assert_int_equal(converted->contained_size, 2);
+        assert_string_equal(list_data_lookup(converted, 0), "foo");
+        assert_string_equal(list_data_lookup(converted, 1), "bar");
+        delete(ctn);
+        delete(converted);
+    );
+    (void)state;
+}
+
+static void  lists_non_empty_sub_to_array_correct_negative_pos_minus_2_len_1(void **state)
+{
+    LOOP_OVER_ALL_KINDS(
+        Container   *ctn;
+        Container   *converted;
+
+        ctn = new(kinds[kinds_idx], *state, COPY_ALL, 0);
+        assert_non_null(ctn);
+        assert_non_null(ctn->contained);
+        assert_int_equal(ctn->contained_size, 2);
+        converted = ctn->sub(ctn, kinds[kinds_idx], -2, 1);
+        assert_non_null(converted);
+        assert_non_null(converted->contained);
+        assert_int_equal(converted->contained_size, 1);
+        assert_string_equal(list_data_lookup(converted, 0), "foo");
+        delete(ctn);
+        delete(converted);
+    );
+    (void)state;
+}
+
+static void  lists_non_empty_sub_to_array_correct_negative_pos_minus_1_len_1(void **state)
+{
+    LOOP_OVER_ALL_KINDS(
+        Container   *ctn;
+        Container   *converted;
+
+        ctn = new(kinds[kinds_idx], *state, COPY_ALL, 0);
+        assert_non_null(ctn);
+        assert_non_null(ctn->contained);
+        assert_int_equal(ctn->contained_size, 2);
+        converted = ctn->sub(ctn, kinds[kinds_idx], -1, 1);
+        assert_non_null(converted);
+        assert_non_null(converted->contained);
+        assert_int_equal(converted->contained_size, 1);
+        assert_string_equal(list_data_lookup(converted, 0), "bar");
+        delete(ctn);
+        delete(converted);
+    );
+    (void)state;
+}
+
+static void  lists_non_empty_sub_to_array_correct_negative_pos_minus_2_copy_all(void **state)
+{
+    LOOP_OVER_ALL_KINDS(
+        Container   *ctn;
+        Container   *converted;
+
+        ctn = new(kinds[kinds_idx], *state, COPY_ALL, 0);
+        assert_non_null(ctn);
+        assert_non_null(ctn->contained);
+        assert_int_equal(ctn->contained_size, 2);
+        converted = ctn->sub(ctn, kinds[kinds_idx], -2, 2);
+        assert_non_null(converted);
+        assert_non_null(converted->contained);
+        assert_int_equal(converted->contained_size, 2);
+        assert_string_equal(list_data_lookup(converted, 0), "foo");
+        assert_string_equal(list_data_lookup(converted, 1), "bar");
+        delete(ctn);
+        delete(converted);
+    );
+    (void)state;
+}
+
+// Map function used to test the map method. Assumes the provided data is a pointer to a non empty string of char.
+static t_data   map_fn(ssize_t idx, void *cur)
+{
+    t_data      *data;
+
+    data = cur;
+    (void)idx;
+    return ((t_data){TYPE_CSTRING, ((char *)data->data) + 1});
+}
+
+static void  lists_empty_map_to_lists(void **state)
+{
+    LOOP_OVER_ALL_KINDS(
+        Container   *ctn;
+        Container   *converted;
+
+        ctn = new(kinds[kinds_idx], NULL, 0);
+        assert_non_null(ctn);
+        assert_null(ctn->contained);
+        assert_int_equal(ctn->contained_size, 0);
+        converted = ctn->map(ctn, kinds[kinds_idx], map_fn);
+        assert_non_null(converted);
+        assert_null(converted->contained);
+        assert_int_equal(converted->contained_size, 0);
+        delete(ctn);
+        delete(converted);
+    );
+    (void)state;
+}
+
+static void  lists_non_empty_map_to_lists(void **state)
+{
+    LOOP_OVER_ALL_KINDS(
+        Container   *ctn;
+        Container   *converted;
+
+        ctn = new(kinds[kinds_idx], *state, COPY_ALL, 0);
+        assert_non_null(ctn);
+        assert_non_null(ctn->contained);
+        assert_int_equal(ctn->contained_size, 2);
+        converted = ctn->map(ctn, kinds[kinds_idx], map_fn);
+        assert_non_null(converted);
+        assert_non_null(converted->contained);
+        assert_int_equal(converted->contained_size, 2);
+        assert_string_equal(list_data_lookup(converted, 0), "oo");
+        assert_string_equal(list_data_lookup(converted, 1), "ar");
+        delete(ctn);
+        delete(converted);
+    );
+    (void)state;
+}
+
 const struct CMUnitTest list_tests[] = {
     cmocka_unit_test_setup_teardown(lists_alloc_obj_no_args, setup_foo_bar_typed_array, teardown_foo_bar_array),
     cmocka_unit_test_setup_teardown(lists_alloc_obj_fully_copy_string_table, setup_foo_bar_typed_array, teardown_foo_bar_array),
@@ -773,6 +1140,24 @@ const struct CMUnitTest list_tests[] = {
     cmocka_unit_test_setup_teardown(lists_non_empty_at_last_pos, setup_foo_bar_typed_array, teardown_foo_bar_array),
     cmocka_unit_test_setup_teardown(lists_empty_convert_to_lists, setup_foo_bar_typed_array, teardown_foo_bar_array),
     cmocka_unit_test_setup_teardown(lists_non_empty_convert_to_lists, setup_foo_bar_typed_array, teardown_foo_bar_array),
+    cmocka_unit_test_setup_teardown(lists_empty_sub_to_array_out_of_range_negative_pos_correct_length, setup_foo_bar_typed_array, teardown_foo_bar_array),
+    cmocka_unit_test_setup_teardown(lists_empty_sub_to_array_correct_pos_too_long_length, setup_foo_bar_typed_array, teardown_foo_bar_array),
+    cmocka_unit_test_setup_teardown(lists_empty_sub_to_array_out_of_range_negative_pos_too_long_length, setup_foo_bar_typed_array, teardown_foo_bar_array),
+    cmocka_unit_test_setup_teardown(lists_empty_sub_to_array_out_of_range_pos_correct_length, setup_foo_bar_typed_array, teardown_foo_bar_array),
+    cmocka_unit_test_setup_teardown(lists_non_empty_sub_to_array_out_of_range_negative_pos_correct_length, setup_foo_bar_typed_array, teardown_foo_bar_array),
+    cmocka_unit_test_setup_teardown(lists_non_empty_sub_to_array_correct_pos_too_long_length, setup_foo_bar_typed_array, teardown_foo_bar_array),
+    cmocka_unit_test_setup_teardown(lists_non_empty_sub_to_array_out_of_range_negative_pos_too_long_length, setup_foo_bar_typed_array, teardown_foo_bar_array),
+    cmocka_unit_test_setup_teardown(lists_non_empty_sub_to_array_out_of_range_pos_correct_length, setup_foo_bar_typed_array, teardown_foo_bar_array),
+    cmocka_unit_test_setup_teardown(lists_empty_sub_to_array_pos_0_len_0, setup_foo_bar_typed_array, teardown_foo_bar_array),
+    cmocka_unit_test_setup_teardown(lists_non_empty_sub_to_array_pos_0_len_0, setup_foo_bar_typed_array, teardown_foo_bar_array),
+    cmocka_unit_test_setup_teardown(lists_non_empty_sub_to_array_pos_0_len_1, setup_foo_bar_typed_array, teardown_foo_bar_array),
+    cmocka_unit_test_setup_teardown(lists_non_empty_sub_to_array_pos_1_len_1, setup_foo_bar_typed_array, teardown_foo_bar_array),
+    cmocka_unit_test_setup_teardown(lists_non_empty_sub_to_array_copy_all, setup_foo_bar_typed_array, teardown_foo_bar_array),
+    cmocka_unit_test_setup_teardown(lists_non_empty_sub_to_array_correct_negative_pos_minus_2_len_1, setup_foo_bar_typed_array, teardown_foo_bar_array),
+    cmocka_unit_test_setup_teardown(lists_non_empty_sub_to_array_correct_negative_pos_minus_1_len_1, setup_foo_bar_typed_array, teardown_foo_bar_array),
+    cmocka_unit_test_setup_teardown(lists_non_empty_sub_to_array_correct_negative_pos_minus_2_copy_all, setup_foo_bar_typed_array, teardown_foo_bar_array),
+    cmocka_unit_test_setup_teardown(lists_empty_map_to_lists, setup_foo_bar_typed_array, teardown_foo_bar_array),
+    cmocka_unit_test_setup_teardown(lists_non_empty_map_to_lists, setup_foo_bar_typed_array, teardown_foo_bar_array),
 };
 // cmocka_unit_test_setup_teardown(, setup_foo_bar_typed_array, teardown_foo_bar_array),
 /*
