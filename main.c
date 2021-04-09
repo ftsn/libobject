@@ -58,9 +58,20 @@ int     main(int ac, char **av)
     ctn = new(_array, data_tab, COPY_ALL, 0);
     ctn->dump(ctn, "ctn array", typed_basic_print, "");
     converted = ctn->map(ctn, _array, mapinho);
+    delete(ctn);
     converted->dump(converted, "converted array", typed_basic_print, "");
     delete(converted);
     free_typed_array(data_tab);
-    delete(ctn);
+
+    String      *str;
+    Container   *array;
+
+    str = new(_string, "foobar", COPY_ALL, 0);
+    array = str->split(str, _array, "o");
+    printf("array size [%zd]\n", array->contained_size);
+    printf("array[0] [%s]\n", ((t_data **)array->contained)[0]->data);
+    printf("array[1] [%s]\n", ((t_data **)array->contained)[1]->data);
+    delete(array);
+    delete(str);
     return (1);
 }

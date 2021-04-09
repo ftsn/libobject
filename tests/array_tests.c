@@ -18,7 +18,7 @@ static int setup_foo_bar_typed_array(void **state)
 
 static int teardown_foo_bar_array(void **state)
 {
-    free(*state);
+    free_typed_array((t_data **)*state);
     *state = NULL;
     return (0);
 }

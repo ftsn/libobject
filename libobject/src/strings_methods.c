@@ -139,11 +139,7 @@ Object          *_string_split(const String *self, const Class *type, const char
 
     if (!self->contained || !sep || !(container = new (type, NULL, 0)))
         return (NULL);
-    if (!(strdump = str_dup((char *)self->contained)))
-    {
-        delete(container);
-        return (NULL);
-    }
+    strdump = self->contained;
     token = strtok(strdump, sep);
     while (token)
     {
@@ -155,7 +151,6 @@ Object          *_string_split(const String *self, const Class *type, const char
         }
         token = strtok(NULL, sep);
     }
-    free(strdump);
     return (container);
 }
 
