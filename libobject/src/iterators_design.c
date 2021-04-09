@@ -15,6 +15,11 @@ static t_bool   _list_iterator_ctor(Object *self, va_list *args)
     it = self;
     iterated_obj = va_arg(*args, void *);
     it->iterated_obj = iterated_obj;
+    if (iterated_obj->contained_size == 0)
+    {
+        it->reached_the_beginning = 1;
+        it->reached_the_end = 1;
+    }
     it->cur = iterated_obj->front(iterated_obj);
     if (it->cur == NULL)
         return (TRUE);
@@ -26,11 +31,6 @@ static t_bool   _list_iterator_ctor(Object *self, va_list *args)
     {
         it->next(it);
         ++i;
-    }
-    if (iterated_obj->contained_size == 0)
-    {
-        it->reached_the_beginning = 1;
-        it->reached_the_end = 1;
     }
     return (TRUE);
 }
