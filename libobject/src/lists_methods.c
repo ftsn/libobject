@@ -125,6 +125,8 @@ t_bool      _spl_list_add(Object *list, void *data, t_type type, ssize_t pos)
 {
     t_data  *typed_data;
 
+    if (pos < 0 || pos > ((Container *)list)->contained_size)
+        return (FALSE);
     if (!(typed_data = malloc(sizeof(t_data))))
         return (FALSE);
     typed_data->type = type;
@@ -141,6 +143,8 @@ t_bool      _spl_clist_add(Object *list, void *data, t_type type, ssize_t pos)
 {
     t_data  *typed_data;
 
+    if (pos < 0 || pos > ((Container *)list)->contained_size)
+        return (FALSE);
     if (!(typed_data = malloc(sizeof(t_data))))
         return (FALSE);
     typed_data->type = type;
@@ -157,6 +161,8 @@ t_bool      _dbl_list_add(Object *list, void *data, t_type type, ssize_t pos)
 {
     t_data  *typed_data;
 
+    if (pos < 0 || pos > ((Container *)list)->contained_size)
+        return (FALSE);
     if (!(typed_data = malloc(sizeof(t_data))))
         return (FALSE);
     typed_data->type = type;
@@ -173,6 +179,8 @@ t_bool      _dbl_clist_add(Object *list, void *data, t_type type, ssize_t pos)
 {
     t_data  *typed_data;
 
+    if (pos < 0 || pos > ((Container *)list)->contained_size)
+        return (FALSE);
     if (!(typed_data = malloc(sizeof(t_data))))
         return (FALSE);
     typed_data->type = type;
@@ -187,7 +195,7 @@ t_bool      _dbl_clist_add(Object *list, void *data, t_type type, ssize_t pos)
 
 t_bool  _spl_list_del(Object *list, ssize_t pos)
 {
-    if (pos > ((Container *)list)->contained_size - 1)
+    if (pos < 0 || pos > ((Container *)list)->contained_size - 1)
         return (FALSE);
     list_del((t_list_data **)&((Container *)list)->contained, pos, SIMPLE);
     --((Container *)list)->contained_size;
@@ -196,7 +204,7 @@ t_bool  _spl_list_del(Object *list, ssize_t pos)
 
 t_bool  _spl_clist_del(Object *list, ssize_t pos)
 {
-    if (pos > ((Container *)list)->contained_size - 1)
+    if (pos < 0 || pos > ((Container *)list)->contained_size - 1)
         return (FALSE);
     list_del((t_list_data **)&((Container *)list)->contained, pos, CIRC_SIMPLE);
     --((Container *)list)->contained_size;
@@ -205,7 +213,7 @@ t_bool  _spl_clist_del(Object *list, ssize_t pos)
 
 t_bool  _dbl_list_del(Object *list, ssize_t pos)
 {
-    if (pos > ((Container *)list)->contained_size - 1)
+    if (pos < 0 || pos > ((Container *)list)->contained_size - 1)
         return (FALSE);
     list_del((t_list_data **)&((Container *)list)->contained, pos, DOUBLE);
     --((Container *)list)->contained_size;
@@ -214,7 +222,7 @@ t_bool  _dbl_list_del(Object *list, ssize_t pos)
 
 t_bool  _dbl_clist_del(Object *list, ssize_t pos)
 {
-    if (pos > ((Container *)list)->contained_size - 1)
+    if (pos < 0 || pos > ((Container *)list)->contained_size - 1)
         return (FALSE);
     list_del((t_list_data **)&((Container *)list)->contained, pos, CIRC_DOUBLE);
     --((Container *)list)->contained_size;
@@ -272,9 +280,14 @@ void                    list_basic_print(ssize_t i, const t_data *elem, const ch
            (list->next ? (char *)list->next->data : "null"));
 }
 
-void    _list_affect(Object *list, void *data)
+t_bool          _list_erase(Object *self)
 {
-    ((Container *)list)->contained = data;
+    Container   *list;
+
+    list = self;
+    while (list->contained)
+        list->delete_at(list, 0);
+    return (TRUE);
 }
 
 t_list_data     *get_nth_node(const Object *list, ssize_t pos)

@@ -56,7 +56,7 @@ static Spl_list _spl_list_descr =
             &_spl_list_add,
             &_container_push_back,
             &_spl_list_del,
-            NULL,
+            &_list_erase,
             NULL,
 
             &_list_front,

@@ -42,6 +42,8 @@ t_bool  _spl_clist_del(Object *list, ssize_t pos);
 t_bool  _dbl_list_del(Object *list, ssize_t pos);
 t_bool  _dbl_clist_del(Object *list, ssize_t pos);
 
+t_bool  _list_erase(Object *self);
+
 Object  *_list_front(const Object *list);
 Object  *_list_end(const Object *list);
 Object  *_list_at(const Object *list, ssize_t pos);
