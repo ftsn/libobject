@@ -94,7 +94,7 @@ static Spl_clist _spl_clist_descr =
             &_spl_clist_add,
             &_container_push_back,
             &_spl_clist_del,
-            NULL,
+            &_list_erase,
             NULL,
 
             &_list_front,
@@ -132,7 +132,7 @@ static Dbl_list _dbl_list_descr =
             &_dbl_list_add,
             &_container_push_back,
             &_dbl_list_del,
-            NULL,
+            &_list_erase,
             NULL,
 
             &_list_front,
@@ -170,7 +170,7 @@ static Dbl_clist _dbl_clist_descr =
             &_dbl_clist_add,
             &_container_push_back,
             &_dbl_clist_del,
-            NULL,
+            &_list_erase,
             NULL,
 
             &_list_front,

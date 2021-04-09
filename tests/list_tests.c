@@ -212,6 +212,7 @@ static void  lists_empty_insert_at_out_of_range_pos(void **state)
         assert_int_equal(ctn->insert_at(ctn, "foobar", TYPE_CSTRING, 666), FALSE);
         assert_null(ctn->contained);
         assert_int_equal(ctn->contained_size, 0);
+        delete(ctn);
     );
     (void)state;
 }
@@ -243,6 +244,7 @@ static void  lists_non_empty_insert_at_out_of_range_pos(void **state)
         assert_int_equal(ctn->contained_size, 2);
         assert_string_equal(list_data_lookup(ctn, 0), "foo");
         assert_string_equal(list_data_lookup(ctn, 1), "bar");
+        delete(ctn);
     );
     (void)state;
 }
@@ -257,6 +259,7 @@ static void  lists_empty_insert_at_pos_0(void **state)
         assert_int_equal(ctn->insert_at(ctn, "foobar", TYPE_CSTRING, 0), TRUE);
         assert_int_equal(ctn->contained_size, 1);
         assert_string_equal(list_data_lookup(ctn, 0), "foobar");
+        delete(ctn);
     );
     (void)state;
 }
@@ -273,6 +276,7 @@ static void  lists_non_empty_insert_at_pos_0(void **state)
         assert_string_equal(list_data_lookup(ctn, 0), "foobar");
         assert_string_equal(list_data_lookup(ctn, 1), "foo");
         assert_string_equal(list_data_lookup(ctn, 2), "bar");
+        delete(ctn);
     );
     (void)state;
 }
@@ -289,6 +293,7 @@ static void  lists_non_empty_insert_at_pos_1(void **state)
         assert_string_equal(list_data_lookup(ctn, 0), "foo");
         assert_string_equal(list_data_lookup(ctn, 1), "foobar");
         assert_string_equal(list_data_lookup(ctn, 2), "bar");
+        delete(ctn);
     );
     (void)state;
 }
@@ -305,6 +310,7 @@ static void  lists_non_empty_insert_at_last_pos(void **state)
         assert_string_equal(list_data_lookup(ctn, 0), "foo");
         assert_string_equal(list_data_lookup(ctn, 1), "bar");
         assert_string_equal(list_data_lookup(ctn, 2), "foobar");
+        delete(ctn);
     );
     (void)state;
 }
