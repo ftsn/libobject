@@ -71,6 +71,7 @@ t_bool          _container_push_back(Object *self, void *data, t_type type)
     Container   *self_c;
 
     self_c = self;
+    printf("push_back:[%d] [%s]\n", type, data);
     return (self_c->insert_at(self_c, data, type, self_c->contained_size));
 }
 
@@ -253,12 +254,12 @@ Object          *_container_sub(Object *self, Class *type, ssize_t begin, ssize_
     return (ctn);
 }
 
-Object          *_container_map(Object *self, Class *type, void *(*fptr)(ssize_t i, void *cur))
+Object          *_container_map(Object *self, Class *type, t_data (*fptr)(ssize_t i, void *cur))
 {
     Container   *ctn;
     Iterator    *it;
     ssize_t     i;
-    t_data      *typed_data;
+    t_data      typed_data;
 
     if (!(ctn = new (type, NULL, 0)))
         return (NULL);
@@ -271,7 +272,7 @@ Object          *_container_map(Object *self, Class *type, void *(*fptr)(ssize_t
     while (!it->reached_the_end)
     {
         typed_data = fptr(i, it->dereference(it));
-        if (ctn->push_back(ctn, typed_data->data, typed_data->type) == FALSE)
+        if (ctn->push_back(ctn, typed_data.data, typed_data.type) == FALSE)
         {
             delete (it);
             delete (ctn);

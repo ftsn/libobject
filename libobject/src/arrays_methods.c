@@ -169,7 +169,7 @@ Object              *_array_front(const Object *array)
     const Container *container;
 
     container = array;
-    return (container->contained ? ((void **)container->contained)[0] : NULL);
+    return (container->contained && container->contained_size ? ((void **)container->contained)[0] : NULL);
 }
 
 Object              *_array_back(const Object *array)
@@ -177,7 +177,7 @@ Object              *_array_back(const Object *array)
     const Container *container;
 
     container = array;
-    return (container->contained ? ((void **)container->contained)[container->contained_size - 1] : NULL);
+    return (container->contained && container->contained_size ? ((void **)container->contained)[container->contained_size - 1] : NULL);
 }
 
 Object              *_array_at(const Object *self, ssize_t pos)
@@ -185,7 +185,7 @@ Object              *_array_at(const Object *self, ssize_t pos)
     const Container *container;
 
     container = self;
-    return (pos < container->contained_size && container->contained ? ((void **)container->contained)[pos] : NULL);
+    return (pos >= 0 && pos < container->contained_size && container->contained ? ((void **)container->contained)[pos] : NULL);
 }
 
 /*

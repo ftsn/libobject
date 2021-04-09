@@ -15,6 +15,15 @@ typedef struct  s_toto {
 } t_toto;
 #pragma pack(pop)
 
+t_data   mapinho(ssize_t idx, void *cur)
+{
+    t_data  *data;
+
+    data = cur;
+    (void)idx;
+    return ((t_data){TYPE_CSTRING, ((char *)data->data) + 1  });
+}
+
 int     main(int ac, char **av)
 {
     Container *dict;
@@ -45,10 +54,10 @@ int     main(int ac, char **av)
     Container   *ctn, *converted;
     t_data      **data_tab;
 
-    data_tab = cstrings_to_data_array((char *[]){"foo", "bar", NULL});
+    data_tab = cstrings_to_data_array((char *[]){"foo", "barbarz", "barz", "bazfoo", NULL});
     ctn = new(_array, data_tab, COPY_ALL, 0);
-    ctn->dump(ctn, "array inserted item at pos 1", typed_basic_print, "");
-    converted = ctn->convert(ctn, _array);
+    ctn->dump(ctn, "ctn array", typed_basic_print, "");
+    converted = ctn->map(ctn, _array, mapinho);
     converted->dump(converted, "converted array", typed_basic_print, "");
     delete(converted);
     free_typed_array(data_tab);

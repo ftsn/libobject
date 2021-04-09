@@ -40,8 +40,8 @@ Object          *_container_to_type(Object *self, Class *type);
 typedef Object  *(*t_sub)(Object *self, Class *type, ssize_t begin, ssize_t len);
 Object          *_container_sub(Object *self, Class *type, ssize_t begin, ssize_t len);
 
-typedef Object  *(*t_map)(Object *self, Class *type, void *(*fptr)(ssize_t i, void *cur));
-Object          *_container_map(Object *self, Class *type, void *(*fptr)(ssize_t i, void *cur));
+typedef Object  *(*t_map)(Object *self, Class *type, t_data (*fptr)(ssize_t i, void *cur));
+Object          *_container_map(Object *self, Class *type, t_data (*fptr)(ssize_t i, void *cur));
 
 typedef Object  *(*t_it_create)(const Object *self);
 Object          *_container_begin(const Object *self);

@@ -27,6 +27,11 @@ static t_bool   _list_iterator_ctor(Object *self, va_list *args)
         it->next(it);
         ++i;
     }
+    if (iterated_obj->contained_size == 0)
+    {
+        it->reached_the_beginning = 1;
+        it->reached_the_end = 1;
+    }
     return (TRUE);
 }
 
