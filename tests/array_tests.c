@@ -7,8 +7,6 @@
 #include "tests.h"
 #include "arrays.h"
 
-#include <stdio.h>
-
 static int setup_foo_bar_typed_array(void **state)
 {
     t_data  **data_tab;
@@ -46,8 +44,8 @@ static void     array_alloc_obj_fully_copy_string_table(void **state)
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
-    assert_string_equal(((t_data **)ctn->contained)[0]->data, "foo");
-    assert_string_equal(((t_data **)ctn->contained)[1]->data, "bar");
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 0), "foo");
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 1), "bar");
     assert_int_not_equal(((Array *)ctn)->total_size, 0);
     delete(ctn);
     (void)state;
@@ -61,7 +59,7 @@ static void     array_alloc_obj_partially_copy_string_table(void **state)
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 1);
-    assert_string_equal(((t_data **)ctn->contained)[0]->data, "foo");
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 0), "foo");
     assert_int_not_equal(((Array *)ctn)->total_size, 0);
     delete(ctn);
     (void)state;
@@ -77,10 +75,10 @@ static void     array_alloc_obj_fully_copy_string_table_plus_additional_args(voi
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 4);
-    assert_string_equal(((t_data **)ctn->contained)[0]->data, "foo");
-    assert_string_equal(((t_data **)ctn->contained)[1]->data, "bar");
-    assert_string_equal(((t_data **)ctn->contained)[2]->data, "a");
-    assert_int_equal(*(int *)((t_data **)ctn->contained)[3]->data, 666);
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 0), "foo");
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 1), "bar");
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 2), "a");
+    assert_int_equal(*(int *)ARRAY_DATA_LOOKUP(ctn, 3), 666);
     assert_int_not_equal(((Array *)ctn)->total_size, 0);
     delete(ctn);
     (void)state;
@@ -96,9 +94,9 @@ static void     array_alloc_obj_partially_copy_string_table_plus_additional_args
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 3);
-    assert_string_equal(((t_data **)ctn->contained)[0]->data, "foo");
-    assert_string_equal(((t_data **)ctn->contained)[1]->data, "a");
-    assert_int_equal(*(int *)((t_data **)ctn->contained)[2]->data, 666);
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 0), "foo");
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 1), "a");
+    assert_int_equal(*(int *)ARRAY_DATA_LOOKUP(ctn, 2), 666);
     assert_int_not_equal(((Array *)ctn)->total_size, 0);
     delete(ctn);
     (void)state;
@@ -171,7 +169,7 @@ static void     array_empty_insert_at_negative_pos(void **state)
     assert_non_null(ctn);
     assert_int_equal(ctn->insert_at(ctn, "foobar", TYPE_CSTRING, -1), FALSE);
     assert_int_equal(ctn->contained_size, 0);
-    assert_null(((void **)ctn->contained)[0]);
+    assert_null(ARRAY_LOOKUP(ctn, 0));
     delete(ctn);
     (void)state;
 }
@@ -184,7 +182,7 @@ static void     array_empty_insert_at_out_of_range_pos(void **state)
     assert_non_null(ctn);
     assert_int_equal(ctn->insert_at(ctn, "foobar", TYPE_CSTRING, 666), FALSE);
     assert_int_equal(ctn->contained_size, 0);
-    assert_null(((void **)ctn->contained)[0]);
+    assert_null(ARRAY_LOOKUP(ctn, 0));
     delete(ctn);
     (void)state;
 }
@@ -197,8 +195,8 @@ static void     array_non_empty_insert_at_negative_pos(void **state)
     assert_non_null(ctn);
     assert_int_equal(ctn->insert_at(ctn, "foobar", TYPE_CSTRING, -1), FALSE);
     assert_int_equal(ctn->contained_size, 2);
-    assert_string_equal(((t_data **)ctn->contained)[0]->data, "foo");
-    assert_string_equal(((t_data **)ctn->contained)[1]->data, "bar");
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 0), "foo");
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 1), "bar");
     delete(ctn);
     (void)state;
 }
@@ -211,8 +209,8 @@ static void     array_non_empty_insert_at_out_of_range_pos(void **state)
     assert_non_null(ctn);
     assert_int_equal(ctn->insert_at(ctn, "foobar", TYPE_CSTRING, 666), FALSE);
     assert_int_equal(ctn->contained_size, 2);
-    assert_string_equal(((t_data **)ctn->contained)[0]->data, "foo");
-    assert_string_equal(((t_data **)ctn->contained)[1]->data, "bar");
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 0), "foo");
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 1), "bar");
     delete(ctn);
     (void)state;
 }
@@ -225,7 +223,7 @@ static void     array_empty_insert_at_pos_0(void **state)
     assert_non_null(ctn);
     assert_int_equal(ctn->insert_at(ctn, "foobar", TYPE_CSTRING, 0), TRUE);
     assert_int_equal(ctn->contained_size, 1);
-    assert_string_equal(((t_data **)ctn->contained)[0]->data, "foobar");
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 0), "foobar");
     delete(ctn);
     (void)state;
 }
@@ -238,9 +236,9 @@ static void     array_non_empty_insert_at_pos_0(void **state)
     assert_non_null(ctn);
     assert_int_equal(ctn->insert_at(ctn, "foobar", TYPE_CSTRING, 0), TRUE);
     assert_int_equal(ctn->contained_size, 3);
-    assert_string_equal(((t_data **)ctn->contained)[0]->data, "foobar");
-    assert_string_equal(((t_data **)ctn->contained)[1]->data, "foo");
-    assert_string_equal(((t_data **)ctn->contained)[2]->data, "bar");
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 0), "foobar");
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 1), "foo");
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 2), "bar");
     delete(ctn);
     (void)state;
 }
@@ -253,9 +251,9 @@ static void     array_non_empty_insert_at_pos_1(void **state)
     assert_non_null(ctn);
     assert_int_equal(ctn->insert_at(ctn, "foobar", TYPE_CSTRING, 1), TRUE);
     assert_int_equal(ctn->contained_size, 3);
-    assert_string_equal(((t_data **)ctn->contained)[0]->data, "foo");
-    assert_string_equal(((t_data **)ctn->contained)[1]->data, "foobar");
-    assert_string_equal(((t_data **)ctn->contained)[2]->data, "bar");
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 0), "foo");
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 1), "foobar");
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 2), "bar");
     delete(ctn);
     (void)state;
 }
@@ -268,9 +266,9 @@ static void     array_non_empty_insert_at_last_pos(void **state)
     assert_non_null(ctn);
     assert_int_equal(ctn->insert_at(ctn, "foobar", TYPE_CSTRING, 2), TRUE);
     assert_int_equal(ctn->contained_size, 3);
-    assert_string_equal(((t_data **)ctn->contained)[0]->data, "foo");
-    assert_string_equal(((t_data **)ctn->contained)[1]->data, "bar");
-    assert_string_equal(((t_data **)ctn->contained)[2]->data, "foobar");
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 0), "foo");
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 1), "bar");
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 2), "foobar");
     delete(ctn);
     (void)state;
 }
@@ -283,7 +281,7 @@ static void     array_empty_push_back(void **state)
     assert_non_null(ctn);
     assert_int_equal(ctn->push_back(ctn, "foobar", TYPE_CSTRING), TRUE);
     assert_int_equal(ctn->contained_size, 1);
-    assert_string_equal(((t_data **)ctn->contained)[0]->data, "foobar");
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 0), "foobar");
     delete(ctn);
     (void)state;
 }
@@ -296,9 +294,9 @@ static void     array_non_empty_push_back(void **state)
     assert_non_null(ctn);
     assert_int_equal(ctn->push_back(ctn, "foobar", TYPE_CSTRING), TRUE);
     assert_int_equal(ctn->contained_size, 3);
-    assert_string_equal(((t_data **)ctn->contained)[0]->data, "foo");
-    assert_string_equal(((t_data **)ctn->contained)[1]->data, "bar");
-    assert_string_equal(((t_data **)ctn->contained)[2]->data, "foobar");
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 0), "foo");
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 1), "bar");
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 2), "foobar");
     delete(ctn);
     (void)state;
 }
@@ -311,7 +309,7 @@ static void     array_empty_delete_at_negative_pos(void **state)
     assert_non_null(ctn);
     assert_int_equal(ctn->delete_at(ctn, -1), FALSE);
     assert_int_equal(ctn->contained_size, 0);
-    assert_null(((void **)ctn->contained)[0]);
+    assert_null(ARRAY_LOOKUP(ctn, 0));
     delete(ctn);
     (void)state;
 }
@@ -324,7 +322,7 @@ static void     array_empty_delete_at_out_of_range_pos(void **state)
     assert_non_null(ctn);
     assert_int_equal(ctn->delete_at(ctn, 666), FALSE);
     assert_int_equal(ctn->contained_size, 0);
-    assert_null(((void **)ctn->contained)[0]);
+    assert_null(ARRAY_LOOKUP(ctn, 0));
     delete(ctn);
     (void)state;
 }
@@ -337,8 +335,8 @@ static void     array_non_empty_delete_at_negative_pos(void **state)
     assert_non_null(ctn);
     assert_int_equal(ctn->delete_at(ctn, -1), FALSE);
     assert_int_equal(ctn->contained_size, 2);
-    assert_string_equal(((t_data **)ctn->contained)[0]->data, "foo");
-    assert_string_equal(((t_data **)ctn->contained)[1]->data, "bar");
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 0), "foo");
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 1), "bar");
     delete(ctn);
     (void)state;
 }
@@ -351,8 +349,8 @@ static void     array_non_empty_delete_at_out_of_range_pos(void **state)
     assert_non_null(ctn);
     assert_int_equal(ctn->delete_at(ctn, 666), FALSE);
     assert_int_equal(ctn->contained_size, 2);
-    assert_string_equal(((t_data **)ctn->contained)[0]->data, "foo");
-    assert_string_equal(((t_data **)ctn->contained)[1]->data, "bar");
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 0), "foo");
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 1), "bar");
     delete(ctn);
     (void)state;
 }
@@ -365,7 +363,7 @@ static void     array_non_empty_delete_at_pos_0(void **state)
     assert_non_null(ctn);
     assert_int_equal(ctn->delete_at(ctn, 0), TRUE);
     assert_int_equal(ctn->contained_size, 1);
-    assert_string_equal(((t_data **)ctn->contained)[0]->data, "bar");
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 0), "bar");
     delete(ctn);
     (void)state;
 }
@@ -378,7 +376,7 @@ static void     array_non_empty_delete_at_pos_1(void **state)
     assert_non_null(ctn);
     assert_int_equal(ctn->delete_at(ctn, 1), TRUE);
     assert_int_equal(ctn->contained_size, 1);
-    assert_string_equal(((t_data **)ctn->contained)[0]->data, "foo");
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 0), "foo");
     delete(ctn);
     (void)state;
 }
@@ -391,40 +389,40 @@ static void     array_mixed_insertion_deletion(void **state)
     assert_non_null(ctn);
     assert_int_equal(ctn->delete_at(ctn, 1), TRUE);
     assert_int_equal(ctn->contained_size, 1);
-    assert_string_equal(((t_data **)ctn->contained)[0]->data, "foo");
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 0), "foo");
     assert_int_equal(ctn->insert_at(ctn, "foobar", TYPE_CSTRING, 1), TRUE);
     assert_int_equal(ctn->contained_size, 2);
-    assert_string_equal(((t_data **)ctn->contained)[0]->data, "foo");
-    assert_string_equal(((t_data **)ctn->contained)[1]->data, "foobar");
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 0), "foo");
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 1), "foobar");
     assert_int_equal(ctn->insert_at(ctn, "barfoo", TYPE_CSTRING, 1), TRUE);
     assert_int_equal(ctn->contained_size, 3);
-    assert_string_equal(((t_data **)ctn->contained)[0]->data, "foo");
-    assert_string_equal(((t_data **)ctn->contained)[1]->data, "barfoo");
-    assert_string_equal(((t_data **)ctn->contained)[2]->data, "foobar");
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 0), "foo");
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 1), "barfoo");
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 2), "foobar");
     assert_int_equal(ctn->push_back(ctn, "baz", TYPE_CSTRING), TRUE);
     assert_int_equal(ctn->contained_size, 4);
-    assert_string_equal(((t_data **)ctn->contained)[0]->data, "foo");
-    assert_string_equal(((t_data **)ctn->contained)[1]->data, "barfoo");
-    assert_string_equal(((t_data **)ctn->contained)[2]->data, "foobar");
-    assert_string_equal(((t_data **)ctn->contained)[3]->data, "baz");
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 0), "foo");
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 1), "barfoo");
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 2), "foobar");
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 3), "baz");
     assert_int_equal(ctn->delete_at(ctn, -1), FALSE);
     assert_int_equal(ctn->contained_size, 4);
-    assert_string_equal(((t_data **)ctn->contained)[0]->data, "foo");
-    assert_string_equal(((t_data **)ctn->contained)[1]->data, "barfoo");
-    assert_string_equal(((t_data **)ctn->contained)[2]->data, "foobar");
-    assert_string_equal(((t_data **)ctn->contained)[3]->data, "baz");
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 0), "foo");
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 1), "barfoo");
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 2), "foobar");
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 3), "baz");
     assert_int_equal(ctn->delete_at(ctn, 2), TRUE);
     assert_int_equal(ctn->contained_size, 3);
-    assert_string_equal(((t_data **)ctn->contained)[0]->data, "foo");
-    assert_string_equal(((t_data **)ctn->contained)[1]->data, "barfoo");
-    assert_string_equal(((t_data **)ctn->contained)[2]->data, "baz");
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 0), "foo");
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 1), "barfoo");
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 2), "baz");
     assert_int_equal(ctn->delete_at(ctn, 0), TRUE);
     assert_int_equal(ctn->contained_size, 2);
-    assert_string_equal(((t_data **)ctn->contained)[0]->data, "barfoo");
-    assert_string_equal(((t_data **)ctn->contained)[1]->data, "baz");
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 0), "barfoo");
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 1), "baz");
     assert_int_equal(ctn->delete_at(ctn, 0), TRUE);
     assert_int_equal(ctn->contained_size, 1);
-    assert_string_equal(((t_data **)ctn->contained)[0]->data, "baz");
+    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 0), "baz");
     assert_int_equal(ctn->delete_at(ctn, 0), TRUE);
     assert_int_equal(ctn->contained_size, 0);
     assert_int_equal(ctn->delete_at(ctn, 0), FALSE);
@@ -459,7 +457,7 @@ static void     array_non_empty_erase(void **state)
     assert_int_equal(ctn->erase(ctn), TRUE);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
-    assert_null(((t_data **)ctn->contained)[0]);
+    assert_null(ARRAY_LOOKUP(ctn, 0));
     delete(ctn);
     (void)state;
 }
@@ -773,7 +771,7 @@ static void     array_empty_sub_to_array_pos_0_len_0(void **state)
     assert_non_null(converted);
     assert_non_null(converted->contained);
     assert_int_equal(converted->contained_size, 0);
-    assert_null(((void **)converted->contained)[0]);
+    assert_null(ARRAY_LOOKUP(converted, 0));
     delete(ctn);
     delete(converted);
     (void)state;
@@ -791,7 +789,7 @@ static void     array_non_empty_sub_to_array_pos_0_len_0(void **state)
     assert_non_null(converted);
     assert_non_null(converted->contained);
     assert_int_equal(converted->contained_size, 0);
-    assert_null(((void **)converted->contained)[0]);
+    assert_null(ARRAY_LOOKUP(converted, 0));
     delete(ctn);
     delete(converted);
     (void)state;
@@ -809,7 +807,7 @@ static void     array_non_empty_sub_to_array_pos_0_len_1(void **state)
     assert_non_null(converted);
     assert_non_null(converted->contained);
     assert_int_equal(converted->contained_size, 1);
-    assert_string_equal(((t_data **)converted->contained)[0]->data, "foo");
+    assert_string_equal(ARRAY_DATA_LOOKUP(converted, 0), "foo");
     delete(ctn);
     delete(converted);
     (void)state;
@@ -827,7 +825,7 @@ static void     array_non_empty_sub_to_array_pos_1_len_1(void **state)
     assert_non_null(converted);
     assert_non_null(converted->contained);
     assert_int_equal(converted->contained_size, 1);
-    assert_string_equal(((t_data **)converted->contained)[0]->data, "bar");
+    assert_string_equal(ARRAY_DATA_LOOKUP(converted, 0), "bar");
     delete(ctn);
     delete(converted);
     (void)state;
@@ -845,8 +843,8 @@ static void     array_non_empty_sub_to_array_copy_all(void **state)
     assert_non_null(converted);
     assert_non_null(converted->contained);
     assert_int_equal(converted->contained_size, 2);
-    assert_string_equal(((t_data **)converted->contained)[0]->data, "foo");
-    assert_string_equal(((t_data **)converted->contained)[1]->data, "bar");
+    assert_string_equal(ARRAY_DATA_LOOKUP(converted, 0), "foo");
+    assert_string_equal(ARRAY_DATA_LOOKUP(converted, 1), "bar");
     delete(ctn);
     delete(converted);
     (void)state;
@@ -864,7 +862,7 @@ static void     array_non_empty_sub_to_array_correct_negative_pos_minus_2_len_1(
     assert_non_null(converted);
     assert_non_null(converted->contained);
     assert_int_equal(converted->contained_size, 1);
-    assert_string_equal(((t_data **)converted->contained)[0]->data, "foo");
+    assert_string_equal(ARRAY_DATA_LOOKUP(converted, 0), "foo");
     delete(ctn);
     delete(converted);
     (void)state;
@@ -882,7 +880,7 @@ static void     array_non_empty_sub_to_array_correct_negative_pos_minus_1_len_1(
     assert_non_null(converted);
     assert_non_null(converted->contained);
     assert_int_equal(converted->contained_size, 1);
-    assert_string_equal(((t_data **)converted->contained)[0]->data, "bar");
+    assert_string_equal(ARRAY_DATA_LOOKUP(converted, 0), "bar");
     delete(ctn);
     delete(converted);
     (void)state;
@@ -900,14 +898,59 @@ static void     array_non_empty_sub_to_array_correct_negative_pos_minus_2_copy_a
     assert_non_null(converted);
     assert_non_null(converted->contained);
     assert_int_equal(converted->contained_size, 2);
-    assert_string_equal(((t_data **)converted->contained)[0]->data, "foo");
-    assert_string_equal(((t_data **)converted->contained)[1]->data, "bar");
+    assert_string_equal(ARRAY_DATA_LOOKUP(converted, 0), "foo");
+    assert_string_equal(ARRAY_DATA_LOOKUP(converted, 1), "bar");
     delete(ctn);
     delete(converted);
     (void)state;
 }
 
-static
+// Map function used to test the map method. Assumes the provided data is a pointer to a non empty string of char.
+static t_data   map_fn(ssize_t idx, void *cur)
+{
+    t_data      *data;
+
+    data = cur;
+    (void)idx;
+    return ((t_data){TYPE_CSTRING, ((char *)data->data) + 1});
+}
+
+static void     array_empty_map_to_array(void **state)
+{
+    Container   *ctn, *converted;
+
+    ctn = new(_array, NULL, 0);
+    assert_non_null(ctn);
+    assert_non_null(ctn->contained);
+    assert_int_equal(ctn->contained_size, 0);
+    converted = ctn->map(ctn, _array, map_fn);
+    assert_non_null(converted);
+    assert_non_null(converted->contained);
+    assert_int_equal(converted->contained_size, 0);
+    assert_null(ARRAY_LOOKUP(converted, 0));
+    delete(ctn);
+    delete(converted);
+    (void)state;
+}
+
+static void     array_non_empty_map_to_array(void **state)
+{
+    Container   *ctn, *converted;
+
+    ctn = new(_array, *state, COPY_ALL, 0);
+    assert_non_null(ctn);
+    assert_non_null(ctn->contained);
+    assert_int_equal(ctn->contained_size, 2);
+    converted = ctn->map(ctn, _array, map_fn);
+    assert_non_null(converted);
+    assert_non_null(converted->contained);
+    assert_int_equal(converted->contained_size, 2);
+    assert_string_equal(ARRAY_DATA_LOOKUP(converted, 0), "oo");
+    assert_string_equal(ARRAY_DATA_LOOKUP(converted, 1), "ar");
+    delete(ctn);
+    delete(converted);
+    (void)state;
+}
 
 const struct CMUnitTest array_tests[] = {
     cmocka_unit_test_setup_teardown(array_alloc_obj_no_args, setup_foo_bar_typed_array, teardown_foo_bar_array),
@@ -968,7 +1011,6 @@ const struct CMUnitTest array_tests[] = {
     cmocka_unit_test_setup_teardown(array_non_empty_sub_to_array_correct_negative_pos_minus_2_len_1, setup_foo_bar_typed_array, teardown_foo_bar_array),
     cmocka_unit_test_setup_teardown(array_non_empty_sub_to_array_correct_negative_pos_minus_1_len_1, setup_foo_bar_typed_array, teardown_foo_bar_array),
     cmocka_unit_test_setup_teardown(array_non_empty_sub_to_array_correct_negative_pos_minus_2_copy_all, setup_foo_bar_typed_array, teardown_foo_bar_array),
+    cmocka_unit_test_setup_teardown(array_empty_map_to_array, setup_foo_bar_typed_array, teardown_foo_bar_array),
+    cmocka_unit_test_setup_teardown(array_non_empty_map_to_array, setup_foo_bar_typed_array, teardown_foo_bar_array),
 };
-/*
-cmocka_unit_test_setup_teardown(, setup_foo_bar_typed_array, teardown_foo_bar_array),
-    */

@@ -71,7 +71,6 @@ t_bool          _container_push_back(Object *self, void *data, t_type type)
     Container   *self_c;
 
     self_c = self;
-    printf("push_back:[%d] [%s]\n", type, data);
     return (self_c->insert_at(self_c, data, type, self_c->contained_size));
 }
 
