@@ -34,7 +34,6 @@ typedef struct
 } Dict;
 
 t_bool  dict_alloc(Container *dict, ssize_t new_size);
-void    dict_basic_print(ssize_t i, const t_data *elem, const char *prefix);
 
 extern Class *_dict;
 

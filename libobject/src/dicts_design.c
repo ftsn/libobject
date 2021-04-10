@@ -17,8 +17,8 @@ static t_bool   _dict_ctor(Object *self, va_list *args)
 static void     _dict_dtor(Object *self, va_list *args)
 {
     ssize_t     i;
-    void        **contained;
-    Iterator    *it;
+    Container   **contained;
+    //Iterator    *it;
 
     i = 0;
     contained = ((Container *)self)->contained;
@@ -26,6 +26,8 @@ static void     _dict_dtor(Object *self, va_list *args)
     {
         if (contained[i])
         {
+            delete(contained[i]);
+            /*
             it = ((Container *)contained[i])->begin(contained[i]);
             if (it == NULL)
                 return ;
@@ -36,6 +38,7 @@ static void     _dict_dtor(Object *self, va_list *args)
             }
             delete(it);
             delete(contained[i]);
+            */
         }
         ++i;
     }

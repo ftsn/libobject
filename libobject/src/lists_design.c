@@ -27,13 +27,9 @@ static void     _list_dtor(Object *self, va_list *args)
     Container   *list;
 
     list = self;
-    while (list->contained)
-    {
-        if (list->delete_at(list, 0) == FALSE)
-            return;
-    }
-    ((Container *)self)->contained = NULL;
-    ((Container *)self)->contained_size = 0;
+    list->erase(list);
+    list->contained = NULL;
+    list->contained_size = 0;
     (void)args; 
 }
 

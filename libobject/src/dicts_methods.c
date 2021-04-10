@@ -16,14 +16,6 @@ static unsigned long    djb2a_hash(unsigned char *str)
     return hash;
 }
 
-void    dict_basic_print(ssize_t i, const t_data *elem, const char *prefix)
-{
-    (void)i;
-    (void)elem;
-    (void)prefix;
-    //printf("%s%d)key: [%s]\tvalue: [%s]\n", prefix, (int)i, ((t_pair *)elem)->key, (char *)((t_pair *)elem)->data);
-}
-
 Object              *_get_obj_by_key(const Object *dict_obj, const char *key)
 {
     /*
