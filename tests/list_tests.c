@@ -730,11 +730,6 @@ static void  lists_non_empty_convert_to_lists(void **state)
     (void)state;
 }
 
-
-
-
-
-
 static void  lists_empty_sub_to_array_out_of_range_negative_pos_correct_length(void **state)
 {
     LOOP_OVER_ALL_KINDS(
@@ -1159,28 +1154,3 @@ const struct CMUnitTest list_tests[] = {
     cmocka_unit_test_setup_teardown(lists_empty_map_to_lists, setup_foo_bar_typed_array, teardown_foo_bar_array),
     cmocka_unit_test_setup_teardown(lists_non_empty_map_to_lists, setup_foo_bar_typed_array, teardown_foo_bar_array),
 };
-// cmocka_unit_test_setup_teardown(, setup_foo_bar_typed_array, teardown_foo_bar_array),
-/*
-
-static void  lists_data(void **state)
-{
-    LOOP_OVER_ALL_KINDS(
-        Container   *ctn;
-
-        ctn = new(kinds[kinds_idx], NULL, 0);
-    );
-    (void)state;
-}
-
-static void  lists_data(void **state)
-{
-    LOOP_OVER_ALL_KINDS(
-        Container   *ctn;
-
-        ctn = new(kinds[kinds_idx], *state, COPY_ALL, 0);
-    );
-    (void)state;
-}
-
-
-*/

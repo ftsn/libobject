@@ -268,8 +268,6 @@ Object              *generate_it(const Object *self, t_it_type type)
     Iterator        *it;
 
     it = NULL;
-    if (!((Container *)self)->contained)
-        return (NULL);
     if (is_spl_list(self) == TRUE)
         it = new(_spl_list_forward_it, self, type);
     else if (is_dbl_list(self) == TRUE)

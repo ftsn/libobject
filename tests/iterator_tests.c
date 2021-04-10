@@ -214,39 +214,58 @@ static void                 iterator_non_empty_array_compare_its(void **state)
     (void)state;
 }
 
-
-
-
-
-
-
-
 static void     iterator_null_string_begin(void **state)
 {
-    Container   *ctn;
+    String      *str;
     Iterator    *it;
 
-    ctn = new(_string, NULL, 0);
-    assert_non_null(ctn);
-    assert_null(ctn->contained);
-    assert_int_equal(ctn->contained_size, 0);
-    it = ctn->begin(ctn);
-    assert_null(it);
+    str = new(_string, NULL, 0);
+    assert_non_null(str);
+    assert_null(str->contained);
+    assert_int_equal(str->contained_size, 0);
+    it = str->begin(str);
+    assert_non_null(it);
+    assert_int_equal(it->reached_the_beginning, 1);
+    assert_int_equal(it->reached_the_end, 1);
+    assert_int_equal(it->it_idx, 0);
+    assert_int_equal(((RandomAccessIterator *)it)->ra_idx, 0);
+    assert_null(it->dereference(it));
     delete(it);
-    delete(ctn);
+    delete(str);
+    (void)state;
+}
+
+static void     iterator_null_string_end(void **state)
+{
+    String      *str;
+    Iterator    *it;
+
+    str = new(_string, NULL, 0);
+    assert_non_null(str);
+    assert_null(str->contained);
+    assert_int_equal(str->contained_size, 0);
+    it = str->end(str);
+    assert_non_null(it);
+    assert_int_equal(it->reached_the_beginning, 1);
+    assert_int_equal(it->reached_the_end, 1);
+    assert_int_equal(it->it_idx, 0);
+    assert_int_equal(((RandomAccessIterator *)it)->ra_idx, 0);
+    assert_null(it->dereference(it));
+    delete(it);
+    delete(str);
     (void)state;
 }
 
 static void     iterator_empty_string_begin(void **state)
 {
-    Container   *ctn;
+    String      *str;
     Iterator    *it;
 
-    ctn = new(_string, "", COPY_ALL, 0);
-    assert_non_null(ctn);
-    assert_non_null(ctn->contained);
-    assert_int_equal(ctn->contained_size, 0);
-    it = ctn->begin(ctn);
+    str = new(_string, "", COPY_ALL, 0);
+    assert_non_null(str);
+    assert_non_null(str->contained);
+    assert_int_equal(str->contained_size, 0);
+    it = str->begin(str);
     assert_non_null(it);
     assert_int_equal(it->reached_the_beginning, 1);
     assert_int_equal(it->reached_the_end, 1);
@@ -254,21 +273,20 @@ static void     iterator_empty_string_begin(void **state)
     assert_int_equal(((RandomAccessIterator *)it)->ra_idx, 0);
     assert_null(it->dereference(it));
     delete(it);
-    delete(ctn);
+    delete(str);
     (void)state;
 }
 
 static void     iterator_empty_string_end(void **state)
 {
-    Container   *ctn;
+    String      *str;
     Iterator    *it;
 
-    ctn = new(_array, NULL, 0);
-    assert_non_null(ctn);
-    assert_non_null(ctn->contained);
-    assert_int_equal(ctn->contained_size, 0);
-    assert_int_not_equal(((Array *)ctn)->total_size, 0);
-    it = ctn->end(ctn);
+    str = new(_string, "", COPY_ALL, 0);
+    assert_non_null(str);
+    assert_non_null(str->contained);
+    assert_int_equal(str->contained_size, 0);
+    it = str->end(str);
     assert_non_null(it);
     assert_int_equal(it->reached_the_beginning, 1);
     assert_int_equal(it->reached_the_end, 1);
@@ -276,138 +294,129 @@ static void     iterator_empty_string_end(void **state)
     assert_int_equal(((RandomAccessIterator *)it)->ra_idx, 0);
     assert_null(it->dereference(it));
     delete(it);
-    delete(ctn);
+    delete(str);
     (void)state;
 }
 
 static void     iterator_non_empty_string_begin(void **state)
 {
-    Container   *ctn;
+    String      *str;
     Iterator    *it;
+    char        foobar[] = "foobar";
 
-    ctn = new(_array, *state, COPY_ALL, 0);
-    assert_non_null(ctn);
-    assert_non_null(ctn->contained);
-    assert_int_equal(ctn->contained_size, 2);
-    assert_int_not_equal(((Array *)ctn)->total_size, 0);
-    it = ctn->begin(ctn);
+    str = new(_string, foobar, COPY_ALL, 0);
+    assert_non_null(str);
+    assert_non_null(str->contained);
+    assert_int_equal(str->contained_size, 6);
+    it = str->begin(str);
     assert_non_null(it);
     assert_int_equal(it->reached_the_beginning, 0);
     assert_int_equal(it->reached_the_end, 0);
     assert_int_equal(it->it_idx, 0);
-    assert_string_equal(((t_data *)it->dereference(it))->data, "foo");
-    assert_int_equal(it->next(it), TRUE);
-    assert_int_equal(it->reached_the_beginning, 0);
-    assert_int_equal(it->reached_the_end, 0);
-    assert_int_equal(it->it_idx, 1);
-    assert_string_equal(((t_data *)it->dereference(it))->data, "bar");
-    assert_int_equal(it->next(it), FALSE);
-    assert_non_null(it->dereference(it));
+    while (!it->reached_the_end)
+    {
+        assert_string_equal(it->dereference(it), foobar + it->it_idx);
+        it->next(it);
+    }
     assert_int_equal(it->reached_the_beginning, 0);
     assert_int_equal(it->reached_the_end, 1);
-    assert_string_equal(((t_data *)it->dereference(it))->data, "bar");
+    assert_int_equal(it->it_idx, 5);
     delete(it);
-    delete(ctn);
+    delete(str);
     (void)state;
 }
 
 static void     iterator_non_empty_string_end(void **state)
 {
-    Container   *ctn;
+    String      *str;
     Iterator    *it;
+    char        foobar[] = "foobar";
 
-    ctn = new(_array, *state, COPY_ALL, 0);
-    assert_non_null(ctn);
-    assert_non_null(ctn->contained);
-    assert_int_equal(ctn->contained_size, 2);
-    assert_int_not_equal(((Array *)ctn)->total_size, 0);
-    it = ctn->end(ctn);
+    str = new(_string, foobar, COPY_ALL, 0);
+    assert_non_null(str);
+    assert_non_null(str->contained);
+    assert_int_equal(str->contained_size, 6);
+    it = str->end(str);
     assert_non_null(it);
     assert_int_equal(it->reached_the_beginning, 0);
     assert_int_equal(it->reached_the_end, 0);
     assert_int_equal(it->it_idx, 0);
-    assert_string_equal(((t_data *)it->dereference(it))->data, "bar");
-    assert_int_equal(it->previous(it), TRUE);
-    assert_int_equal(it->reached_the_beginning, 0);
-    assert_int_equal(it->reached_the_end, 0);
-    assert_int_equal(it->it_idx, 1);
-    assert_string_equal(((t_data *)it->dereference(it))->data, "foo");
-    assert_int_equal(it->previous(it), FALSE);
-    assert_non_null(it->dereference(it));
+    while (!it->reached_the_beginning)
+    {
+        assert_string_equal(it->dereference(it), foobar + ((RandomAccessIterator *)it)->ra_idx);
+        it->previous(it);
+    }
     assert_int_equal(it->reached_the_beginning, 1);
     assert_int_equal(it->reached_the_end, 0);
-    assert_int_equal(it->it_idx, 1);
-    assert_string_equal(((t_data *)it->dereference(it))->data, "foo");
+    assert_int_equal(it->it_idx, 5);
     delete(it);
-    delete(ctn);
+    delete(str);
     (void)state;
 }
 
 static void                 iterator_non_empty_string_arithmetic(void **state)
 {
-    Container               *ctn;
+    String                  *str;
     Iterator                *it;
     RandomAccessIterator    *ra;
 
-    ctn = new(_array, *state, COPY_ALL, 2, "baz", TYPE_CSTRING, "barz", TYPE_CSTRING);
-    assert_non_null(ctn);
-    assert_non_null(ctn->contained);
-    assert_int_equal(ctn->contained_size, 4);
-    assert_int_not_equal(((Array *)ctn)->total_size, 0);
-    it = ctn->begin(ctn);
+    str = new(_string, "foobar", COPY_ALL, 0);
+    assert_non_null(str);
+    assert_non_null(str->contained);
+    assert_int_equal(str->contained_size, 6);
+    it = str->begin(str);
     ra = (RandomAccessIterator *)it;
     assert_non_null(it);
     assert_int_equal(it->reached_the_beginning, 0);
     assert_int_equal(it->reached_the_end, 0);
     assert_int_equal(it->it_idx, 0);
-    assert_string_equal(((t_data *)it->dereference(it))->data, "foo");
-    assert_int_equal(ra->jump(ra, 2), TRUE);
-    assert_int_equal(ra->jump(ra, 2), FALSE);
-    assert_non_null(it->dereference(it));
-    assert_int_equal(it->reached_the_beginning, 0);
-    assert_int_equal(it->reached_the_end, 0);
-    assert_int_equal(it->it_idx, 2);
-    assert_string_equal(((t_data *)it->dereference(it))->data, "baz");
-    assert_int_equal(it->next(it), TRUE);
+    assert_string_equal(it->dereference(it), "foobar");
+    assert_int_equal(ra->jump(ra, 3), TRUE);
+    assert_int_equal(ra->jump(ra, 3), FALSE);
     assert_non_null(it->dereference(it));
     assert_int_equal(it->reached_the_beginning, 0);
     assert_int_equal(it->reached_the_end, 0);
     assert_int_equal(it->it_idx, 3);
-    assert_string_equal(((t_data *)it->dereference(it))->data, "barz");
-    assert_int_equal(ra->jump(ra, -3), TRUE);
+    assert_string_equal(it->dereference(it), "bar");
+    assert_int_equal(it->next(it), TRUE);
+    assert_non_null(it->dereference(it));
+    assert_int_equal(it->reached_the_beginning, 0);
+    assert_int_equal(it->reached_the_end, 0);
+    assert_int_equal(it->it_idx, 4);
+    assert_string_equal(it->dereference(it), "ar");
+    assert_int_equal(ra->jump(ra, -4), TRUE);
     assert_non_null(it->dereference(it));
     assert_int_equal(it->reached_the_beginning, 0);
     assert_int_equal(it->reached_the_end, 0);
     assert_int_equal(it->it_idx, 0);
-    assert_string_equal(((t_data *)it->dereference(it))->data, "foo");
+    assert_string_equal(it->dereference(it), "foobar");
     delete(it);
-    delete(ctn);
+    delete(str);
     (void)state;
 }
 
 static void                 iterator_non_empty_string_compare_its(void **state)
 {
-    Container               *ctn;
+    String                  *str;
     Iterator                *it1, *it2;
     RandomAccessIterator    *ra1, *ra2;
 
-    ctn = new(_array, *state, COPY_ALL, 0);
-    assert_non_null(ctn);
-    assert_non_null(ctn->contained);
-    assert_int_equal(ctn->contained_size, 2);
-    assert_int_not_equal(((Array *)ctn)->total_size, 0);
-    it1 = ctn->begin(ctn);
+    str = new(_string, "foobar", COPY_ALL, 0);
+    assert_non_null(str);
+    assert_non_null(str->contained);
+    assert_int_equal(str->contained_size, 6);
+    it1 = str->begin(str);
     assert_non_null(it1);
     assert_int_equal(it1->reached_the_beginning, 0);
     assert_int_equal(it1->reached_the_end, 0);
     assert_int_equal(it1->it_idx, 0);
-    assert_string_equal(((t_data *)it1->dereference(it1))->data, "foo");
-    it2 = ctn->begin(ctn);
+    assert_string_equal(it1->dereference(it1), "foobar");
+    it2 = str->begin(str);
     assert_non_null(it2);
     assert_int_equal(it2->reached_the_beginning, 0);
     assert_int_equal(it2->reached_the_end, 0);
     assert_int_equal(it2->it_idx, 0);
-    assert_string_equal(((t_data *)it2->dereference(it2))->data, "foo");
+    assert_string_equal(it2->dereference(it2), "foobar");
     assert_int_equal(it1->equals(it1, it2), TRUE);
     assert_int_equal(it1->next(it1), TRUE);
     assert_int_equal(it1->reached_the_beginning, 0);
@@ -421,7 +430,7 @@ static void                 iterator_non_empty_string_compare_its(void **state)
     assert_int_equal(ra2->gt(ra2, ra1), FALSE);
     delete(it1);
     delete(it2);
-    delete(ctn);
+    delete(str);
     (void)state;
 }
 
@@ -434,6 +443,7 @@ const struct CMUnitTest iterator_tests[] = {
     cmocka_unit_test_setup_teardown(iterator_non_empty_array_compare_its, setup_foo_bar_typed_array, teardown_foo_bar_array),
 
     cmocka_unit_test_setup_teardown(iterator_null_string_begin, setup_foo_bar_typed_array, teardown_foo_bar_array),
+    cmocka_unit_test_setup_teardown(iterator_null_string_end, setup_foo_bar_typed_array, teardown_foo_bar_array),
     cmocka_unit_test_setup_teardown(iterator_empty_string_begin, setup_foo_bar_typed_array, teardown_foo_bar_array),
     cmocka_unit_test_setup_teardown(iterator_empty_string_end, setup_foo_bar_typed_array, teardown_foo_bar_array),
     cmocka_unit_test_setup_teardown(iterator_non_empty_string_begin, setup_foo_bar_typed_array, teardown_foo_bar_array),
