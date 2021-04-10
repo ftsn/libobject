@@ -4,6 +4,7 @@
 #include "iterators.h"
 #include "lists.h"
 #include "dicts.h"
+#include "stringsdef.h"
 
 static t_bool   _list_iterator_ctor(Object *self, va_list *args)
 {
@@ -35,9 +36,32 @@ static t_bool   _list_iterator_ctor(Object *self, va_list *args)
     return (TRUE);
 }
 
-static t_bool               _ra_iterator_ctor(Object *self, va_list *args)
+static t_bool               _array_ra_iterator_ctor(Object *self, va_list *args)
 {
     Container               *iterated_obj;
+    Iterator                *it;
+    RandomAccessIterator    *ra_it;
+    ssize_t                 idx_start;
+
+    it = self;
+    ra_it = (RandomAccessIterator *)it;
+    iterated_obj = va_arg(*args, void *);
+    it->iterated_obj = iterated_obj;
+    idx_start = va_arg(*args, int);
+    if (idx_start == END)
+        idx_start = iterated_obj->contained_size ? iterated_obj->contained_size - 1 : 0;
+    ra_it->jump(ra_it, idx_start);
+    if (iterated_obj->contained_size == 0)
+    {
+        it->reached_the_beginning = 1;
+        it->reached_the_end = 1;
+    }
+    return (TRUE);
+}
+
+static t_bool               _string_ra_iterator_ctor(Object *self, va_list *args)
+{
+    String                  *iterated_obj;
     Iterator                *it;
     RandomAccessIterator    *ra_it;
     ssize_t                 idx_start;
@@ -92,7 +116,7 @@ static RandomAccessIterator _array_ra_it_descr =
             {
                 TYPE_ARRAY_RA_ITERATOR,
                 sizeof(RandomAccessIterator),
-                &_ra_iterator_ctor,
+                &_array_ra_iterator_ctor,
                 &_iterator_dtor
             },
             &_it_equals,
@@ -126,7 +150,7 @@ static RandomAccessIterator _string_ra_it_descr =
             {
                 TYPE_STRING_RA_ITERATOR,
                 sizeof(RandomAccessIterator),
-                &_ra_iterator_ctor,
+                &_string_ra_iterator_ctor,
                 &_iterator_dtor
             },
             &_it_equals,
