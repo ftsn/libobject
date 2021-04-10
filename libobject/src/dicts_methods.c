@@ -4,7 +4,7 @@
 #include "dicts.h"
 #include "lists.h"
 
-static unsigned long    djb2a_hash(unsigned char *str)
+static unsigned long    djb2a_hash(const unsigned char *str)
 {
     unsigned long       hash;
     int                 c;
@@ -56,26 +56,27 @@ t_bool          _dict_erase(Object *self)
     return (TRUE);
 }
 
-Object              *_get_obj_by_key(const Object *dict_obj, const char *key)
+t_data              *_get_obj_by_key(const Object *dict_obj, const unsigned char *key)
 {
-    /*
-    const Container *dict;
-    t_data          **typed_pairs;
-    ssize_t         i;
+    const Container *self_c = dict_obj;
+    Container       *list;
+    t_list_data     *cur;
+    ssize_t         i, idx;
+    t_pair          *pair;
 
-    dict = dict_obj;
-    if (!(typed_pairs = dict->contained))
+    idx = djb2a_hash(key) % ((const Dict *)self_c)->total_size;
+    if ((list = ((void **)self_c->contained)[idx]) == NULL)
         return (NULL);
     i = 0;
-    while (i < dict->contained_size)
+    cur = list->contained;
+    while (i < list->contained_size)
     {
-        if (!strcmp(((t_pair *)typed_pairs[i])->key, key))
-            return (((t_pair *)typed_pairs[i])->data);
+        pair = ((t_data *)cur->data)->data;
+        if (!strcmp((char *)pair->key, (char *)key))
+            return (&pair->data);
+        cur = cur->next;
         ++i;
     }
-    */
-   (void)dict_obj;
-   (void)key;
     return (NULL);
 }
 
@@ -205,7 +206,7 @@ t_bool          _dict_push(Object *self, unsigned char *key, void *data, t_type 
     return (_dict_push_no_resizing(self, key, data, type));
 }
 
-t_bool          _dict_remove(Object *self, unsigned char *key)
+t_bool          _dict_remove(Object *self, const unsigned char *key)
 {
     Container   *self_c, *list;
     t_list_data *cur;

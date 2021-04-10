@@ -28,26 +28,32 @@ int     main(int ac, char **av)
 {
     Container *dict;
     ssize_t i;
+    t_bool res;
+    t_data *pair_data;
 
     dict = new(_dict);
     i = -1;
     while (++i < ac)
         ((Dict *)dict)->push(dict, (unsigned char *)av[i], &i, TYPE_INT);
-    dict->dump(dict, "Dict dump", typed_basic_print, "");
-    ((Dict *)dict)->remove(dict, (unsigned char *)"hello");
-    dict->dump(dict, "Dict dump", typed_basic_print, "");
-    ((Dict *)dict)->push(dict, (unsigned char *)"add1", &i, TYPE_INT);
-    dict->dump(dict, "Dict dump", typed_basic_print, "");
+    dict->dump(dict, "Dict dump1", typed_basic_print, "");
+    res = ((Dict *)dict)->remove(dict, (unsigned char *)"hello");
+    printf("RES REMOVE hello: [%s]\n", res == TRUE ? "TRUE" : "FALSE");
+    dict->dump(dict, "Dict dump2", typed_basic_print, "");
+    ((Dict *)dict)->push(dict, (unsigned char *)"add1", "testinho", TYPE_CSTRING);
+    dict->dump(dict, "Dict dump3", typed_basic_print, "");
     ((Dict *)dict)->push(dict, (unsigned char *)"add2", &i, TYPE_INT);
-    dict->dump(dict, "Dict dump", typed_basic_print, "");
+    dict->dump(dict, "Dict dump4", typed_basic_print, "");
     ((Dict *)dict)->push(dict, (unsigned char *)"add3", &i, TYPE_INT);
-    dict->dump(dict, "Dict dump", typed_basic_print, "");
+    dict->dump(dict, "Dict dump5", typed_basic_print, "");
     ((Dict *)dict)->push(dict, (unsigned char *)"add4", &i, TYPE_INT);
-    dict->dump(dict, "Dict dump", typed_basic_print, "");
+    dict->dump(dict, "Dict dump6", typed_basic_print, "");
     ((Dict *)dict)->push(dict, (unsigned char *)"add5", &i, TYPE_INT);
-    dict->dump(dict, "Dict dump", typed_basic_print, "");
-    ((Dict *)dict)->remove(dict, (unsigned char *)"add5");
-    dict->dump(dict, "Dict dump", typed_basic_print, "");
+    dict->dump(dict, "Dict dump7", typed_basic_print, "");
+    res = ((Dict *)dict)->remove(dict, (unsigned char *)"add5");
+    printf("RES REMOVE add5: [%s]\n", res == TRUE ? "TRUE" : "FALSE");
+    dict->dump(dict, "Dict dump8", typed_basic_print, "");
+    pair_data = ((Dict *)dict)->get_by_key(dict, (unsigned char *)"add1");
+    printf("test get_key: type [%d] data [%s]\n", pair_data->type, pair_data->data);
     delete(dict);
     //printf("%d\n", ARG_LENGTH(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
 

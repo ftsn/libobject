@@ -15,14 +15,14 @@ typedef struct  s_pair
     unsigned char   *key;
 } t_pair;
 
-typedef Object  *(*t_obj_by_key)(const Object *dict, const char *key);
-Object          *_get_obj_by_key(const Object *dict, const char *key);
+typedef t_data  *(*t_obj_by_key)(const Object *dict, const unsigned char *key);
+t_data          *_get_obj_by_key(const Object *dict, const unsigned char *key);
 
 typedef t_bool  (*t_dict_push)(Object *self, unsigned char *key, void *data, t_type type);
 t_bool          _dict_push(Object *self, unsigned char *key, void *data, t_type type);
 
-typedef t_bool  (*t_dict_remove)(Object *self, unsigned char *key);
-t_bool          _dict_remove(Object *self, unsigned char *key);
+typedef t_bool  (*t_dict_remove)(Object *self, const unsigned char *key);
+t_bool          _dict_remove(Object *self, const unsigned char *key);
 
 typedef struct
 {
