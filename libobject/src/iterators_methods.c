@@ -19,7 +19,7 @@ t_bool          _list_it_previous(Iterator *it)
         ++it->reached_the_beginning;
         if (ctn->contained_size > 1)
         {
-            --it->it_idx;
+            it->it_idx = ctn->contained_size - 1;
             it->cur = ((t_list_data *)it->cur)->prev;
         }
         return (TRUE);
@@ -112,7 +112,7 @@ t_bool          _array_ra_it_previous(Iterator *it)
             ++it->reached_the_beginning;
         return (FALSE);
     }
-    ++it->it_idx;
+    --it->it_idx;
     --((RandomAccessIterator *)it)->ra_idx;
     ((Iterator *)it)->cur = ((t_data **)ctn->contained)[((RandomAccessIterator *)it)->ra_idx];
     return (TRUE);
@@ -167,7 +167,7 @@ t_bool      _string_ra_it_previous(Iterator *it)
             ++it->reached_the_beginning;
         return (FALSE);
     }
-    ++it->it_idx;
+    --it->it_idx;
     --((RandomAccessIterator *)it)->ra_idx;
     ((Iterator *)it)->cur = &((char *)s->contained)[((RandomAccessIterator *)it)->ra_idx];
     return (TRUE);
@@ -238,7 +238,7 @@ t_bool                          _dict_bidirectional_it_previous(Iterator *it)
     contained = ((Container *)it->iterated_obj)->contained;
     if (it->cur && ((t_list_data *)it->cur)->prev)
     {
-        ++it->it_idx;
+        --it->it_idx;
         it->cur = ((t_list_data *)it->cur)->prev;
         return (TRUE);
     }
@@ -253,7 +253,7 @@ t_bool                          _dict_bidirectional_it_previous(Iterator *it)
         it->reached_the_beginning = 1;
         return (FALSE);
     }
-    ++it->it_idx;
+    --it->it_idx;
     it->cur = ((Container *)contained[dict_it->internal_idx])->contained;
     return (TRUE);
 }

@@ -7,6 +7,8 @@
 #include "tests.h"
 #include "stringsdef.h"
 #include "arrays.h"
+#include "lists.h"
+#include "dicts.h"
 #include "iterators.h"
 
 static int setup_foo_bar_typed_array(void **state)
@@ -114,18 +116,18 @@ static void     iterator_non_empty_array_end(void **state)
     assert_non_null(it);
     assert_int_equal(it->reached_the_beginning, 0);
     assert_int_equal(it->reached_the_end, 0);
-    assert_int_equal(it->it_idx, 0);
+    assert_int_equal(it->it_idx, 1);
     assert_string_equal(((t_data *)it->dereference(it))->data, "bar");
     assert_int_equal(it->previous(it), TRUE);
     assert_int_equal(it->reached_the_beginning, 0);
     assert_int_equal(it->reached_the_end, 0);
-    assert_int_equal(it->it_idx, 1);
+    assert_int_equal(it->it_idx, 0);
     assert_string_equal(((t_data *)it->dereference(it))->data, "foo");
     assert_int_equal(it->previous(it), FALSE);
     assert_non_null(it->dereference(it));
     assert_int_equal(it->reached_the_beginning, 1);
     assert_int_equal(it->reached_the_end, 0);
-    assert_int_equal(it->it_idx, 1);
+    assert_int_equal(it->it_idx, 0);
     assert_string_equal(((t_data *)it->dereference(it))->data, "foo");
     delete(it);
     delete(ctn);
@@ -340,7 +342,7 @@ static void     iterator_non_empty_string_end(void **state)
     assert_non_null(it);
     assert_int_equal(it->reached_the_beginning, 0);
     assert_int_equal(it->reached_the_end, 0);
-    assert_int_equal(it->it_idx, 0);
+    assert_int_equal(it->it_idx, 5);
     while (!it->reached_the_beginning)
     {
         assert_string_equal(it->dereference(it), foobar + ((RandomAccessIterator *)it)->ra_idx);
@@ -348,7 +350,7 @@ static void     iterator_non_empty_string_end(void **state)
     }
     assert_int_equal(it->reached_the_beginning, 1);
     assert_int_equal(it->reached_the_end, 0);
-    assert_int_equal(it->it_idx, 5);
+    assert_int_equal(it->it_idx, 0);
     delete(it);
     delete(str);
     (void)state;
@@ -434,6 +436,253 @@ static void                 iterator_non_empty_string_compare_its(void **state)
     (void)state;
 }
 
+static void     iterator_empty_lists_begin(void **state)
+{
+    LOOP_OVER_ALL_KINDS(
+        Container   *ctn;
+        Iterator    *it;
+
+        ctn = new(kinds[kinds_idx], NULL, 0);
+        assert_non_null(ctn);
+        assert_null(ctn->contained);
+        assert_int_equal(ctn->contained_size, 0);
+        it = ctn->begin(ctn);
+        assert_non_null(it);
+        assert_int_equal(it->reached_the_beginning, 1);
+        assert_int_equal(it->reached_the_end, 1);
+        assert_int_equal(it->it_idx, 0);
+        assert_null(it->dereference(it));
+        delete(it);
+        delete(ctn);
+    );
+    (void)state;
+}
+
+static void     iterator_empty_lists_end(void **state)
+{
+    LOOP_OVER_ALL_KINDS(
+        Container   *ctn;
+        Iterator    *it;
+
+        ctn = new(kinds[kinds_idx], NULL, 0);
+        assert_non_null(ctn);
+        assert_null(ctn->contained);
+        assert_int_equal(ctn->contained_size, 0);
+        it = ctn->end(ctn);
+        assert_non_null(it);
+        assert_int_equal(it->reached_the_beginning, 1);
+        assert_int_equal(it->reached_the_end, 1);
+        assert_int_equal(it->it_idx, 0);
+        assert_null(it->dereference(it));
+        delete(it);
+        delete(ctn);
+    );
+    (void)state;
+}
+
+static void     iterator_non_empty_lists_begin(void **state)
+{
+    LOOP_OVER_ALL_KINDS(
+        Container   *ctn;
+        Iterator    *it;
+
+        ctn = new(kinds[kinds_idx], *state, COPY_ALL, 0);
+        assert_non_null(ctn);
+        assert_non_null(ctn->contained);
+        assert_int_equal(ctn->contained_size, 2);
+        it = ctn->begin(ctn);
+        assert_non_null(it);
+        assert_int_equal(it->reached_the_beginning, 0);
+        assert_int_equal(it->reached_the_end, 0);
+        assert_int_equal(it->it_idx, 0);
+        assert_string_equal(((t_data *)it->dereference(it))->data, "foo");
+        assert_int_equal(it->next(it), TRUE);
+        assert_int_equal(it->reached_the_beginning, 0);
+        assert_int_equal(it->reached_the_end, 0);
+        assert_int_equal(it->it_idx, 1);
+        assert_string_equal(((t_data *)it->dereference(it))->data, "bar");
+        if (is_clist(ctn) == FALSE)
+            assert_int_equal(it->next(it), FALSE);
+        else
+            assert_int_equal(it->next(it), TRUE);
+        assert_non_null(it->dereference(it));
+        assert_int_equal(it->reached_the_beginning, 0);
+        assert_int_equal(it->reached_the_end, 1);
+        if (is_clist(ctn) == FALSE)
+            assert_int_equal(it->it_idx, 1);
+        else
+            assert_int_equal(it->it_idx, 0);
+        if (is_clist(ctn) == FALSE)
+            assert_string_equal(((t_data *)it->dereference(it))->data, "bar");
+        else
+            assert_string_equal(((t_data *)it->dereference(it))->data, "foo");
+        delete(it);
+        delete(ctn);
+    );
+    (void)state;
+}
+
+static void     iterator_non_empty_lists_end(void **state)
+{
+    LOOP_OVER_ALL_KINDS(
+        Container   *ctn;
+        Iterator    *it;
+
+        ctn = new(kinds[kinds_idx], *state, COPY_ALL, 0);
+        assert_non_null(ctn);
+        assert_non_null(ctn->contained);
+        assert_int_equal(ctn->contained_size, 2);
+        it = ctn->end(ctn);
+        if (is_dbl_list(ctn) == TRUE)
+        {
+            assert_non_null(it);
+            assert_int_equal(it->reached_the_beginning, 0);
+            assert_int_equal(it->reached_the_end, 0);
+            assert_int_equal(it->it_idx, 1);
+            assert_string_equal(((t_data *)it->dereference(it))->data, "bar");
+            assert_int_equal(it->previous(it), TRUE);
+            assert_int_equal(it->reached_the_beginning, 0);
+            assert_int_equal(it->reached_the_end, 0);
+            assert_int_equal(it->it_idx, 0);
+            assert_string_equal(((t_data *)it->dereference(it))->data, "foo");
+            if (is_clist(ctn) == FALSE)
+                assert_int_equal(it->previous(it), FALSE);
+            else
+                assert_int_equal(it->previous(it), TRUE);
+            assert_non_null(it->dereference(it));
+            assert_int_equal(it->reached_the_beginning, 1);
+            assert_int_equal(it->reached_the_end, 0);
+            if (is_clist(ctn) == FALSE)
+                assert_int_equal(it->it_idx, 0);
+            else
+                assert_int_equal(it->it_idx, 1);
+            if (is_clist(ctn) == FALSE)
+                assert_string_equal(((t_data *)it->dereference(it))->data, "foo");
+            else
+                assert_string_equal(((t_data *)it->dereference(it))->data, "bar");
+        }
+        delete(it);
+        delete(ctn);
+    );
+    (void)state;
+}
+
+static void     iterator_empty_dict_begin(void **state)
+{
+    Container   *ctn;
+    Iterator    *it;
+
+    ctn = new(_dict, NULL, 0);
+    assert_non_null(ctn);
+    assert_non_null(ctn->contained);
+    assert_int_equal(ctn->contained_size, 0);
+    assert_int_not_equal(((Dict *)ctn)->total_size, 0);
+    it = ctn->begin(ctn);
+    assert_non_null(it);
+    assert_int_equal(it->reached_the_beginning, 1);
+    assert_int_equal(it->reached_the_end, 1);
+    assert_int_equal(it->it_idx, 0);
+    assert_null(it->dereference(it));
+    delete(it);
+    delete(ctn);
+    (void)state;
+}
+
+static void     iterator_empty_dict_end(void **state)
+{
+    Container   *ctn;
+    Iterator    *it;
+
+    ctn = new(_dict, NULL, 0);
+    assert_non_null(ctn);
+    assert_non_null(ctn->contained);
+    assert_int_equal(ctn->contained_size, 0);
+    assert_int_not_equal(((Dict *)ctn)->total_size, 0);
+    it = ctn->end(ctn);
+    assert_non_null(it);
+    assert_int_equal(it->reached_the_beginning, 1);
+    assert_int_equal(it->reached_the_end, 1);
+    assert_int_equal(it->it_idx, 0);
+    assert_null(it->dereference(it));
+    delete(it);
+    delete(ctn);
+    (void)state;
+}
+
+static void     iterator_non_empty_dict_begin(void **state)
+{
+    Container   *ctn;
+    Iterator    *it;
+    t_pair      *pair;
+
+    ctn = new(_dict, NULL, 0);
+    assert_non_null(ctn);
+    assert_non_null(ctn->contained);
+    assert_int_equal(((Dict *)ctn)->push(ctn, (unsigned char *)"baz", "barz", TYPE_CSTRING), TRUE);
+    assert_int_equal(((Dict *)ctn)->push(ctn, (unsigned char *)"foo", "bar", TYPE_CSTRING), TRUE);
+    assert_int_equal(ctn->contained_size, 2);
+    assert_int_not_equal(((Dict *)ctn)->total_size, 0);
+    it = ctn->begin(ctn);
+    assert_non_null(it);
+    assert_int_equal(it->reached_the_beginning, 0);
+    assert_int_equal(it->reached_the_end, 0);
+    assert_int_equal(it->it_idx, 0);
+    pair = ((t_data *)it->dereference(it))->data;
+    assert_string_equal(pair->data.data, "barz");
+    assert_int_equal(it->next(it), TRUE);
+    assert_int_equal(it->reached_the_beginning, 0);
+    assert_int_equal(it->reached_the_end, 0);
+    assert_int_equal(it->it_idx, 1);
+    pair = ((t_data *)it->dereference(it))->data;
+    assert_string_equal(pair->data.data, "bar");
+    assert_int_equal(it->next(it), FALSE);
+    assert_non_null(it->dereference(it));
+    assert_int_equal(it->reached_the_beginning, 0);
+    assert_int_equal(it->reached_the_end, 1);
+    pair = ((t_data *)it->dereference(it))->data;
+    assert_string_equal(pair->data.data, "bar");
+    delete(it);
+    delete(ctn);
+    (void)state;
+}
+
+static void     iterator_non_empty_dict_end(void **state)
+{
+    Container   *ctn;
+    Iterator    *it;
+    t_pair      *pair;
+
+    ctn = new(_dict, NULL, 0);
+    assert_non_null(ctn);
+    assert_non_null(ctn->contained);
+    assert_int_equal(((Dict *)ctn)->push(ctn, (unsigned char *)"baz", "barz", TYPE_CSTRING), TRUE);
+    assert_int_equal(((Dict *)ctn)->push(ctn, (unsigned char *)"foo", "bar", TYPE_CSTRING), TRUE);
+    assert_int_equal(ctn->contained_size, 2);
+    assert_int_not_equal(((Dict *)ctn)->total_size, 0);
+    it = ctn->end(ctn);
+    assert_non_null(it);
+    assert_int_equal(it->reached_the_beginning, 0);
+    assert_int_equal(it->reached_the_end, 0);
+    assert_int_equal(it->it_idx, 1);
+    pair = ((t_data *)it->dereference(it))->data;
+    assert_string_equal(pair->data.data, "bar");
+    assert_int_equal(it->previous(it), TRUE);
+    assert_int_equal(it->reached_the_beginning, 0);
+    assert_int_equal(it->reached_the_end, 0);
+    assert_int_equal(it->it_idx, 0);
+    pair = ((t_data *)it->dereference(it))->data;
+    assert_string_equal(pair->data.data, "barz");
+    assert_int_equal(it->previous(it), FALSE);
+    assert_non_null(it->dereference(it));
+    assert_int_equal(it->reached_the_beginning, 1);
+    assert_int_equal(it->reached_the_end, 0);
+    pair = ((t_data *)it->dereference(it))->data;
+    assert_string_equal(pair->data.data, "barz");
+    delete(it);
+    delete(ctn);
+    (void)state;
+}
+
 const struct CMUnitTest iterator_tests[] = {
     cmocka_unit_test_setup_teardown(iterator_empty_array_begin, setup_foo_bar_typed_array, teardown_foo_bar_array),
     cmocka_unit_test_setup_teardown(iterator_empty_array_end, setup_foo_bar_typed_array, teardown_foo_bar_array),
@@ -450,4 +699,14 @@ const struct CMUnitTest iterator_tests[] = {
     cmocka_unit_test_setup_teardown(iterator_non_empty_string_end, setup_foo_bar_typed_array, teardown_foo_bar_array),
     cmocka_unit_test_setup_teardown(iterator_non_empty_string_arithmetic, setup_foo_bar_typed_array, teardown_foo_bar_array),
     cmocka_unit_test_setup_teardown(iterator_non_empty_string_compare_its, setup_foo_bar_typed_array, teardown_foo_bar_array),
+
+    cmocka_unit_test_setup_teardown(iterator_empty_lists_begin, setup_foo_bar_typed_array, teardown_foo_bar_array),
+    cmocka_unit_test_setup_teardown(iterator_empty_lists_end, setup_foo_bar_typed_array, teardown_foo_bar_array),
+    cmocka_unit_test_setup_teardown(iterator_non_empty_lists_begin, setup_foo_bar_typed_array, teardown_foo_bar_array),
+    cmocka_unit_test_setup_teardown(iterator_non_empty_lists_end, setup_foo_bar_typed_array, teardown_foo_bar_array),
+
+    cmocka_unit_test_setup_teardown(iterator_empty_dict_begin, setup_foo_bar_typed_array, teardown_foo_bar_array),
+    cmocka_unit_test_setup_teardown(iterator_empty_dict_end, setup_foo_bar_typed_array, teardown_foo_bar_array),
+    cmocka_unit_test_setup_teardown(iterator_non_empty_dict_begin, setup_foo_bar_typed_array, teardown_foo_bar_array),
+    cmocka_unit_test_setup_teardown(iterator_non_empty_dict_end, setup_foo_bar_typed_array, teardown_foo_bar_array),
 };

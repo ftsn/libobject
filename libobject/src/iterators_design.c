@@ -56,7 +56,6 @@ static t_bool               _array_ra_iterator_ctor(Object *self, va_list *args)
         it->reached_the_beginning = 1;
         it->reached_the_end = 1;
     }
-    it->it_idx = 0;
     return (TRUE);
 }
 
@@ -80,7 +79,6 @@ static t_bool               _string_ra_iterator_ctor(Object *self, va_list *args
         it->reached_the_beginning = 1;
         it->reached_the_end = 1;
     }
-    it->it_idx = 0;
     return (TRUE);
 }
 
@@ -100,9 +98,18 @@ static t_bool                   _dict_bidirectional_it_ctor(Object *self, va_lis
     {
         dict_it->internal_idx = iterated_obj->total_size;
         it->previous(it);
+        it->it_idx = ((Container *)iterated_obj)->contained_size ? ((Container *)iterated_obj)->contained_size - 1 : 0;
     }
     else
+    {
         it->next(it);
+        it->it_idx = 0;
+    }
+    if (((Container *)iterated_obj)->contained_size == 0)
+    {
+        it->reached_the_beginning = 1;
+        it->reached_the_end = 1;
+    }
     return (TRUE);
 }
 
