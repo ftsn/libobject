@@ -21,6 +21,10 @@ do {                                                                        \
     }                                                                       \
 } while (0)
 
+// Dict
+# define DICT_PAIR_LOOKUP(ctn, key)     (((Dict *)ctn)->get_by_key(ctn, (unsigned char *)key))
+# define DICT_DATA_LOOKUP(ctn, key)     (((t_data *)((Dict *)ctn)->get_by_key(ctn, (unsigned char *)key))->data)
+
 extern const struct CMUnitTest string_tests[MAX_TEST_PER_GROUP];
 extern const struct CMUnitTest array_tests[MAX_TEST_PER_GROUP];
 extern const struct CMUnitTest list_tests[MAX_TEST_PER_GROUP];

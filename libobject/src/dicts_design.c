@@ -53,9 +53,9 @@ static Dict _dict_descr =
 
             &_container_print,
 
-            &_container_to_type,
-            &_container_sub,
-            &_container_map,
+            NULL,
+            NULL,
+            NULL,
 
             &_container_begin,
             &_container_end
