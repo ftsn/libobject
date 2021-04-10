@@ -1,7 +1,9 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include "dicts.h"
 #include "arrays.h"
 #include "iterators.h"
+#include "lists.h"
 
 static t_bool   _dict_ctor(Object *self, va_list *args)
 {
@@ -16,32 +18,7 @@ static t_bool   _dict_ctor(Object *self, va_list *args)
 
 static void     _dict_dtor(Object *self, va_list *args)
 {
-    ssize_t     i;
-    Container   **contained;
-    //Iterator    *it;
-
-    i = 0;
-    contained = ((Container *)self)->contained;
-    while (i < ((Dict *)self)->total_size)
-    {
-        if (contained[i])
-        {
-            delete(contained[i]);
-            /*
-            it = ((Container *)contained[i])->begin(contained[i]);
-            if (it == NULL)
-                return ;
-            while (!it->reached_the_end)
-            {
-                free(((t_data *)it->dereference(it))->data);
-                it->next(it);
-            }
-            delete(it);
-            delete(contained[i]);
-            */
-        }
-        ++i;
-    }
+    ((Container *)self)->erase(self);
     free(((Container *)self)->contained);
     ((Container *)self)->contained = NULL;
     ((Container *)self)->contained_size = 0;
@@ -67,7 +44,7 @@ static Dict _dict_descr =
             NULL, // insert_at
             NULL, // push_back
             NULL, // delete_at
-            NULL, // erase
+            &_dict_erase, // erase
             NULL,
 
             NULL, // front

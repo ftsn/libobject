@@ -150,16 +150,16 @@ t_bool          _array_delete_at(Object *container, ssize_t pos)
 
 t_bool          _array_erase(Object *container)
 {
-    Container   *self;
-    ssize_t     i;
+    Container *self;
+    ssize_t i;
 
     self = container;
     i = -1;
     while (++i < self->contained_size)
-        {
-            free(((t_data **)self->contained)[i]);
-            ((t_data **)self->contained)[i] = NULL;
-        }
+    {
+        free(((t_data **)self->contained)[i]);
+        ((t_data **)self->contained)[i] = NULL;
+    }
     self->contained_size = 0;
     return (TRUE);
 }

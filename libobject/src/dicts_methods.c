@@ -3,7 +3,6 @@
 #include <stdio.h>
 #include "dicts.h"
 #include "lists.h"
-#include "iterators.h"
 
 static unsigned long    djb2a_hash(unsigned char *str)
 {
@@ -14,6 +13,47 @@ static unsigned long    djb2a_hash(unsigned char *str)
     while ((c = *str++))
         hash = hash * 33 ^ c;
     return hash;
+}
+
+static void     release_dict_content(Container **contained, ssize_t size)
+{
+    t_list_data *node;
+    ssize_t     i, list_idx;
+
+    i = 0;
+    while (i < size)
+    {
+        list_idx = 0;
+        if (contained[i])
+        {
+            node = contained[i]->contained;
+            while (list_idx < contained[i]->contained_size)
+            {
+                free(((t_data *)node->data)->data);
+                ((t_data *)node->data)->data = NULL;
+                node = node->next;
+                ++list_idx;
+            }
+            delete(contained[i]);
+            contained[i] = NULL;
+        }
+        ++i;
+    }
+}
+
+static void release_contained(Container **contained, ssize_t size)
+{
+    release_dict_content(contained, size);
+    free(contained);
+}
+
+t_bool          _dict_erase(Object *self)
+{
+    Container   *dict;
+
+    dict = self;
+    release_dict_content(dict->contained, ((Dict *)dict)->total_size);
+    return (TRUE);
 }
 
 Object              *_get_obj_by_key(const Object *dict_obj, const char *key)
@@ -98,60 +138,29 @@ static t_bool   _dict_push_no_resizing(Object *self, unsigned char *key, void *d
     return (TRUE);
 }
 
-static void     release_contained(void **contained, ssize_t size)
+static t_bool   calculate_new_idx_and_assign(Container *dict, Container **old_contained, ssize_t old_total_size)
 {
-    ssize_t     i;
+    ssize_t     i, list_idx;
     Container   *list;
-    Iterator    *it;
-
-    i = -1;
-    while (++i < size)
-    {
-        list = contained[i];
-        if (list)
-        {
-            it = list->begin(list);
-            if (it == NULL)
-                return ;
-            while (!it->reached_the_end)
-            {
-                free(((t_data *)it->dereference(it))->data);
-                it->next(it);
-            }
-            delete(it);
-            delete(list);
-        }
-    }
-    free(contained);
-}
-
-static t_bool   calculate_new_idx_and_assign(Container *dict, void **old_contained, ssize_t old_total_size)
-{
-    ssize_t     i;
-    Container   *list;
-    Iterator    *it;
+    t_list_data *node;
     t_pair      *pair;
 
     i = -1;
     while (++i < old_total_size)
     {
         list = old_contained[i];
+        list_idx = 0;
         if (list)
         {
-            it = list->begin(list);
-            if (it == NULL)
-                return (FALSE);
-            while (!it->reached_the_end)
+            node = list->contained;
+            while (list_idx < list->contained_size)
             {
-                pair = ((t_data *)it->dereference(it))->data;
+                pair = ((t_data *)node->data)->data;
                 if (_dict_push_no_resizing(dict, pair->key, pair->data.data, pair->data.type) == FALSE)
-                {
-                    delete(it);
                     return (FALSE);
-                }
-                it->next(it);
+                node = node->next;
+                ++list_idx;
             }
-            delete(it);
         }
     }
     return (TRUE);
@@ -160,7 +169,7 @@ static t_bool   calculate_new_idx_and_assign(Container *dict, void **old_contain
 t_bool          dict_alloc(Container *dict, ssize_t new_size)
 {
     ssize_t     old_ctn_size, old_total_size;
-    void        **contained, **old_contained;
+    Container   **contained, **old_contained;
 
     if (!(contained = calloc(new_size + 1, sizeof(void *))))
         return (FALSE);
@@ -206,9 +215,9 @@ t_bool          _dict_remove(Object *self, unsigned char *key)
     idx = djb2a_hash(key) % ((Dict *)self)->total_size;
     if ((list = ((void **)self_c->contained)[idx]) == NULL)
         return (FALSE);
-    i = -1;
+    i = 0;
     cur = list->contained;
-    while (++i < list->contained_size)
+    while (i < list->contained_size)
     {
         if (!strcmp((char *)((t_pair *)((t_data *)cur->data)->data)->key, (char *)key))
         {
@@ -218,6 +227,7 @@ t_bool          _dict_remove(Object *self, unsigned char *key)
             {
                 delete(list);
                 ((void **)self_c->contained)[idx] = NULL;
+                --self_c->contained_size;
             }
             break ;
         }

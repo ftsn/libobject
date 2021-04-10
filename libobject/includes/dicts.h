@@ -33,6 +33,7 @@ typedef struct
     t_dict_remove   remove;
 } Dict;
 
+t_bool  _dict_erase(Object *self);
 t_bool  dict_alloc(Container *dict, ssize_t new_size);
 
 extern Class *_dict;

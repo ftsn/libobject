@@ -270,18 +270,6 @@ Object          *_list_at(const Object *list, ssize_t pos)
     return (list_data);
 }
 
-void                    list_basic_print(ssize_t i, const t_data *elem, const char *prefix)
-{
-    const t_list_data   *list;
-
-    list = (const t_list_data *)elem;
-    printf("%s%d)prev [%s] cur [%s] next [%s]\n",
-           prefix, (int)i,
-           (list->prev ? (char *)list->prev->data : "null"),
-           (char *)list->data,
-           (list->next ? (char *)list->next->data : "null"));
-}
-
 t_bool          _list_erase(Object *self)
 {
     Container   *list;
