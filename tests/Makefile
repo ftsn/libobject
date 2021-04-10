@@ -19,8 +19,8 @@ SRCS    =	main		\
 		string_tests	\
 		array_tests	\
 		list_tests	\
-		dict_tests
-#		iterator_tests
+		dict_tests	\
+		iterator_tests
 
 SRCS	:=	$(addsuffix .$(EXT), $(SRCS))
 

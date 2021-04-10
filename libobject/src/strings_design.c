@@ -72,6 +72,9 @@ static String _string_descr =
 
         &_string_print,
 
+        &_string_begin,
+        &_string_end,
+
         &_string_dup,
         &_string_findstr,
         &_string_find,

@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include "stringsdef.h"
 #include "utils.h"
+#include "iterators.h"
 
 t_bool      _string_insert_at(String *self, char c, ssize_t pos)
 {
@@ -85,6 +86,16 @@ char    *_string_at(const String *self, ssize_t pos)
 void    _string_print(const String *self, const char *title)
 {
     printf("%s[%s]\n", title, (char *)self->contained);
+}
+
+Object  *_string_begin(const Object *self)
+{
+    return (generate_it(self, BEGIN));
+}
+
+Object  *_string_end(const Object *self)
+{
+    return (generate_it(self, END));
 }
 
 String  *_string_dup(const String *self)

@@ -76,12 +76,12 @@ inline Object  *_ra_it_dereference(Iterator *it)
 
 inline t_bool  _ra_it_lt(RandomAccessIterator *it1, RandomAccessIterator *it2)
 {
-    return (it1 < it2 ? TRUE : FALSE);
+    return (((Iterator *)it1)->it_idx < ((Iterator *)it2)->it_idx ? TRUE : FALSE);
 }
 
 inline t_bool  _ra_it_gt(RandomAccessIterator *it1, RandomAccessIterator *it2)
 {
-    return (it1 > it2 ? TRUE : FALSE);
+    return (((Iterator *)it1)->it_idx > ((Iterator *)it2)->it_idx ? TRUE : FALSE);
 }
 
 t_bool          _array_ra_it_next(Iterator *it)
@@ -112,7 +112,7 @@ t_bool          _array_ra_it_previous(Iterator *it)
             ++it->reached_the_beginning;
         return (FALSE);
     }
-    --it->it_idx;
+    ++it->it_idx;
     --((RandomAccessIterator *)it)->ra_idx;
     ((Iterator *)it)->cur = ((t_data **)ctn->contained)[((RandomAccessIterator *)it)->ra_idx];
     return (TRUE);
@@ -167,7 +167,7 @@ t_bool      _string_ra_it_previous(Iterator *it)
             ++it->reached_the_beginning;
         return (FALSE);
     }
-    --it->it_idx;
+    ++it->it_idx;
     --((RandomAccessIterator *)it)->ra_idx;
     ((Iterator *)it)->cur = &((char *)s->contained)[((RandomAccessIterator *)it)->ra_idx];
     return (TRUE);
@@ -268,6 +268,8 @@ Object              *generate_it(const Object *self, t_it_type type)
     Iterator        *it;
 
     it = NULL;
+    if (!((Container *)self)->contained)
+        return (NULL);
     if (is_spl_list(self) == TRUE)
         it = new(_spl_list_forward_it, self, type);
     else if (is_dbl_list(self) == TRUE)

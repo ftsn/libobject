@@ -29,5 +29,6 @@ extern const struct CMUnitTest string_tests[MAX_TEST_PER_GROUP];
 extern const struct CMUnitTest array_tests[MAX_TEST_PER_GROUP];
 extern const struct CMUnitTest list_tests[MAX_TEST_PER_GROUP];
 extern const struct CMUnitTest dict_tests[MAX_TEST_PER_GROUP];
+extern const struct CMUnitTest iterator_tests[MAX_TEST_PER_GROUP];
 
 #endif /* !TESTS_H_ */

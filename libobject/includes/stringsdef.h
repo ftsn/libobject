@@ -31,6 +31,10 @@ char            *_string_at(const String *self, ssize_t pos);
 typedef void    (*t_str_dump)(const String *self, const char *title);
 void            _string_print(const String *self, const char *title);
 
+typedef Object  *(*t_str_it_create)(const Object *self);
+Object          *_string_begin(const Object *self);
+Object          *_string_end(const Object *self);
+
 typedef String  *(*t_dup)(const String *self);
 String          *_string_dup(const String *self);
 
@@ -75,8 +79,11 @@ struct s_string
     t_str_rand_access   at;
 
     t_str_dump          dump;
+
+    t_str_it_create     begin;
+    t_str_it_create     end;
     
-    t_dup               dup;
+    t_dup               dup;        // NOT TESTED
     t_str_findstr       find_str;
     t_str_find          find;
     t_str_find          rfind;
