@@ -23,7 +23,7 @@ Object          *variadic_func_definition(array_ctor) {
     return (array);
 }
 
-static Object   *_array_shallow_ctor()
+static Object   *_shallow_array_ctor()
 {
     return (new_obj(ARRAY));
 }
@@ -55,7 +55,7 @@ static Array _array_descr =
             {
                 TYPE_ARRAY,
                 sizeof(Array),
-                &_array_shallow_ctor,
+                &_shallow_array_ctor,
                 &_array_dtor
             },
             NULL,

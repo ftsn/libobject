@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include "arrays.h"
 #include "stringsdef.h"
 #include "types.h"
 
@@ -17,24 +18,24 @@ static t_bool   copy_ctor(String *string, char *copy, ssize_t size)
     return (TRUE);
 }
 
-static t_bool   _string_ctor(Object *self, va_list *args)
-{
-    String      *string;
-    ssize_t     nb_args;
-    char        *copy;
+Object      *variadic_func_definition(string_ctor) {
+    String  *string;
 
-    string = self;
-    if ((copy = va_arg(*args, char *)))
-        if (copy_ctor(string, copy, va_arg(*args, ssize_t)) == FALSE)
-            return (FALSE);
-    nb_args = va_arg(*args, ssize_t);
-    while (nb_args > 0)
-    {
-        if (string->insert_at(string, (char)va_arg(*args, int), string->contained_size) == FALSE)
-            return (FALSE);
-        --nb_args;
-    }
-    return (TRUE);
+    string = args->class;
+    if (!string)
+        return (NULL);
+    if (args->to_copy)
+        if (copy_ctor(string, args->to_copy, args->copy_amount) == FALSE)
+        {
+            delete(string);
+            return (NULL);
+        }
+    return (string);
+}
+
+static Object   *_shallow_string_ctor()
+{
+    return (new_obj(STRING));
 }
 
 static void _string_dtor(Object *self, va_list *args)
@@ -50,7 +51,7 @@ static String _string_descr =
         {
             TYPE_STRING,
             sizeof(String),
-            &_string_ctor,
+            &_shallow_string_ctor,
             &_string_dtor
         },
         NULL,

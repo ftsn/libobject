@@ -98,6 +98,7 @@ Object  *_string_end(const Object *self)
     return (generate_it(self, END));
 }
 
+// To remove?
 String  *_string_dup(const String *self)
 {
     return (new(_string, self->contained, 0));
@@ -148,7 +149,7 @@ Object          *_string_split(const String *self, const Class *type, const char
     char        *token;
     char        *strdump;
 
-    if (!self->contained || !sep || !(container = new (type, NULL, 0)))
+    if (!self->contained || !sep || !(container = shallow_new_obj(type)))
         return (NULL);
     strdump = self->contained;
     token = strtok(strdump, sep);

@@ -93,6 +93,11 @@ struct s_string
     t_str_sub           sub;
 };
 
-extern Class *_string;
+// Constructor declaration
+variadic_func_declare(Object *, string_ctor, Object *class; char *to_copy; ssize_t copy_amount;)
+#define _string_ctor_(...)    call_variadic_func_wrapper(string_ctor, __VA_ARGS__)
+
+#define STRING  _string
+extern Class    *STRING;
 
 #endif /* !STRINGSDEF_H_ */

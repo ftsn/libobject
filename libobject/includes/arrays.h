@@ -19,7 +19,7 @@ typedef struct
     ssize_t     total_size;
 } Array;
 
-// Constructor
+// Constructor declaration
 variadic_func_declare(Object *, array_ctor, Object *class; t_data **to_copy; ssize_t copy_amount;)
 #define _array_ctor_(...)    call_variadic_func_wrapper(array_ctor, __VA_ARGS__)
 
