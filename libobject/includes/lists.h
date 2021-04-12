@@ -32,6 +32,19 @@ typedef enum    e_list_type
     CIRC_DOUBLE
 } t_list_type;
 
+// Constructor
+variadic_func_declare(Object *, spl_list_ctor, Object *class; t_data **to_copy; ssize_t copy_amount;)
+#define _spl_list_ctor_(...)    call_variadic_func_wrapper(spl_list_ctor, __VA_ARGS__)
+
+variadic_func_declare(Object *, spl_clist_ctor, Object *class; t_data **to_copy; ssize_t copy_amount;)
+#define _spl_clist_ctor_(...)    call_variadic_func_wrapper(spl_clist_ctor, __VA_ARGS__)
+
+variadic_func_declare(Object *, dbl_list_ctor, Object *class; t_data **to_copy; ssize_t copy_amount;)
+#define _dbl_list_ctor_(...)    call_variadic_func_wrapper(dbl_list_ctor, __VA_ARGS__)
+
+variadic_func_declare(Object *, dbl_clist_ctor, Object *class; t_data **to_copy; ssize_t copy_amount;)
+#define _dbl_clist_ctor_(...)    call_variadic_func_wrapper(dbl_clist_ctor, __VA_ARGS__)
+
 t_bool  _spl_list_add(Object *list, void *data, t_type type, ssize_t pos);
 t_bool  _spl_clist_add(Object *list, void *data, t_type type, ssize_t pos);
 t_bool  _dbl_list_add(Object *list, void *data, t_type type, ssize_t pos);

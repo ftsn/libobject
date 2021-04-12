@@ -27,7 +27,7 @@ static void     array_alloc_obj_no_args(void **state)
 {
     Container   *ctn;
 
-    ctn = new(_array, NULL, 0);
+    ctn = new_obj(ARRAY);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
@@ -40,7 +40,7 @@ static void     array_alloc_obj_fully_copy_string_table(void **state)
 {
     Container   *ctn;
 
-    ctn = new(_array, *state, COPY_ALL, 0);
+    ctn = new_obj(ARRAY, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
@@ -55,7 +55,7 @@ static void     array_alloc_obj_partially_copy_string_table(void **state)
 {
     Container   *ctn;
 
-    ctn = new(_array, *state, 1, 0);
+    ctn = new_obj(ARRAY, .to_copy = *state, .copy_amount = 1);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 1);
@@ -65,48 +65,11 @@ static void     array_alloc_obj_partially_copy_string_table(void **state)
     (void)state;
 }
 
-static void     array_alloc_obj_fully_copy_string_table_plus_additional_args(void **state)
-{
-    Container   *ctn;
-    int         nb;
-
-    nb = 666;
-    ctn = new(_array, *state, COPY_ALL, 2, "a", TYPE_CHAR, &nb, TYPE_INT);
-    assert_non_null(ctn);
-    assert_non_null(ctn->contained);
-    assert_int_equal(ctn->contained_size, 4);
-    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 0), "foo");
-    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 1), "bar");
-    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 2), "a");
-    assert_int_equal(*(int *)ARRAY_DATA_LOOKUP(ctn, 3), 666);
-    assert_int_not_equal(((Array *)ctn)->total_size, 0);
-    delete(ctn);
-    (void)state;
-}
-
-static void     array_alloc_obj_partially_copy_string_table_plus_additional_args(void **state)
-{
-    Container   *ctn;
-    int         nb;
-
-    nb = 666;
-    ctn = new(_array, *state, 1, 2, "a", TYPE_CHAR, &nb, TYPE_INT);
-    assert_non_null(ctn);
-    assert_non_null(ctn->contained);
-    assert_int_equal(ctn->contained_size, 3);
-    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 0), "foo");
-    assert_string_equal(ARRAY_DATA_LOOKUP(ctn, 1), "a");
-    assert_int_equal(*(int *)ARRAY_DATA_LOOKUP(ctn, 2), 666);
-    assert_int_not_equal(((Array *)ctn)->total_size, 0);
-    delete(ctn);
-    (void)state;
-}
-
 static void     array_data(void **state)
 {
     Container   *ctn;
 
-    ctn = new(_array, NULL, 0);
+    ctn = new_obj(ARRAY);
     assert_non_null(ctn);
     assert_ptr_equal(ctn->data(ctn), ctn->contained);
     delete(ctn);
@@ -117,7 +80,7 @@ static void     array_empty_test_size(void **state)
 {
     Container   *ctn;
 
-    ctn = new(_array, NULL, 0);
+    ctn = new_obj(ARRAY);
     assert_non_null(ctn);
     assert_int_equal(ctn->contained_size, 0);
     assert_int_equal(ctn->size(ctn), 0);
@@ -129,7 +92,7 @@ static void     array_non_empty_test_size(void **state)
 {
     Container   *ctn;
 
-    ctn = new(_array, *state, COPY_ALL, 0);
+    ctn = new_obj(ARRAY, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
     assert_int_equal(ctn->contained_size, 2);
     assert_int_equal(ctn->size(ctn), 2);
@@ -141,7 +104,7 @@ static void     array_empty_test_empty(void **state)
 {
     Container   *ctn;
 
-    ctn = new(_array, NULL, 0);
+    ctn = new_obj(ARRAY);
     assert_non_null(ctn);
     assert_int_equal(ctn->contained_size, 0);
     assert_int_equal(ctn->empty(ctn), TRUE);
@@ -153,7 +116,7 @@ static void     array_non_empty_test_empty(void **state)
 {
     Container   *ctn;
 
-    ctn = new(_array, *state, COPY_ALL, 0);
+    ctn = new_obj(ARRAY, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
     assert_int_equal(ctn->contained_size, 2);
     assert_int_equal(ctn->empty(ctn), FALSE);
@@ -165,7 +128,7 @@ static void     array_empty_insert_at_negative_pos(void **state)
 {
     Container   *ctn;
 
-    ctn = new(_array, NULL, 0);
+    ctn = new_obj(ARRAY);
     assert_non_null(ctn);
     assert_int_equal(ctn->insert_at(ctn, "foobar", TYPE_CSTRING, -1), FALSE);
     assert_int_equal(ctn->contained_size, 0);
@@ -178,7 +141,7 @@ static void     array_empty_insert_at_out_of_range_pos(void **state)
 {
     Container   *ctn;
 
-    ctn = new(_array, NULL, 0);
+    ctn = new_obj(ARRAY);
     assert_non_null(ctn);
     assert_int_equal(ctn->insert_at(ctn, "foobar", TYPE_CSTRING, 666), FALSE);
     assert_int_equal(ctn->contained_size, 0);
@@ -191,7 +154,7 @@ static void     array_non_empty_insert_at_negative_pos(void **state)
 {
     Container   *ctn;
 
-    ctn = new(_array, *state, COPY_ALL, 0);
+    ctn = new_obj(ARRAY, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
     assert_int_equal(ctn->insert_at(ctn, "foobar", TYPE_CSTRING, -1), FALSE);
     assert_int_equal(ctn->contained_size, 2);
@@ -205,7 +168,7 @@ static void     array_non_empty_insert_at_out_of_range_pos(void **state)
 {
     Container   *ctn;
 
-    ctn = new(_array, *state, COPY_ALL, 0);
+    ctn = new_obj(ARRAY, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
     assert_int_equal(ctn->insert_at(ctn, "foobar", TYPE_CSTRING, 666), FALSE);
     assert_int_equal(ctn->contained_size, 2);
@@ -219,7 +182,7 @@ static void     array_empty_insert_at_pos_0(void **state)
 {
     Container   *ctn;
 
-    ctn = new(_array, NULL, 0);
+    ctn = new_obj(ARRAY);
     assert_non_null(ctn);
     assert_int_equal(ctn->insert_at(ctn, "foobar", TYPE_CSTRING, 0), TRUE);
     assert_int_equal(ctn->contained_size, 1);
@@ -232,7 +195,7 @@ static void     array_non_empty_insert_at_pos_0(void **state)
 {
     Container   *ctn;
 
-    ctn = new(_array, *state, COPY_ALL, 0);
+    ctn = new_obj(ARRAY, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
     assert_int_equal(ctn->insert_at(ctn, "foobar", TYPE_CSTRING, 0), TRUE);
     assert_int_equal(ctn->contained_size, 3);
@@ -247,7 +210,7 @@ static void     array_non_empty_insert_at_pos_1(void **state)
 {
     Container   *ctn;
 
-    ctn = new(_array, *state, COPY_ALL, 0);
+    ctn = new_obj(ARRAY, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
     assert_int_equal(ctn->insert_at(ctn, "foobar", TYPE_CSTRING, 1), TRUE);
     assert_int_equal(ctn->contained_size, 3);
@@ -262,7 +225,7 @@ static void     array_non_empty_insert_at_last_pos(void **state)
 {
     Container   *ctn;
 
-    ctn = new(_array, *state, COPY_ALL, 0);
+    ctn = new_obj(ARRAY, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
     assert_int_equal(ctn->insert_at(ctn, "foobar", TYPE_CSTRING, 2), TRUE);
     assert_int_equal(ctn->contained_size, 3);
@@ -277,7 +240,7 @@ static void     array_empty_push_back(void **state)
 {
     Container   *ctn;
 
-    ctn = new(_array, NULL, 0);
+    ctn = new_obj(ARRAY);
     assert_non_null(ctn);
     assert_int_equal(ctn->push_back(ctn, "foobar", TYPE_CSTRING), TRUE);
     assert_int_equal(ctn->contained_size, 1);
@@ -290,7 +253,7 @@ static void     array_non_empty_push_back(void **state)
 {
     Container   *ctn;
 
-    ctn = new(_array, *state, COPY_ALL, 0);
+    ctn = new_obj(ARRAY, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
     assert_int_equal(ctn->push_back(ctn, "foobar", TYPE_CSTRING), TRUE);
     assert_int_equal(ctn->contained_size, 3);
@@ -305,7 +268,7 @@ static void     array_empty_delete_at_negative_pos(void **state)
 {
     Container   *ctn;
 
-    ctn = new(_array, NULL, 0);
+    ctn = new_obj(ARRAY);
     assert_non_null(ctn);
     assert_int_equal(ctn->delete_at(ctn, -1), FALSE);
     assert_int_equal(ctn->contained_size, 0);
@@ -318,7 +281,7 @@ static void     array_empty_delete_at_out_of_range_pos(void **state)
 {
     Container   *ctn;
 
-    ctn = new(_array, NULL, 0);
+    ctn = new_obj(ARRAY);
     assert_non_null(ctn);
     assert_int_equal(ctn->delete_at(ctn, 666), FALSE);
     assert_int_equal(ctn->contained_size, 0);
@@ -331,7 +294,7 @@ static void     array_non_empty_delete_at_negative_pos(void **state)
 {
     Container   *ctn;
 
-    ctn = new(_array, *state, COPY_ALL, 0);
+    ctn = new_obj(ARRAY, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
     assert_int_equal(ctn->delete_at(ctn, -1), FALSE);
     assert_int_equal(ctn->contained_size, 2);
@@ -345,7 +308,7 @@ static void     array_non_empty_delete_at_out_of_range_pos(void **state)
 {
     Container   *ctn;
 
-    ctn = new(_array, *state, COPY_ALL, 0);
+    ctn = new_obj(ARRAY, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
     assert_int_equal(ctn->delete_at(ctn, 666), FALSE);
     assert_int_equal(ctn->contained_size, 2);
@@ -359,7 +322,7 @@ static void     array_non_empty_delete_at_pos_0(void **state)
 {
     Container   *ctn;
 
-    ctn = new(_array, *state, COPY_ALL, 0);
+    ctn = new_obj(ARRAY, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
     assert_int_equal(ctn->delete_at(ctn, 0), TRUE);
     assert_int_equal(ctn->contained_size, 1);
@@ -372,7 +335,7 @@ static void     array_non_empty_delete_at_pos_1(void **state)
 {
     Container   *ctn;
 
-    ctn = new(_array, *state, COPY_ALL, 0);
+    ctn = new_obj(ARRAY, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
     assert_int_equal(ctn->delete_at(ctn, 1), TRUE);
     assert_int_equal(ctn->contained_size, 1);
@@ -385,7 +348,7 @@ static void     array_mixed_insertion_deletion(void **state)
 {
     Container   *ctn;
 
-    ctn = new(_array, *state, COPY_ALL, 0);
+    ctn = new_obj(ARRAY, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
     assert_int_equal(ctn->delete_at(ctn, 1), TRUE);
     assert_int_equal(ctn->contained_size, 1);
@@ -435,7 +398,7 @@ static void     array_empty_erase(void **state)
 {
     Container   *ctn;
 
-    ctn = new(_array, NULL, 0);
+    ctn = new_obj(ARRAY);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
@@ -450,7 +413,7 @@ static void     array_non_empty_erase(void **state)
 {
     Container   *ctn;
 
-    ctn = new(_array, *state, COPY_ALL, 0);
+    ctn = new_obj(ARRAY, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
@@ -466,7 +429,7 @@ static void     array_empty_front(void **state)
 {
     Container   *ctn;
 
-    ctn = new(_array, NULL, 0);
+    ctn = new_obj(ARRAY);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
@@ -479,7 +442,7 @@ static void     array_non_empty_front(void **state)
 {
     Container   *ctn;
 
-    ctn = new(_array, *state, COPY_ALL, 0);
+    ctn = new_obj(ARRAY, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
@@ -492,7 +455,7 @@ static void     array_empty_back(void **state)
 {
     Container   *ctn;
 
-    ctn = new(_array, NULL, 0);
+    ctn = new_obj(ARRAY);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
@@ -505,7 +468,7 @@ static void     array_non_empty_back(void **state)
 {
     Container   *ctn;
 
-    ctn = new(_array, *state, COPY_ALL, 0);
+    ctn = new_obj(ARRAY, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
@@ -518,7 +481,7 @@ static void     array_empty_at_negative_pos(void **state)
 {
     Container   *ctn;
 
-    ctn = new(_array, NULL, 0);
+    ctn = new_obj(ARRAY);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
@@ -531,7 +494,7 @@ static void     array_empty_at_out_of_range_pos(void **state)
 {
     Container   *ctn;
 
-    ctn = new(_array, NULL, 0);
+    ctn = new_obj(ARRAY);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
@@ -544,7 +507,7 @@ static void     array_non_empty_at_negative_pos(void **state)
 {
     Container   *ctn;
 
-    ctn = new(_array, *state, COPY_ALL, 0);
+    ctn = new_obj(ARRAY, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
@@ -557,7 +520,7 @@ static void     array_non_empty_at_out_of_range_pos(void **state)
 {
     Container   *ctn;
 
-    ctn = new(_array, *state, COPY_ALL, 0);
+    ctn = new_obj(ARRAY, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
@@ -570,7 +533,7 @@ static void     array_empty_at_pos_0(void **state)
 {
     Container   *ctn;
 
-    ctn = new(_array, NULL, 0);
+    ctn = new_obj(ARRAY);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
@@ -583,7 +546,7 @@ static void     array_non_empty_at_pos_0(void **state)
 {
     Container   *ctn;
 
-    ctn = new(_array, *state, COPY_ALL, 0);
+    ctn = new_obj(ARRAY, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
@@ -596,7 +559,7 @@ static void     array_non_empty_at_last_pos(void **state)
 {
     Container   *ctn;
 
-    ctn = new(_array, *state, COPY_ALL, 0);
+    ctn = new_obj(ARRAY, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
@@ -609,11 +572,11 @@ static void     array_empty_convert_to_array(void **state)
 {
     Container   *ctn, *converted;
 
-    ctn = new(_array, NULL, 0);
+    ctn = new_obj(ARRAY);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
-    converted = ctn->convert(ctn, _array);
+    converted = ctn->convert(ctn, ARRAY);
     assert_non_null(converted);
     assert_non_null(converted->contained);
     assert_int_equal(converted->contained_size, 0);
@@ -626,11 +589,11 @@ static void     array_non_empty_convert_to_array(void **state)
 {
     Container   *ctn, *converted;
 
-    ctn = new(_array, *state, COPY_ALL, 0);
+    ctn = new_obj(ARRAY, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
-    converted = ctn->convert(ctn, _array);
+    converted = ctn->convert(ctn, ARRAY);
     assert_non_null(converted);
     assert_non_null(converted->contained);
     assert_int_equal(converted->contained_size, 2);
@@ -645,11 +608,11 @@ static void     array_empty_sub_to_array_out_of_range_negative_pos_correct_lengt
 {
     Container   *ctn, *converted;
 
-    ctn = new(_array, NULL, 0);
+    ctn = new_obj(ARRAY);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
-    converted = ctn->sub(ctn, _array, -666, 0);
+    converted = ctn->sub(ctn, ARRAY, -666, 0);
     assert_null(converted);
     delete(ctn);
     delete(converted);
@@ -660,11 +623,11 @@ static void     array_empty_sub_to_array_correct_pos_too_long_length(void **stat
 {
     Container   *ctn, *converted;
 
-    ctn = new(_array, NULL, 0);
+    ctn = new_obj(ARRAY);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
-    converted = ctn->sub(ctn, _array, 0, 1);
+    converted = ctn->sub(ctn, ARRAY, 0, 1);
     assert_null(converted);
     delete(ctn);
     delete(converted);
@@ -675,11 +638,11 @@ static void     array_empty_sub_to_array_out_of_range_negative_pos_too_long_leng
 {
     Container   *ctn, *converted;
 
-    ctn = new(_array, NULL, 0);
+    ctn = new_obj(ARRAY);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
-    converted = ctn->sub(ctn, _array, -666, 1);
+    converted = ctn->sub(ctn, ARRAY, -666, 1);
     assert_null(converted);
     delete(ctn);
     delete(converted);
@@ -690,11 +653,11 @@ static void     array_empty_sub_to_array_out_of_range_pos_correct_length(void **
 {
     Container   *ctn, *converted;
 
-    ctn = new(_array, NULL, 0);
+    ctn = new_obj(ARRAY);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
-    converted = ctn->sub(ctn, _array, 666, 0);
+    converted = ctn->sub(ctn, ARRAY, 666, 0);
     assert_null(converted);
     delete(ctn);
     delete(converted);
@@ -705,11 +668,11 @@ static void     array_non_empty_sub_to_array_out_of_range_negative_pos_correct_l
 {
     Container   *ctn, *converted;
 
-    ctn = new(_array, *state, COPY_ALL, 0);
+    ctn = new_obj(ARRAY, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
-    converted = ctn->sub(ctn, _array, -666, 1);
+    converted = ctn->sub(ctn, ARRAY, -666, 1);
     assert_null(converted);
     delete(ctn);
     delete(converted);
@@ -720,11 +683,11 @@ static void     array_non_empty_sub_to_array_correct_pos_too_long_length(void **
 {
     Container   *ctn, *converted;
 
-    ctn = new(_array, *state, COPY_ALL, 0);
+    ctn = new_obj(ARRAY, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
-    converted = ctn->sub(ctn, _array, 0, 3);
+    converted = ctn->sub(ctn, ARRAY, 0, 3);
     assert_null(converted);
     delete(ctn);
     delete(converted);
@@ -735,11 +698,11 @@ static void     array_non_empty_sub_to_array_out_of_range_negative_pos_too_long_
 {
     Container   *ctn, *converted;
 
-    ctn = new(_array, *state, COPY_ALL, 0);
+    ctn = new_obj(ARRAY, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
-    converted = ctn->sub(ctn, _array, -666, 3);
+    converted = ctn->sub(ctn, ARRAY, -666, 3);
     assert_null(converted);
     delete(ctn);
     delete(converted);
@@ -750,11 +713,11 @@ static void     array_non_empty_sub_to_array_out_of_range_pos_correct_length(voi
 {
     Container   *ctn, *converted;
 
-    ctn = new(_array, *state, COPY_ALL, 0);
+    ctn = new_obj(ARRAY, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
-    converted = ctn->sub(ctn, _array, 666, 1);
+    converted = ctn->sub(ctn, ARRAY, 666, 1);
     assert_null(converted);
     delete(ctn);
     delete(converted);
@@ -765,11 +728,11 @@ static void     array_empty_sub_to_array_pos_0_len_0(void **state)
 {
     Container   *ctn, *converted;
 
-    ctn = new(_array, NULL, 0);
+    ctn = new_obj(ARRAY);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
-    converted = ctn->sub(ctn, _array, 0, 0);
+    converted = ctn->sub(ctn, ARRAY, 0, 0);
     assert_non_null(converted);
     assert_non_null(converted->contained);
     assert_int_equal(converted->contained_size, 0);
@@ -783,11 +746,11 @@ static void     array_non_empty_sub_to_array_pos_0_len_0(void **state)
 {
     Container   *ctn, *converted;
 
-    ctn = new(_array, *state, COPY_ALL, 0);
+    ctn = new_obj(ARRAY, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
-    converted = ctn->sub(ctn, _array, 0, 0);
+    converted = ctn->sub(ctn, ARRAY, 0, 0);
     assert_non_null(converted);
     assert_non_null(converted->contained);
     assert_int_equal(converted->contained_size, 0);
@@ -801,11 +764,11 @@ static void     array_non_empty_sub_to_array_pos_0_len_1(void **state)
 {
     Container   *ctn, *converted;
 
-    ctn = new(_array, *state, COPY_ALL, 0);
+    ctn = new_obj(ARRAY, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
-    converted = ctn->sub(ctn, _array, 0, 1);
+    converted = ctn->sub(ctn, ARRAY, 0, 1);
     assert_non_null(converted);
     assert_non_null(converted->contained);
     assert_int_equal(converted->contained_size, 1);
@@ -819,11 +782,11 @@ static void     array_non_empty_sub_to_array_pos_1_len_1(void **state)
 {
     Container   *ctn, *converted;
 
-    ctn = new(_array, *state, COPY_ALL, 0);
+    ctn = new_obj(ARRAY, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
-    converted = ctn->sub(ctn, _array, 1, 1);
+    converted = ctn->sub(ctn, ARRAY, 1, 1);
     assert_non_null(converted);
     assert_non_null(converted->contained);
     assert_int_equal(converted->contained_size, 1);
@@ -837,11 +800,11 @@ static void     array_non_empty_sub_to_array_copy_all(void **state)
 {
     Container   *ctn, *converted;
 
-    ctn = new(_array, *state, COPY_ALL, 0);
+    ctn = new_obj(ARRAY, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
-    converted = ctn->sub(ctn, _array, 0, 2);
+    converted = ctn->sub(ctn, ARRAY, 0, 2);
     assert_non_null(converted);
     assert_non_null(converted->contained);
     assert_int_equal(converted->contained_size, 2);
@@ -856,11 +819,11 @@ static void     array_non_empty_sub_to_array_correct_negative_pos_minus_2_len_1(
 {
     Container   *ctn, *converted;
 
-    ctn = new(_array, *state, COPY_ALL, 0);
+    ctn = new_obj(ARRAY, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
-    converted = ctn->sub(ctn, _array, -2, 1);
+    converted = ctn->sub(ctn, ARRAY, -2, 1);
     assert_non_null(converted);
     assert_non_null(converted->contained);
     assert_int_equal(converted->contained_size, 1);
@@ -874,11 +837,11 @@ static void     array_non_empty_sub_to_array_correct_negative_pos_minus_1_len_1(
 {
     Container   *ctn, *converted;
 
-    ctn = new(_array, *state, COPY_ALL, 0);
+    ctn = new_obj(ARRAY, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
-    converted = ctn->sub(ctn, _array, -1, 1);
+    converted = ctn->sub(ctn, ARRAY, -1, 1);
     assert_non_null(converted);
     assert_non_null(converted->contained);
     assert_int_equal(converted->contained_size, 1);
@@ -892,11 +855,11 @@ static void     array_non_empty_sub_to_array_correct_negative_pos_minus_2_copy_a
 {
     Container   *ctn, *converted;
 
-    ctn = new(_array, *state, COPY_ALL, 0);
+    ctn = new_obj(ARRAY, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
-    converted = ctn->sub(ctn, _array, -2, 2);
+    converted = ctn->sub(ctn, ARRAY, -2, 2);
     assert_non_null(converted);
     assert_non_null(converted->contained);
     assert_int_equal(converted->contained_size, 2);
@@ -921,11 +884,11 @@ static void     array_empty_map_to_array(void **state)
 {
     Container   *ctn, *converted;
 
-    ctn = new(_array, NULL, 0);
+    ctn = new_obj(ARRAY);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
-    converted = ctn->map(ctn, _array, map_fn);
+    converted = ctn->map(ctn, ARRAY, map_fn);
     assert_non_null(converted);
     assert_non_null(converted->contained);
     assert_int_equal(converted->contained_size, 0);
@@ -939,11 +902,11 @@ static void     array_non_empty_map_to_array(void **state)
 {
     Container   *ctn, *converted;
 
-    ctn = new(_array, *state, COPY_ALL, 0);
+    ctn = new_obj(ARRAY, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
-    converted = ctn->map(ctn, _array, map_fn);
+    converted = ctn->map(ctn, ARRAY, map_fn);
     assert_non_null(converted);
     assert_non_null(converted->contained);
     assert_int_equal(converted->contained_size, 2);
@@ -958,8 +921,6 @@ const struct CMUnitTest array_tests[] = {
     cmocka_unit_test_setup_teardown(array_alloc_obj_no_args, setup_foo_bar_typed_array, teardown_foo_bar_array),
     cmocka_unit_test_setup_teardown(array_alloc_obj_fully_copy_string_table, setup_foo_bar_typed_array, teardown_foo_bar_array),
     cmocka_unit_test_setup_teardown(array_alloc_obj_partially_copy_string_table, setup_foo_bar_typed_array, teardown_foo_bar_array),
-    cmocka_unit_test_setup_teardown(array_alloc_obj_fully_copy_string_table_plus_additional_args, setup_foo_bar_typed_array, teardown_foo_bar_array),
-    cmocka_unit_test_setup_teardown(array_alloc_obj_partially_copy_string_table_plus_additional_args, setup_foo_bar_typed_array, teardown_foo_bar_array),
     cmocka_unit_test_setup_teardown(array_data, setup_foo_bar_typed_array, teardown_foo_bar_array),
     cmocka_unit_test_setup_teardown(array_empty_test_size, setup_foo_bar_typed_array, teardown_foo_bar_array),
     cmocka_unit_test_setup_teardown(array_non_empty_test_size, setup_foo_bar_typed_array, teardown_foo_bar_array),

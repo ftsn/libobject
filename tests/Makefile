@@ -8,7 +8,7 @@ OBJDIR	=	build
 
 LIBDIR	=	../libobject
 
-CFLAGS	=	-Wall -Wextra -Werror -std=c99 -g3
+CFLAGS	=	-Wall -Wextra -std=c99 -g3
 CFLAGS	+=	-I$(LIBDIR)/includes
 
 LDFLAGS	+=	-L$(LIBDIR) -lobject -lcmocka
@@ -16,11 +16,11 @@ LDFLAGS	+=	-L$(LIBDIR) -lobject -lcmocka
 VPATH	=	./
 
 SRCS    =	main		\
-		string_tests	\
-		array_tests	\
-		list_tests	\
-		dict_tests	\
-		iterator_tests
+		array_tests
+#		string_tests
+#		list_tests	\
+#		dict_tests	\
+#		iterator_tests
 
 SRCS	:=	$(addsuffix .$(EXT), $(SRCS))
 

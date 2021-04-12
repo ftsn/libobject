@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 #include "object.h"
 #include "utils.h"
 
@@ -46,6 +47,11 @@ static Object   *va_new(const Class *class, va_list *ap)
     return (new);
 }
 
+Object  *shallow_new_obj(const Class *class, ...)
+{
+    return (class->__init__());
+}
+
 Object      *new(const Class *class, ...)
 {
     Object  *new;
@@ -69,4 +75,15 @@ void        delete(Object *ptr, ...)
     class->__del__(ptr, &ap);
     va_end(ap);
     free(ptr);
+}
+
+Object      *_init_new_obj(const Class *class)
+{
+    Object  *new;
+
+    new = malloc(class->__size__);
+    if (!new)
+        return (NULL);
+    new = memcpy(new, class, class->__size__);
+    return (new);
 }

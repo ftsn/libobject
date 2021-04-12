@@ -188,7 +188,7 @@ Object          *_container_to_type(Object *self, Class *type)
     Iterator    *it;
 
     self_c = self;
-    if (!(ctn = new(type, NULL, 0)))
+    if (!(ctn = shallow_new_obj(type)))
         return (NULL);
     if (!(it = self_c->begin(self_c)))
     {
@@ -225,7 +225,7 @@ Object          *_container_sub(Object *self, Class *type, ssize_t begin, ssize_
         return (NULL);
     if (begin + len > self_c->contained_size)
         return (NULL);
-    if (!(ctn = new(type, NULL, 0)))
+    if (!(ctn = shallow_new_obj(type)))
         return (NULL);
     if (!(it = self_c->begin(self_c)))
     {
@@ -260,7 +260,7 @@ Object          *_container_map(Object *self, Class *type, t_data (*fptr)(ssize_
     ssize_t     i;
     t_data      typed_data;
 
-    if (!(ctn = new (type, NULL, 0)))
+    if (!(ctn = shallow_new_obj(type)))
         return (NULL);
     if (!(it = ((Container *)self)->begin(self)))
     {
@@ -294,7 +294,7 @@ Object  *_container_end(const Object *self)
     return (generate_it(self, END));
 }
 
-t_bool      ctn_copy_ctor(Container *ctn, void **copy, ssize_t size)
+t_bool      ctn_copy_ctor(Container *ctn, t_data **copy, ssize_t size)
 {
     ssize_t i;
 

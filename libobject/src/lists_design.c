@@ -2,6 +2,42 @@
 #include "lists.h"
 #include "iterators.h"
 
+static Object   *_shared_list_ctor(Object *class, t_data **to_copy, ssize_t copy_amount)
+{
+    Container   *list;
+
+    list = class;
+    if (!list)
+        return (NULL);
+    if (to_copy)
+        if (ctn_copy_ctor(list, to_copy, copy_amount) == FALSE)
+        {
+            delete(list);
+            return (NULL);
+        }
+    return (list);
+}
+
+Object          *variadic_func_definition(spl_list_ctor)
+{
+    return (_shared_list_ctor(args->class, args->to_copy, args->copy_amount));
+}
+
+Object          *variadic_func_definition(spl_clist_ctor)
+{
+    return (_shared_list_ctor(args->class, args->to_copy, args->copy_amount));
+}
+
+Object          *variadic_func_definition(dbl_list_ctor)
+{
+    return (_shared_list_ctor(args->class, args->to_copy, args->copy_amount));
+}
+
+Object          *variadic_func_definition(dbl_clist_ctor)
+{
+    return (_shared_list_ctor(args->class, args->to_copy, args->copy_amount));
+}
+
 static t_bool   _list_ctor(Object *self, va_list *args)
 {
     Container   *list;

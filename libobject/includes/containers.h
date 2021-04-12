@@ -77,6 +77,6 @@ typedef struct {
     t_it_create     end;
 } Container;
 
-t_bool  ctn_copy_ctor(Container *ctn, void **copy, ssize_t size);
+t_bool  ctn_copy_ctor(Container *ctn, t_data **copy, ssize_t size);
 
 #endif /* !CONTAINERS_H_ */

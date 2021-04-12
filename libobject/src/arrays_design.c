@@ -3,26 +3,29 @@
 #include "arrays.h"
 #include "iterators.h"
 
-static t_bool   _array_ctor(Object *self, va_list *args)
-{
+Object          *variadic_func_definition(array_ctor) {
     Container   *array;
-    ssize_t     nb_args;
-    void        *copy;
 
-    array = self;
+    array = args->class;
+    if (!array)
+        return (NULL);
     if (array_alloc(array, ARRAY_ALLOC_SIZE(array->contained_size), ARRAY_NO_OPERATION) == FALSE)
-        return (FALSE);
-    if ((copy = va_arg(*args, void *)))
-        if (ctn_copy_ctor(array, copy, va_arg(*args, ssize_t)) == FALSE)
-            return (FALSE);
-    nb_args = va_arg(*args, ssize_t);
-    while (nb_args > 0)
     {
-        if (array->push_back(array, va_arg(*args, void *), va_arg(*args, t_type)) == FALSE)
-            return (FALSE);
-        --nb_args;
+        delete(array);
+        return (NULL);
     }
-    return (TRUE);
+    if (args->to_copy)
+        if (ctn_copy_ctor(array, args->to_copy, args->copy_amount) == FALSE)
+        {
+            delete(array);
+            return (NULL);
+        }
+    return (array);
+}
+
+static Object   *_array_shallow_ctor()
+{
+    return (new_obj(ARRAY));
 }
 
 static void     _array_dtor(Object *self, va_list *args)
@@ -52,7 +55,7 @@ static Array _array_descr =
             {
                 TYPE_ARRAY,
                 sizeof(Array),
-                &_array_ctor,
+                &_array_shallow_ctor,
                 &_array_dtor
             },
             NULL,
