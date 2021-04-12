@@ -5,15 +5,23 @@
 #include "iterators.h"
 #include "lists.h"
 
-static t_bool   _dict_ctor(Object *self, va_list *args)
-{
+Object          *variadic_func_definition(dict_ctor) {
     Container   *dict;
 
-    (void)args;
-    dict = self;
+    dict = args->class;
+    if (!dict)
+        return (NULL);
     if (dict_alloc(dict, DICT_ALLOC_SIZE(dict->contained_size)) == FALSE)
-        return (FALSE);
-    return (TRUE);
+    {
+        delete(dict);
+        return (NULL);
+    }
+    return (dict);
+}
+
+static Object   *_shallow_dict_ctor()
+{
+    return (new_obj(DICT));
 }
 
 static void     _dict_dtor(Object *self, va_list *args)
@@ -31,7 +39,7 @@ static Dict _dict_descr =
             {
                 TYPE_DICT,
                 sizeof(Dict),
-                &_dict_ctor,
+                &_shallow_dict_ctor,
                 &_dict_dtor
             },
             NULL,

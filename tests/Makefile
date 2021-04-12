@@ -17,9 +17,9 @@ VPATH	=	./
 
 SRCS    =	main		\
 		array_tests	\
-		string_tests
+		string_tests	\
+		dict_tests
 #		list_tests	\
-#		dict_tests	\
 #		iterator_tests
 
 SRCS	:=	$(addsuffix .$(EXT), $(SRCS))

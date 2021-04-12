@@ -11,7 +11,7 @@ static void     dict_alloc_obj_no_args(void **state)
 {
     Container   *ctn;
 
-    ctn = new(_dict, NULL, 0);
+    ctn = new_obj(DICT);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
@@ -24,7 +24,7 @@ static void     dict_insert_key(void **state)
 {
     Container   *ctn;
 
-    ctn = new(_dict, NULL, 0);
+    ctn = new_obj(DICT);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
@@ -41,7 +41,7 @@ static void     dict_insert_key_twice(void **state)
 {
     Container   *ctn;
 
-    ctn = new(_dict, NULL, 0);
+    ctn = new_obj(DICT);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
@@ -62,7 +62,7 @@ static void     dict_insert_different_keys(void **state)
 {
     Container   *ctn;
 
-    ctn = new(_dict, NULL, 0);
+    ctn = new_obj(DICT);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
@@ -86,7 +86,7 @@ static void     dict_mixed_insertion_deletion(void **state)
 {
     Container   *ctn;
 
-    ctn = new(_dict, NULL, 0);
+    ctn = new_obj(DICT);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
@@ -164,7 +164,7 @@ static void     dict_data(void **state)
 {
     Container   *ctn;
 
-    ctn = new(_dict, NULL, 0);
+    ctn = new_obj(DICT);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
@@ -178,7 +178,7 @@ static void     dict_empty_size(void **state)
 {
     Container   *ctn;
 
-    ctn = new(_dict, NULL, 0);
+    ctn = new_obj(DICT);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
@@ -192,7 +192,7 @@ static void     dict_non_empty_size(void **state)
 {
     Container   *ctn;
 
-    ctn = new(_dict, NULL, 0);
+    ctn = new_obj(DICT);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
@@ -210,7 +210,7 @@ static void     dict_empty_test_empty(void **state)
 {
     Container   *ctn;
 
-    ctn = new(_dict, NULL, 0);
+    ctn = new_obj(DICT);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
@@ -224,7 +224,7 @@ static void     dict_non_empty_test_empty(void **state)
 {
     Container   *ctn;
 
-    ctn = new(_dict, NULL, 0);
+    ctn = new_obj(DICT);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
