@@ -23,9 +23,19 @@ Object          *variadic_func_definition(spl_list_ctor)
     return (_shared_list_ctor(args->class, args->to_copy, args->copy_amount));
 }
 
+static Object   *_shallow_spl_list_ctor()
+{
+    return (new_obj(SPL_LIST));
+}
+
 Object          *variadic_func_definition(spl_clist_ctor)
 {
     return (_shared_list_ctor(args->class, args->to_copy, args->copy_amount));
+}
+
+static Object   *_shallow_spl_clist_ctor()
+{
+    return (new_obj(SPL_CLIST));
 }
 
 Object          *variadic_func_definition(dbl_list_ctor)
@@ -33,29 +43,19 @@ Object          *variadic_func_definition(dbl_list_ctor)
     return (_shared_list_ctor(args->class, args->to_copy, args->copy_amount));
 }
 
+static Object   *_shallow_dbl_list_ctor()
+{
+    return (new_obj(DBL_LIST));
+}
+
 Object          *variadic_func_definition(dbl_clist_ctor)
 {
     return (_shared_list_ctor(args->class, args->to_copy, args->copy_amount));
 }
 
-static t_bool   _list_ctor(Object *self, va_list *args)
+static Object   *_shallow_dbl_clist_ctor()
 {
-    Container   *list;
-    ssize_t     nb_args;
-    void        *copy;
-
-    list = self;
-    if ((copy = va_arg(*args, void *)))
-        if (ctn_copy_ctor(list, copy, va_arg(*args, ssize_t)) == FALSE)
-            return (FALSE);
-    nb_args = va_arg(*args, ssize_t);
-    while (nb_args > 0)
-    {
-        if (list->push_back(list, va_arg(*args, void *), va_arg(*args, t_type)) == FALSE)
-            return (FALSE);
-        --nb_args;
-    }
-    return (TRUE);
+    return (new_obj(DBL_CLIST));
 }
 
 static void     _list_dtor(Object *self, va_list *args)
@@ -69,13 +69,13 @@ static void     _list_dtor(Object *self, va_list *args)
     (void)args; 
 }
 
-static Spl_list _spl_list_descr =
+static SplList _spl_list_descr =
     {
         {
             {
                 TYPE_LINKED_LIST,
                 sizeof(List),
-                &_list_ctor,
+                &_shallow_spl_list_ctor,
                 &_list_dtor
             },
             NULL,
@@ -107,13 +107,13 @@ static Spl_list _spl_list_descr =
         &get_nth_node
     };
 
-static Spl_clist _spl_clist_descr =
+static SplClist _spl_clist_descr =
     {
         {
             {
                 TYPE_CIRCULAR_LINKED_LIST,
                 sizeof(List),
-                &_list_ctor,
+                &_shallow_spl_clist_ctor,
                 &_list_dtor
             },
             NULL,
@@ -145,13 +145,13 @@ static Spl_clist _spl_clist_descr =
         &get_nth_node
     };
 
-static Dbl_list _dbl_list_descr =
+static DblList _dbl_list_descr =
     {
         {
             {
                 TYPE_DOUBLY_LINKED_LIST,
                 sizeof(List),
-                &_list_ctor,
+                &_shallow_dbl_list_ctor,
                 &_list_dtor
             },
             NULL,
@@ -183,13 +183,13 @@ static Dbl_list _dbl_list_descr =
         &get_nth_node
     };
 
-static Dbl_clist _dbl_clist_descr =
+static DblClist _dbl_clist_descr =
     {
         {
             {
                 TYPE_CIRCULAR_DOUBLY_LINKED_LIST,
                 sizeof(List),
-                &_list_ctor,
+                &_shallow_dbl_clist_ctor,
                 &_list_dtor
             },
             NULL,

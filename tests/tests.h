@@ -12,6 +12,7 @@
 
 // List
 # define NODE_TO_DATA(node)             (((t_data *)((t_list_data *)node)->data)->data)
+# define LIST_TYPE(kind_idx)            
 # define LOOP_OVER_ALL_KINDS(x)                                             \
 do {                                                                        \
     Class *kinds[] = {_spl_list, _spl_clist, _dbl_list, _dbl_clist, NULL};  \
@@ -27,7 +28,10 @@ do {                                                                        \
 
 extern const struct CMUnitTest string_tests[MAX_TEST_PER_GROUP];
 extern const struct CMUnitTest array_tests[MAX_TEST_PER_GROUP];
-extern const struct CMUnitTest list_tests[MAX_TEST_PER_GROUP];
+extern const struct CMUnitTest spl_list_tests[MAX_TEST_PER_GROUP];
+extern const struct CMUnitTest spl_clist_tests[MAX_TEST_PER_GROUP];
+extern const struct CMUnitTest dbl_list_tests[MAX_TEST_PER_GROUP];
+extern const struct CMUnitTest dbl_clist_tests[MAX_TEST_PER_GROUP];
 extern const struct CMUnitTest dict_tests[MAX_TEST_PER_GROUP];
 extern const struct CMUnitTest iterator_tests[MAX_TEST_PER_GROUP];
 

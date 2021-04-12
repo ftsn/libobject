@@ -4,6 +4,7 @@
 #include "object.h"
 #include "utils.h"
 
+/*
 static t_bool   static_va_new(const Class *class, Class *dest, va_list *ap)
 {
     memcpy(dest, class, class->__size__);
@@ -33,7 +34,7 @@ void        static_delete(Object *ptr, ...)
     class->__del__(ptr, &ap);
     va_end(ap);
 }
-
+*/
 static Object   *va_new(const Class *class, va_list *ap)
 {
     Object      *new;

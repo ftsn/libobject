@@ -19,10 +19,10 @@ typedef struct
     t_get_node  nth_node;
 } List;
 
-typedef List Spl_list;
-typedef List Spl_clist;
-typedef List Dbl_list;
-typedef List Dbl_clist;
+typedef List SplList;
+typedef List SplClist;
+typedef List DblList;
+typedef List DblClist;
 
 typedef enum    e_list_type
 {
@@ -32,7 +32,7 @@ typedef enum    e_list_type
     CIRC_DOUBLE
 } t_list_type;
 
-// Constructor
+// Constructors declarations
 variadic_func_declare(Object *, spl_list_ctor, Object *class; t_data **to_copy; ssize_t copy_amount;)
 #define _spl_list_ctor_(...)    call_variadic_func_wrapper(spl_list_ctor, __VA_ARGS__)
 
@@ -61,9 +61,14 @@ Object  *_list_front(const Object *list);
 Object  *_list_end(const Object *list);
 Object  *_list_at(const Object *list, ssize_t pos);
 
-extern Class *_spl_list;
-extern Class *_spl_clist;
-extern Class *_dbl_list;
-extern Class *_dbl_clist;
+#define SPL_LIST    _spl_list
+#define SPL_CLIST   _spl_clist
+#define DBL_LIST    _dbl_list
+#define DBL_CLIST   _dbl_clist
+
+extern Class *SPL_LIST;
+extern Class *SPL_CLIST;
+extern Class *DBL_LIST;
+extern Class *DBL_CLIST;
 
 #endif /* !LISTS_H_ */

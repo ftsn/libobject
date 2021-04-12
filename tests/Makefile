@@ -18,8 +18,11 @@ VPATH	=	./
 SRCS    =	main		\
 		array_tests	\
 		string_tests	\
-		dict_tests
-#		list_tests	\
+		dict_tests	\
+		spl_list_tests	\
+		spl_clist_tests	\
+		dbl_list_tests	\
+		dbl_clist_tests
 #		iterator_tests
 
 SRCS	:=	$(addsuffix .$(EXT), $(SRCS))
