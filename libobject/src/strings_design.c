@@ -38,9 +38,8 @@ static Object   *_shallow_string_ctor()
     return (new_obj(STRING));
 }
 
-static void _string_dtor(Object *self, va_list *args)
+static void _string_dtor(Object *self)
 {
-    (void)args;
     free(((Container *)self)->contained);
     ((Container *)self)->contained = NULL;
 }

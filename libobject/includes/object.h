@@ -7,7 +7,7 @@
 #include "variadic.h"
 
 typedef Object  *(*ctor_t)();
-typedef void    (*dtor_t)(Object *self, va_list *args);
+typedef void    (*dtor_t)(Object *self);
 
 typedef struct
 {
@@ -18,7 +18,7 @@ typedef struct
 } Class;
 
 Object      *shallow_new_obj(const Class *class, ...);
-void        delete (Object *ptr, ...);
+void        delete(Object *ptr);
 
 Object      *_init_new_obj(const Class *class);
 

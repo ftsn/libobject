@@ -28,7 +28,7 @@ static Object   *_shallow_array_ctor()
     return (new_obj(ARRAY));
 }
 
-static void     _array_dtor(Object *self, va_list *args)
+static void     _array_dtor(Object *self)
 {
     ssize_t     i;
     void        **contained;
@@ -46,7 +46,6 @@ static void     _array_dtor(Object *self, va_list *args)
     free(((Container *)self)->contained);
     ((Container *)self)->contained = NULL;
     ((Container *)self)->contained_size = 0;
-    (void)args;
 }
 
 static Array _array_descr =

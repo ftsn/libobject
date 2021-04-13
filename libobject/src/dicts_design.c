@@ -24,13 +24,12 @@ static Object   *_shallow_dict_ctor()
     return (new_obj(DICT));
 }
 
-static void     _dict_dtor(Object *self, va_list *args)
+static void     _dict_dtor(Object *self)
 {
     ((Container *)self)->erase(self);
     free(((Container *)self)->contained);
     ((Container *)self)->contained = NULL;
     ((Container *)self)->contained_size = 0;
-    (void)args;
 }
 
 static Dict _dict_descr =

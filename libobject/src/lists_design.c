@@ -58,7 +58,7 @@ static Object   *_shallow_dbl_clist_ctor()
     return (new_obj(DBL_CLIST));
 }
 
-static void     _list_dtor(Object *self, va_list *args)
+static void     _list_dtor(Object *self)
 {
     Container   *list;
 
@@ -66,7 +66,6 @@ static void     _list_dtor(Object *self, va_list *args)
     list->erase(list);
     list->contained = NULL;
     list->contained_size = 0;
-    (void)args; 
 }
 
 static SplList _spl_list_descr =

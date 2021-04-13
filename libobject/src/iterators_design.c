@@ -176,10 +176,9 @@ static Object   *_shallow_dict_iterator_ctor()
     return (new_obj(DICT_IT));
 }
 
-static void _iterator_dtor(Object *self, va_list *args)
+static void _iterator_dtor(Object *self)
 {
     (void)self;
-    (void)args;
 }
 
 static RandomAccessIterator _array_ra_it_descr =
