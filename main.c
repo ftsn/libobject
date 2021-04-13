@@ -32,5 +32,6 @@ int     main(int ac, char **av)
     Container *array;
     array = new_obj(ARRAY, .to_copy = (t_data *[]){&(t_data){TYPE_CSTRING, "fabinho"}, &(t_data ){TYPE_CSTRING, "HELL0000"}, NULL}, .copy_amount = 1);
     array->dump(array, "Title smile", typed_basic_print, "");
+    //((String *)STRING)->dup = &_string_dup;
     return (1);
 }

@@ -6,38 +6,7 @@
 #include "dicts.h"
 #include "stringsdef.h"
 
-/*
-static t_bool   _list_iterator_ctor(Object *self, va_list *args)
-{
-    Container   *iterated_obj;
-    Iterator    *it;
-    ssize_t     idx_start;
-    ssize_t     i;
-
-    it = self;
-    iterated_obj = va_arg(*args, void *);
-    it->iterated_obj = iterated_obj;
-    if (iterated_obj->contained_size == 0)
-    {
-        it->reached_the_beginning = 1;
-        it->reached_the_end = 1;
-    }
-    it->cur = iterated_obj->front(iterated_obj);
-    if (it->cur == NULL)
-        return (TRUE);
-    idx_start = va_arg(*args, int);
-    if (idx_start == END)
-        idx_start = iterated_obj->contained_size ? iterated_obj->contained_size - 1 : 0;
-    i = 0;
-    while (i < idx_start)
-    {
-        it->next(it);
-        ++i;
-    }
-    return (TRUE);
-}*/
-
-Object          *variadic_func_definition(spl_list_it_ctor)
+Object          *ctor_definition(SPL_LIST_IT)
 {
     Container   *iterated_obj;
     Iterator    *it;
@@ -74,7 +43,7 @@ static Object   *_shallow_spl_list_iterator_ctor()
     return (new_obj(SPL_LIST_IT));
 }
 
-Object          *variadic_func_definition(dbl_list_it_ctor)
+Object          *ctor_definition(DBL_LIST_IT)
 {
     Container   *iterated_obj;
     Iterator    *it;
@@ -111,31 +80,7 @@ static Object   *_shallow_dbl_list_iterator_ctor()
     return (new_obj(DBL_LIST_IT));
 }
 
-/*
-static t_bool               _array_ra_iterator_ctor(Object *self, va_list *args)
-{
-    Container               *iterated_obj;
-    Iterator                *it;
-    RandomAccessIterator    *ra_it;
-    ssize_t                 idx_start;
-
-    it = self;
-    ra_it = (RandomAccessIterator *)it;
-    iterated_obj = va_arg(*args, void *);
-    it->iterated_obj = iterated_obj;
-    idx_start = va_arg(*args, int);
-    if (idx_start == END)
-        idx_start = iterated_obj->contained_size ? iterated_obj->contained_size - 1 : 0;
-    ra_it->jump(ra_it, idx_start);
-    if (iterated_obj->contained_size == 0)
-    {
-        it->reached_the_beginning = 1;
-        it->reached_the_end = 1;
-    }
-    return (TRUE);
-}*/
-
-Object                      *variadic_func_definition(array_it_ctor)
+Object                      *ctor_definition(ARRAY_IT)
 {
     Container               *iterated_obj;
     Iterator                *it;
@@ -165,31 +110,7 @@ static Object   *_shallow_array_iterator_ctor()
     return (new_obj(ARRAY_IT));
 }
 
-/*
-static t_bool               _string_ra_iterator_ctor(Object *self, va_list *args)
-{
-    String                  *iterated_obj;
-    Iterator                *it;
-    RandomAccessIterator    *ra_it;
-    ssize_t                 idx_start;
-
-    it = self;
-    ra_it = (RandomAccessIterator *)it;
-    iterated_obj = va_arg(*args, void *);
-    it->iterated_obj = iterated_obj;
-    idx_start = va_arg(*args, int);
-    if (idx_start == END)
-        idx_start = iterated_obj->contained_size ? iterated_obj->contained_size - 1 : 0;
-    ra_it->jump(ra_it, idx_start);
-    if (iterated_obj->contained_size == 0)
-    {
-        it->reached_the_beginning = 1;
-        it->reached_the_end = 1;
-    }
-    return (TRUE);
-}*/
-
-Object                      *variadic_func_definition(string_it_ctor)
+Object                      *ctor_definition(STRING_IT)
 {
     String                  *iterated_obj;
     Iterator                *it;
@@ -219,39 +140,7 @@ static Object   *_shallow_string_iterator_ctor()
     return (new_obj(STRING_IT));
 }
 
-/*
-static t_bool                   _dict_bidirectional_it_ctor(Object *self, va_list *args)
-{
-    Dict                        *iterated_obj;
-    Iterator                    *it;
-    DictBidirectionalIterator   *dict_it;
-    ssize_t                     idx_start;
-
-    it = self;
-    dict_it = (DictBidirectionalIterator *)it;
-    iterated_obj = va_arg(*args, void *);
-    it->iterated_obj = iterated_obj;
-    idx_start = va_arg(*args, int);
-    if (idx_start == END)
-    {
-        dict_it->internal_idx = iterated_obj->total_size;
-        it->previous(it);
-        it->it_idx = ((Container *)iterated_obj)->contained_size ? ((Container *)iterated_obj)->contained_size - 1 : 0;
-    }
-    else
-    {
-        it->next(it);
-        it->it_idx = 0;
-    }
-    if (((Container *)iterated_obj)->contained_size == 0)
-    {
-        it->reached_the_beginning = 1;
-        it->reached_the_end = 1;
-    }
-    return (TRUE);
-}*/
-
-Object                          *variadic_func_definition(dict_it_ctor)
+Object                          *ctor_definition(DICT_IT)
 {
     Dict                        *iterated_obj;
     Iterator                    *it;

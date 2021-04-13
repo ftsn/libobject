@@ -18,7 +18,7 @@ static Object   *_shared_list_ctor(Object *class, t_data **to_copy, ssize_t copy
     return (list);
 }
 
-Object          *variadic_func_definition(spl_list_ctor)
+Object          *ctor_definition(SPL_LIST)
 {
     return (_shared_list_ctor(args->class, args->to_copy, args->copy_amount));
 }
@@ -28,7 +28,7 @@ static Object   *_shallow_spl_list_ctor()
     return (new_obj(SPL_LIST));
 }
 
-Object          *variadic_func_definition(spl_clist_ctor)
+Object          *ctor_definition(SPL_CLIST)
 {
     return (_shared_list_ctor(args->class, args->to_copy, args->copy_amount));
 }
@@ -38,7 +38,7 @@ static Object   *_shallow_spl_clist_ctor()
     return (new_obj(SPL_CLIST));
 }
 
-Object          *variadic_func_definition(dbl_list_ctor)
+Object          *ctor_definition(DBL_LIST)
 {
     return (_shared_list_ctor(args->class, args->to_copy, args->copy_amount));
 }
@@ -48,7 +48,7 @@ static Object   *_shallow_dbl_list_ctor()
     return (new_obj(DBL_LIST));
 }
 
-Object          *variadic_func_definition(dbl_clist_ctor)
+Object          *ctor_definition(DBL_CLIST)
 {
     return (_shared_list_ctor(args->class, args->to_copy, args->copy_amount));
 }
@@ -221,7 +221,7 @@ static DblClist _dbl_clist_descr =
         &get_nth_node
     };
 
-Class *_spl_list = (Class *)&_spl_list_descr;
-Class *_spl_clist = (Class *)&_spl_clist_descr;
-Class *_dbl_list = (Class *)&_dbl_list_descr;
-Class *_dbl_clist = (Class *)&_dbl_clist_descr;
+Class *SPL_LIST = (Class *)&_spl_list_descr;
+Class *SPL_CLIST = (Class *)&_spl_clist_descr;
+Class *DBL_LIST = (Class *)&_dbl_list_descr;
+Class *DBL_CLIST = (Class *)&_dbl_clist_descr;

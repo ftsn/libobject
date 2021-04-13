@@ -33,14 +33,14 @@ typedef struct
     t_dict_remove   remove;
 } Dict;
 
+#define DICT  _dict
+
 // Constructor declaration
-variadic_func_declare(Object *, dict_ctor, Object *class;)
-#define _dict_ctor_(...)    call_variadic_func_wrapper(dict_ctor, __VA_ARGS__)
+ctor_declaration(Object *, DICT, Object *class;)
 
 t_bool  _dict_erase(Object *self);
 t_bool  dict_alloc(Container *dict, ssize_t new_size);
 
-#define DICT  _dict
 extern Class *DICT;
 
 #endif /* !DICTS_H_ */

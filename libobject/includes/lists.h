@@ -32,18 +32,16 @@ typedef enum    e_list_type
     CIRC_DOUBLE
 } t_list_type;
 
+#define SPL_LIST    _spl_list
+#define SPL_CLIST   _spl_clist
+#define DBL_LIST    _dbl_list
+#define DBL_CLIST   _dbl_clist
+
 // Constructors declarations
-variadic_func_declare(Object *, spl_list_ctor, Object *class; t_data **to_copy; ssize_t copy_amount;)
-#define _spl_list_ctor_(...)    call_variadic_func_wrapper(spl_list_ctor, __VA_ARGS__)
-
-variadic_func_declare(Object *, spl_clist_ctor, Object *class; t_data **to_copy; ssize_t copy_amount;)
-#define _spl_clist_ctor_(...)    call_variadic_func_wrapper(spl_clist_ctor, __VA_ARGS__)
-
-variadic_func_declare(Object *, dbl_list_ctor, Object *class; t_data **to_copy; ssize_t copy_amount;)
-#define _dbl_list_ctor_(...)    call_variadic_func_wrapper(dbl_list_ctor, __VA_ARGS__)
-
-variadic_func_declare(Object *, dbl_clist_ctor, Object *class; t_data **to_copy; ssize_t copy_amount;)
-#define _dbl_clist_ctor_(...)    call_variadic_func_wrapper(dbl_clist_ctor, __VA_ARGS__)
+ctor_declaration(Object *, SPL_LIST, Object *class; t_data **to_copy; ssize_t copy_amount;)
+ctor_declaration(Object *, SPL_CLIST, Object *class; t_data **to_copy; ssize_t copy_amount;)
+ctor_declaration(Object *, DBL_LIST, Object *class; t_data **to_copy; ssize_t copy_amount;)
+ctor_declaration(Object *, DBL_CLIST, Object *class; t_data **to_copy; ssize_t copy_amount;)
 
 t_bool  _spl_list_add(Object *list, void *data, t_type type, ssize_t pos);
 t_bool  _spl_clist_add(Object *list, void *data, t_type type, ssize_t pos);
@@ -60,11 +58,6 @@ t_bool  _list_erase(Object *self);
 Object  *_list_front(const Object *list);
 Object  *_list_end(const Object *list);
 Object  *_list_at(const Object *list, ssize_t pos);
-
-#define SPL_LIST    _spl_list
-#define SPL_CLIST   _spl_clist
-#define DBL_LIST    _dbl_list
-#define DBL_CLIST   _dbl_clist
 
 extern Class *SPL_LIST;
 extern Class *SPL_CLIST;

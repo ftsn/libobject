@@ -17,8 +17,6 @@ typedef struct
     dtor_t __del__;
 } Class;
 
-t_bool      static_new(const Class *class, Class *dest, ...);
-void        static_delete(Object *ptr, ...);
 Object      *new (const Class *class, ...);
 Object      *shallow_new_obj(const Class *class, ...);
 void        delete (Object *ptr, ...);
@@ -26,10 +24,13 @@ void        delete (Object *ptr, ...);
 Object      *_init_new_obj(const Class *class);
 
 #define _new_obj(obj_type, ...)         obj_type##_ctor_(_init_new_obj(obj_type),##__VA_ARGS__)
-#define new_obj(obj_type, ...)          \
-        _new_obj(obj_type, __VA_ARGS__)
+#define new_obj_(obj_type, ...)         call_variadic_func_wrapper(obj_type##_ctor, _init_new_obj(obj_type),##__VA_ARGS__)
+#define new_obj(obj_type, ...)          new_obj_(obj_type,##__VA_ARGS__)
 
-#define del_obj(obj, ...)  \
-        _##obj##_dtor_(obj,##__VA_ARGS__)
+#define ctor_declaration_(type, name, ...)      variadic_func_declare(type, name##_ctor,##__VA_ARGS__)
+#define ctor_declaration(type, name, ...)       ctor_declaration_(type, name,##__VA_ARGS__)
+
+#define ctor_definition_(name)                  variadic_func_definition(name##_ctor)
+#define ctor_definition(name)                   ctor_definition_(name)
 
 #endif /* !OBJECT_H_ */

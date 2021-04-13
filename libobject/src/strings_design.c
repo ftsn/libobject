@@ -18,7 +18,7 @@ static t_bool   copy_ctor(String *string, char *copy, ssize_t size)
     return (TRUE);
 }
 
-Object      *variadic_func_definition(string_ctor) {
+Object      *ctor_definition(STRING) {
     String  *string;
 
     string = args->class;
@@ -86,4 +86,4 @@ static String _string_descr =
         &_string_sub
     };
 
-Class *_string = (Class *)&_string_descr;
+Class *STRING = (Class *)&_string_descr;

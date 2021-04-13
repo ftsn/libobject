@@ -4,37 +4,6 @@
 #include "object.h"
 #include "utils.h"
 
-/*
-static t_bool   static_va_new(const Class *class, Class *dest, va_list *ap)
-{
-    memcpy(dest, class, class->__size__);
-    return (dest->__init__(dest, ap));
-}
-
-t_bool      static_new(const Class *class, Class *dest, ...)
-{
-    t_bool  b;
-    va_list ap;
-
-    va_start(ap, dest);
-    b = static_va_new(class, dest, &ap);
-    va_end(ap);
-    return (b);
-}
-
-void        static_delete(Object *ptr, ...)
-{
-    Class   *class;
-    va_list ap;
-
-    if (!ptr)
-        return;
-    va_start(ap, ptr);
-    class = ptr;
-    class->__del__(ptr, &ap);
-    va_end(ap);
-}
-*/
 static Object   *va_new(const Class *class, va_list *ap)
 {
     Object      *new;

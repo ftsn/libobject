@@ -5,7 +5,7 @@
 #include "iterators.h"
 #include "lists.h"
 
-Object          *variadic_func_definition(dict_ctor) {
+Object          *ctor_definition(DICT) {
     Container   *dict;
 
     dict = args->class;
@@ -74,4 +74,4 @@ static Dict _dict_descr =
         &_dict_remove,
     };
 
-Class   *_dict = (Class *)&_dict_descr;
+Class   *DICT = (Class *)&_dict_descr;

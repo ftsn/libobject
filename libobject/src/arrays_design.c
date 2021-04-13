@@ -3,7 +3,7 @@
 #include "arrays.h"
 #include "iterators.h"
 
-Object          *variadic_func_definition(array_ctor) {
+Object          *ctor_definition(ARRAY) {
     Container   *array;
 
     array = args->class;
@@ -87,4 +87,4 @@ static Array _array_descr =
         0
     };
 
-Class *_array = (Class *)&_array_descr;
+Class *ARRAY = (Class *)&_array_descr;

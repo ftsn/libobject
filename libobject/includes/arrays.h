@@ -19,9 +19,10 @@ typedef struct
     ssize_t     total_size;
 } Array;
 
+#define ARRAY   _array
+
 // Constructor declaration
-variadic_func_declare(Object *, array_ctor, Object *class; t_data **to_copy; ssize_t copy_amount;)
-#define _array_ctor_(...)    call_variadic_func_wrapper(array_ctor, __VA_ARGS__)
+ctor_declaration(Object *, ARRAY, Object *class; t_data **to_copy; ssize_t copy_amount;)
 
 t_bool  array_alloc(Container *array, ssize_t size, t_array_opr operation, ...);
 
@@ -35,7 +36,6 @@ Object  *_array_at(const Object *self, ssize_t pos);
 
 void    array_basic_print(ssize_t i, const t_data *elem, const char *prefix);
 
-#define ARRAY   _array
 extern Class    *ARRAY;
 
 #endif /* !ARRAYS_H_ */
