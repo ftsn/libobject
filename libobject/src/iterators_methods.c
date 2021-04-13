@@ -263,20 +263,20 @@ inline Object  *_dict_bidirectional_it_dereference(Iterator *it)
     return (it->cur ? ((t_list_data *)it->cur)->data : NULL);
 }
 
-Object              *generate_it(const Object *self, t_it_type type)
+Object              *generate_it(Object *self, t_it_type type)
 {
     Iterator        *it;
 
     it = NULL;
     if (is_spl_list(self) == TRUE)
-        it = new(_spl_list_forward_it, self, type);
+        it = new_obj(SPL_LIST_IT, .iterable = self, .start_pos = type);
     else if (is_dbl_list(self) == TRUE)
-        it = new(_dbl_list_bidirectional_it, self, type);
+        it = new_obj(DBL_LIST_IT, .iterable = self, .start_pos = type);
     else if (is_of_type(self, TYPE_ARRAY) == TRUE)
-        it = new(_array_ra_it, self, type);
+        it = new_obj(ARRAY_IT, .iterable = self, .start_pos = type);
     else if (is_of_type(self, TYPE_DICT) == TRUE)
-        it = new(_dict_ra_it, self, type);
+        it = new_obj(DICT_IT, .iterable = self, .start_pos = type);
     else if (is_of_type(self, TYPE_STRING) == TRUE)
-        it = new(_string_ra_it, self, type);
+        it = new_obj(STRING_IT, .iterable = self, .start_pos = type);
     return (it);
 }

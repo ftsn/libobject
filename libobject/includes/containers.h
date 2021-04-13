@@ -30,8 +30,8 @@ typedef Object  *(*t_access)(const Object *container);
 
 typedef Object  *(*t_rand_access)(const Object *contained, ssize_t pos);
 
-typedef void    (*t_dump)(const Object *self, const char *title, void (*f)(const t_data *elem, const char *prefix), const char *prefix);
-void            _container_print(const Object *container, const char *title, void (*f)(const t_data *elem, const char *prefix), const char *prefix);
+typedef void    (*t_dump)(Object *self, const char *title, void (*f)(const t_data *elem, const char *prefix), const char *prefix);
+void            _container_print(Object *container, const char *title, void (*f)(const t_data *elem, const char *prefix), const char *prefix);
 void            typed_basic_print(const t_data *elem, const char *prefix);
 
 typedef Object  *(*t_converter)(Object *self, Class *type);
@@ -43,9 +43,9 @@ Object          *_container_sub(Object *self, Class *type, ssize_t begin, ssize_
 typedef Object  *(*t_map)(Object *self, Class *type, t_data (*fptr)(ssize_t i, void *cur));
 Object          *_container_map(Object *self, Class *type, t_data (*fptr)(ssize_t i, void *cur));
 
-typedef Object  *(*t_it_create)(const Object *self);
-Object          *_container_begin(const Object *self);
-Object          *_container_end(const Object *self);
+typedef Object  *(*t_it_create)(Object *self);
+Object          *_container_begin(Object *self);
+Object          *_container_end(Object *self);
 
 typedef struct {
     Class           base;

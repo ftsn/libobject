@@ -22,8 +22,8 @@ SRCS    =	main		\
 		spl_list_tests	\
 		spl_clist_tests	\
 		dbl_list_tests	\
-		dbl_clist_tests
-#		iterator_tests
+		dbl_clist_tests	\
+		iterator_tests
 
 SRCS	:=	$(addsuffix .$(EXT), $(SRCS))
 

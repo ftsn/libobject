@@ -76,7 +76,7 @@ static String _string_descr =
         &_string_begin,
         &_string_end,
 
-        &_string_dup,
+        NULL,
         &_string_findstr,
         &_string_find,
         &_string_lfind,

@@ -131,7 +131,7 @@ void typed_basic_print(const t_data *elem, const char *prefix)
     }
 }
 
-void            _container_print(const Object *container,
+void            _container_print(Object *container,
                                  const char *title,
                                  void (*f)(const t_data *elem, const char *prefix),
                                  const char *prefix)
@@ -142,7 +142,7 @@ void            _container_print(const Object *container,
     char        *recursion_title;
     ssize_t     i;
 
-    if (!(it = ((const Container *)container)->begin(container)))
+    if (!(it = ((Container *)container)->begin(container)))
         return;
     i = 0;
     if (!(concat_prefix = concat(prefix, "  ")))
@@ -192,6 +192,7 @@ Object          *_container_to_type(Object *self, Class *type)
         return (NULL);
     if (!(it = self_c->begin(self_c)))
     {
+        printf("PAS D'IT JE REPETE PAS D'IT\n");
         delete(ctn);
         return (NULL);
     }
@@ -284,12 +285,12 @@ Object          *_container_map(Object *self, Class *type, t_data (*fptr)(ssize_
     return (ctn);
 }
 
-Object  *_container_begin(const Object *self)
+Object  *_container_begin(Object *self)
 {
     return (generate_it(self, BEGIN));
 }
 
-Object  *_container_end(const Object *self)
+Object  *_container_end(Object *self)
 {
     return (generate_it(self, END));
 }

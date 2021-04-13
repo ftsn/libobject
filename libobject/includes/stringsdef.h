@@ -31,9 +31,9 @@ char            *_string_at(const String *self, ssize_t pos);
 typedef void    (*t_str_dump)(const String *self, const char *title);
 void            _string_print(const String *self, const char *title);
 
-typedef Object  *(*t_str_it_create)(const Object *self);
-Object          *_string_begin(const Object *self);
-Object          *_string_end(const Object *self);
+typedef Object  *(*t_str_it_create)(Object *self);
+Object          *_string_begin(Object *self);
+Object          *_string_end(Object *self);
 
 typedef String  *(*t_dup)(const String *self);
 String          *_string_dup(const String *self);

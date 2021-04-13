@@ -84,12 +84,34 @@ struct s_ra_iterator {
     ssize_t             ra_idx;
 };
 
-Object  *generate_it(const Object *self, t_it_type type);
+// Constructor declaration
+variadic_func_declare(Object *, spl_list_it_ctor, Object *class; Object *iterable; t_it_type start_pos;)
+#define _spl_list_it_ctor_(...)    call_variadic_func_wrapper(spl_list_it_ctor, __VA_ARGS__)
 
-extern Class *_array_ra_it;
-extern Class *_string_ra_it;
-extern Class *_dict_ra_it;
-extern Class *_spl_list_forward_it;
-extern Class *_dbl_list_bidirectional_it;
+variadic_func_declare(Object *, dbl_list_it_ctor, Object *class; Object *iterable; t_it_type start_pos;)
+#define _dbl_list_it_ctor_(...)    call_variadic_func_wrapper(dbl_list_it_ctor, __VA_ARGS__)
+
+variadic_func_declare(Object *, array_it_ctor, Object *class; Object *iterable; t_it_type start_pos;)
+#define _array_it_ctor_(...)    call_variadic_func_wrapper(array_it_ctor, __VA_ARGS__)
+
+variadic_func_declare(Object *, string_it_ctor, Object *class; Object *iterable; t_it_type start_pos;)
+#define _string_it_ctor_(...)    call_variadic_func_wrapper(string_it_ctor, __VA_ARGS__)
+
+variadic_func_declare(Object *, dict_it_ctor, Object *class; Object *iterable; t_it_type start_pos;)
+#define _dict_it_ctor_(...)    call_variadic_func_wrapper(dict_it_ctor, __VA_ARGS__)
+
+Object  *generate_it(Object *self, t_it_type type);
+
+#define SPL_LIST_IT _spl_list_it
+#define DBL_LIST_IT _dbl_list_it
+#define ARRAY_IT    _array_it
+#define STRING_IT   _string_it
+#define DICT_IT     _dict_it
+
+extern Class *ARRAY_IT;
+extern Class *STRING_IT;
+extern Class *DICT_IT;
+extern Class *SPL_LIST_IT;
+extern Class *DBL_LIST_IT;
 
 #endif /* !ITERATORS_H_ */

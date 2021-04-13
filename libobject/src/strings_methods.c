@@ -88,12 +88,12 @@ void    _string_print(const String *self, const char *title)
     printf("%s[%s]\n", title, (char *)self->contained);
 }
 
-Object  *_string_begin(const Object *self)
+Object  *_string_begin(Object *self)
 {
     return (generate_it(self, BEGIN));
 }
 
-Object  *_string_end(const Object *self)
+Object  *_string_end(Object *self)
 {
     return (generate_it(self, END));
 }
