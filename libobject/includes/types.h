@@ -14,15 +14,24 @@ typedef enum e_type
     TYPE_CHAR,
     TYPE_UCHAR,
     TYPE_CSTRING,
+    TYPE_SHORT,
+    TYPE_USHORT,
     TYPE_INT,
     TYPE_UINT,
     TYPE_LONG,
     TYPE_ULONG,
+    TYPE_INT32,
+    TYPE_UINT32,
     TYPE_INT64,
     TYPE_UINT64,
+    TYPE_LONGLONG,
+    TYPE_ULONGLONG,
+    TYPE_INTMAX,
+    TYPE_UINTMAX,
     TYPE_DOUBLE,
     TYPE_FLOAT,
     TYPE_PTR,
+    TYPE_PTRDIFF,
 
     /* Bool type defined below */
     TYPE_BOOL,
@@ -42,16 +51,19 @@ typedef enum e_type
 
     /* Iterators */
     _TYPE_ITERATOR_BEGIN,
-    TYPE_ARRAY_RA_ITERATOR,
-    TYPE_STRING_RA_ITERATOR,
-    TYPE_SPL_LIST_FORWARD_ITERATOR,
-    TYPE_DBL_LIST_BIDIRECTIONAL_ITERATOR,
-    TYPE_DICT_BIDIRECTIONAL_ITERATOR,
+    TYPE_ARRAY_ITERATOR,
+    TYPE_STRING_ITERATOR,
+    TYPE_SPL_LIST_ITERATOR,
+    TYPE_DBL_LIST_ITERATOR,
+    TYPE_DICT_ITERATOR,
     _TYPE_ITERATOR_END,
 
     /* Other classes */
     TYPE_STRING,
     TYPE_PAIR,
+
+    /* Should always be at the end of the enum */
+    LOBJ_LAST_TYPE,
 } t_type;
 
 typedef struct

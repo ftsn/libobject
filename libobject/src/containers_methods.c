@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <inttypes.h>
+#include <stddef.h>
 #include "containers.h"
 #include "iterators.h"
 #include "utils.h"
@@ -91,6 +92,12 @@ void typed_basic_print(const t_data *elem, const char *prefix)
         case TYPE_CSTRING:
             printf("[%s]\n", (char *)elem->data);
             break;
+        case TYPE_SHORT:
+            printf("[%hd]\n", *(short *)elem->data);
+            break;
+        case TYPE_USHORT:
+            printf("[%hu]\n", *(unsigned short *)elem->data);
+            break;
         case TYPE_INT:
             printf("[%d]\n", *(int *)elem->data);
             break;
@@ -103,11 +110,29 @@ void typed_basic_print(const t_data *elem, const char *prefix)
         case TYPE_ULONG:
             printf("[%lu]\n", *(unsigned long *)elem->data);
             break;
+        case TYPE_INT32:
+            printf("[%" PRId32 "]\n", *(int32_t *)elem->data);
+            break;
+        case TYPE_UINT32:
+            printf("[%" PRIu32 "]\n", *(uint32_t *)elem->data);
+            break;
         case TYPE_INT64:
             printf("[%" PRId64 "]\n", *(int64_t *)elem->data);
             break;
         case TYPE_UINT64:
             printf("[%" PRIu64 "]\n", *(uint64_t *)elem->data);
+            break;
+        case TYPE_LONGLONG:
+            printf("[%lld]\n", *(long long *)elem->data);
+            break;
+        case TYPE_ULONGLONG:
+            printf("[%llu]\n", *(unsigned long long *)elem->data);
+            break;
+        case TYPE_INTMAX:
+            printf("[%jd]\n", *(intmax_t *)elem->data);
+            break;
+        case TYPE_UINTMAX:
+            printf("[%ju]\n", *(uintmax_t *)elem->data);
             break;
         case TYPE_DOUBLE:
             printf("[%f]\n", *(double *)elem->data);
@@ -118,16 +143,20 @@ void typed_basic_print(const t_data *elem, const char *prefix)
         case TYPE_PTR:
             printf("[%p]\n", elem->data);
             break;
+        case TYPE_PTRDIFF:
+            printf("[%tx]\n", *(ptrdiff_t *)elem->data);
+            break;
         case TYPE_BOOL:
             printf("[%s]\n", *(t_bool *)elem->data == TRUE ? "True" : "False");
             break;
         case TYPE_PAIR:
             printf("[%s] => ", ((const t_pair *)elem->data)->key);
             if (is_container(elem->data) == TRUE)
-                _container_print(elem->data, "Sub dict", typed_basic_print, "");
+                _container_print(elem->data, "Sub container", typed_basic_print, "");
             else
                 typed_basic_print(elem->data, prefix);
-        default:;
+        default:
+            printf("Type not detected: [%p]\n", elem->data);
     }
 }
 
@@ -192,7 +221,6 @@ Object          *_container_to_type(Object *self, Class *type)
         return (NULL);
     if (!(it = self_c->begin(self_c)))
     {
-        printf("PAS D'IT JE REPETE PAS D'IT\n");
         delete(ctn);
         return (NULL);
     }

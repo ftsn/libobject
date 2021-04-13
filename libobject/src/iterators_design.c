@@ -185,7 +185,7 @@ static RandomAccessIterator _array_ra_it_descr =
     {
         {
             {
-                TYPE_ARRAY_RA_ITERATOR,
+                TYPE_ARRAY_ITERATOR,
                 sizeof(RandomAccessIterator),
                 &_shallow_array_iterator_ctor,
                 &_iterator_dtor
@@ -219,7 +219,7 @@ static RandomAccessIterator _string_ra_it_descr =
     {
         {
             {
-                TYPE_STRING_RA_ITERATOR,
+                TYPE_STRING_ITERATOR,
                 sizeof(RandomAccessIterator),
                 &_shallow_string_iterator_ctor,
                 &_iterator_dtor
@@ -252,7 +252,7 @@ Class *STRING_IT = (Class *)&_string_ra_it_descr;
 static ForwardIterator _spl_list_forward_it_descr =
     {
         {
-            TYPE_SPL_LIST_FORWARD_ITERATOR,
+            TYPE_SPL_LIST_ITERATOR,
             sizeof(ForwardIterator),
             &_shallow_spl_list_iterator_ctor,
             &_iterator_dtor
@@ -276,7 +276,7 @@ Class *SPL_LIST_IT = (Class *)&_spl_list_forward_it_descr;
 static BidirectionalIterator _dbl_list_bidirectional_it_descr =
     {
         {
-            TYPE_DBL_LIST_BIDIRECTIONAL_ITERATOR,
+            TYPE_DBL_LIST_ITERATOR,
             sizeof(BidirectionalIterator),
             &_shallow_dbl_list_iterator_ctor,
             &_iterator_dtor
@@ -301,7 +301,7 @@ static DictBidirectionalIterator _dict_bidirectional_it_descr =
     {
         {
             {
-                TYPE_DICT_BIDIRECTIONAL_ITERATOR,
+                TYPE_DICT_ITERATOR,
                 sizeof(DictBidirectionalIterator),
                 &_shallow_dict_iterator_ctor,
                 &_iterator_dtor,
