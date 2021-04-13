@@ -17,13 +17,11 @@ typedef struct
     dtor_t __del__;
 } Class;
 
-Object      *new (const Class *class, ...);
 Object      *shallow_new_obj(const Class *class, ...);
 void        delete (Object *ptr, ...);
 
 Object      *_init_new_obj(const Class *class);
 
-#define _new_obj(obj_type, ...)         obj_type##_ctor_(_init_new_obj(obj_type),##__VA_ARGS__)
 #define new_obj_(obj_type, ...)         call_variadic_func_wrapper(obj_type##_ctor, _init_new_obj(obj_type),##__VA_ARGS__)
 #define new_obj(obj_type, ...)          new_obj_(obj_type,##__VA_ARGS__)
 

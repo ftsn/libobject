@@ -101,7 +101,7 @@ Object  *_string_end(Object *self)
 // To remove?
 String  *_string_dup(const String *self)
 {
-    return (new(_string, self->contained, 0));
+    return (new_obj(STRING, .to_copy = self->contained, .copy_amount = COPY_ALL));
 }
 
 char    *_string_findstr(const String *self, const char *substr)
