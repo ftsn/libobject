@@ -9,14 +9,11 @@ Object  *shallow_new_obj(const Class *class, ...)
     return (class->__init__());
 }
 
-void        delete(Object *ptr)
+void    delete(Object *ptr)
 {
-    Class   *class;
-
     if (!ptr)
         return;
-    class = ptr;
-    class->__del__(ptr);
+    ((Class *)ptr)->__del__(ptr);
     free(ptr);
 }
 
