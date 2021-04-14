@@ -770,7 +770,7 @@ static void string_split_null_string_with_null_token_string(void **state)
     String  *str;
 
     str = new_obj(STRING);
-    assert_null(str->split(str, _array, NULL));
+    assert_null(str->split(str, ARRAY, NULL));
     delete(str);
     (void)state;
 }
@@ -780,7 +780,7 @@ static void string_split_null_string_with_empty_token_string(void **state)
     String  *str;
 
     str = new_obj(STRING);
-    assert_null(str->split(str, _array, ""));
+    assert_null(str->split(str, ARRAY, ""));
     delete(str);
     (void)state;
 }
@@ -790,7 +790,7 @@ static void string_split_normal_string_with_null_token_string(void **state)
     String  *str;
 
     str = new_obj(STRING, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    assert_null(str->split(str, _array, NULL));
+    assert_null(str->split(str, ARRAY, NULL));
     delete(str);
     (void)state;
 }
@@ -801,7 +801,7 @@ static void     string_split_normal_string_with_empty_token_string(void **state)
     Container   *array;
 
     str = new_obj(STRING, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    array = str->split(str, _array, "");
+    array = str->split(str, ARRAY, "");
     assert_non_null(array);
     assert_non_null(array->contained);
     assert_int_equal(array->contained_size, 1);
@@ -817,7 +817,7 @@ static void     string_split_normal_string_with_non_matching_single_char_token_s
     Container   *array;
 
     str = new_obj(STRING, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    array = str->split(str, _array, ",");
+    array = str->split(str, ARRAY, ",");
     assert_non_null(array);
     assert_non_null(array->contained);
     assert_int_equal(array->contained_size, 1);
@@ -833,7 +833,7 @@ static void     string_split_normal_string_with_non_matching_multiple_char_token
     Container   *array;
 
     str = new_obj(STRING, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    array = str->split(str, _array, ",;");
+    array = str->split(str, ARRAY, ",;");
     assert_non_null(array);
     assert_non_null(array->contained);
     assert_int_equal(array->contained_size, 1);
@@ -849,7 +849,7 @@ static void     string_split_normal_string_with_matching_single_char_token_strin
     Container   *array;
 
     str = new_obj(STRING, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    array = str->split(str, _array, "o");
+    array = str->split(str, ARRAY, "o");
     assert_non_null(array);
     assert_non_null(array->contained);
     assert_int_equal(array->contained_size, 2);
@@ -866,7 +866,7 @@ static void     string_split_normal_string_with_matching_multiple_char_token_str
     Container   *array;
 
     str = new_obj(STRING, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    array = str->split(str, _array, "oa");
+    array = str->split(str, ARRAY, "oa");
     assert_non_null(array);
     assert_non_null(array->contained);
     assert_int_equal(array->contained_size, 3);

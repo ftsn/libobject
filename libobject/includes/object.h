@@ -31,4 +31,25 @@ Object      *_init_new_obj(const Class *class);
 #define ctor_definition_(name)                  variadic_func_definition(name##_ctor)
 #define ctor_definition(name)                   ctor_definition_(name)
 
+#define class_declaration(class_type, blueprint_name, ...)  \
+        typedef struct                                      \
+        {                                                   \
+            __VA_ARGS__                                     \
+        } class_type;                                       \
+        extern Class    *blueprint_name;
+#define class_definition_(class_type, blueprint_name, ...)  \
+        static Object   *_shallow_##blueprint_name##_ctor() \
+        {                                                   \
+            return (new_obj(blueprint_name));               \
+        }                                                   \
+        static class_type blueprint_name##_ = {             \
+            __VA_ARGS__                                     \
+        };                                                  \
+        Class *blueprint_name = (Class *)&blueprint_name##_;
+#define class_definition(class_type, blueprint_name, ...)   class_definition_(class_type, blueprint_name,##__VA_ARGS__)
+
+#define TEST    _test
+class_declaration(Test, TEST, Class base; int nb;)
+ctor_declaration(Object *, TEST, Object *class; int nb;)
+
 #endif /* !OBJECT_H_ */
