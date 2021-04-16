@@ -140,7 +140,7 @@ t_bool  _string_match(const String *self, const char *compare)
 
 ssize_t  _string_nmatch(const String *self, const char *compare)
 {
-    return (self->contained && compare ? nmatch((char *)self->contained, compare) : -1);
+    return (self->contained && compare ? (ssize_t)nmatch((char *)self->contained, compare) : -1);
 }
 
 Object          *_string_split(const String *self, const Class *type, const char *sep)

@@ -155,6 +155,7 @@ void typed_basic_print(const t_data *elem, const char *prefix)
                 _container_print(elem->data, "Sub container", typed_basic_print, "");
             else
                 typed_basic_print(elem->data, prefix);
+            break;
         default:
             printf("Type not detected: [%p]\n", elem->data);
     }

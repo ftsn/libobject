@@ -4,10 +4,12 @@
 # include "containers.h"
 
 # define CHUNK_SIZE 50
-# define DICT_ALLOC_SIZE(s) (((s) / CHUNK_SIZE + 1) * CHUNK_SIZE)
-# define DICT_REALLOC_SIZE(s) ((s) * 2)
-# define MAX_LOAD_BEFORE_REALLOC ((float)0.05)
-# define MIN_LOAD_BEFORE_REALLOC ((float)0.40)
+# define LOAD_FACTOR(dict_obj)              ((float)((Container *)dict_obj)->contained_size / (float)((Dict *)dict_obj)->total_size)
+# define MAX_LOAD_BEFORE_REALLOC            ((float)0.70)
+# define MIN_LOAD_BEFORE_REALLOC            ((float)0.20)
+# define LOAD_AFTER_REALLOC                 ((float)0.40)
+# define DICT_ALLOC_SIZE(s)                 (((s) / CHUNK_SIZE + 1) * CHUNK_SIZE)
+# define DICT_REALLOC_SIZE(s, wanted_load)  ((s) / wanted_load)
 
 typedef struct  s_pair
 {

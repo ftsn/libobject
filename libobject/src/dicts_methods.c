@@ -198,9 +198,9 @@ t_bool          _dict_push(Object *self, unsigned char *key, void *data, t_type 
     Container   *self_c;
 
     self_c = self;
-    if ((float)self_c->contained_size / (float)((Dict *)self)->total_size > MAX_LOAD_BEFORE_REALLOC)
+    if (LOAD_FACTOR(self) > MAX_LOAD_BEFORE_REALLOC)
     {
-        if (dict_alloc(self, DICT_REALLOC_SIZE(((Dict *)self)->total_size)) == FALSE)
+        if (dict_alloc(self, DICT_REALLOC_SIZE(self_c->contained_size, LOAD_AFTER_REALLOC)) == FALSE)
             return (FALSE);
     }
     return (_dict_push_no_resizing(self, key, data, type));
@@ -235,9 +235,9 @@ t_bool          _dict_remove(Object *self, const unsigned char *key)
         cur = cur->next;
         ++i;
     }
-    if (((Dict *)self)->total_size > CHUNK_SIZE && (float)self_c->contained_size / (float)((Dict *)self)->total_size < MIN_LOAD_BEFORE_REALLOC)
+    if (((Dict *)self)->total_size > CHUNK_SIZE && LOAD_FACTOR(self) < MIN_LOAD_BEFORE_REALLOC)
     {
-        if (dict_alloc(self, DICT_ALLOC_SIZE(self_c->contained_size)) == FALSE)
+        if (dict_alloc(self, DICT_REALLOC_SIZE(self_c->contained_size, LOAD_AFTER_REALLOC)) == FALSE)
             return (FALSE);
     }
     return (TRUE);
