@@ -26,18 +26,16 @@ t_bool          _dict_push(Object *self, unsigned char *key, void *data, t_type 
 typedef t_bool  (*t_dict_remove)(Object *self, const unsigned char *key);
 t_bool          _dict_remove(Object *self, const unsigned char *key);
 
-typedef struct
-{
+#define DICT  _dict
+
+// Class and constructor declaration
+class_declaration(Dict, DICT,
     Container       base;
     ssize_t         total_size;
     t_obj_by_key    get_by_key;
     t_dict_push     push;
     t_dict_remove   remove;
-} Dict;
-
-#define DICT  _dict
-
-// Constructor declaration
+)
 ctor_declaration(Object *, DICT, Object *class;)
 
 t_bool  _dict_erase(Object *self);

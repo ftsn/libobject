@@ -47,7 +47,9 @@ typedef Object  *(*t_it_create)(Object *self);
 Object          *_container_begin(Object *self);
 Object          *_container_end(Object *self);
 
-typedef struct {
+#define CONTAINER   _container
+
+class_declaration(Container, CONTAINER,
     Class           base;
     Object          *contained;
 
@@ -75,7 +77,7 @@ typedef struct {
 
     t_it_create     begin;
     t_it_create     end;
-} Container;
+)
 
 t_bool  ctn_copy_ctor(Container *ctn, t_data **copy, ssize_t size);
 

@@ -65,11 +65,8 @@ struct s_iterator {
 
 typedef struct s_dict_bidirectional_iterator {
     Iterator    base;
-
     ssize_t     internal_idx;
 } DictBidirectionalIterator;
-
-
 
 struct s_ra_iterator {
     Iterator            base;

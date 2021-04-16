@@ -4,7 +4,7 @@
 # include "containers.h"
 
 // Forward declaration of the String class so we can use the type in our methods
-typedef struct s_string String;
+forward_class_declaration(String)
 
 typedef t_bool  (*t_str_rand_insert)(String *self, char c, ssize_t pos);
 t_bool          _string_insert_at(String *string, char c, ssize_t pos);
@@ -57,8 +57,10 @@ Object          *_string_split(const String *self, const Class *type, const char
 typedef char    *(*t_str_sub)(const String *self, ssize_t begin, ssize_t len);
 char            *_string_sub(const String *self, ssize_t begin, ssize_t len);
 
-struct s_string
-{
+#define STRING  _string
+
+// Class and constructor declaration
+forward_declared_class_declaration(String, STRING,
     Class               base;
     char                *contained;
     ssize_t             contained_size;
@@ -91,11 +93,7 @@ struct s_string
     t_str_nmatch        nmatch;
     t_str_split         split;
     t_str_sub           sub;
-};
-
-#define STRING  _string
-
-// Constructor declaration
+)
 ctor_declaration(Object *, STRING, Object *class; char *to_copy; ssize_t copy_amount;)
 
 extern Class    *STRING;

@@ -13,15 +13,13 @@ typedef enum e_array_opr
     ARRAY_DELETION,
 } t_array_opr;
 
-typedef struct
-{
-    Container   base;
-    ssize_t     total_size;
-} Array;
-
 #define ARRAY   _array
 
-// Constructor declaration
+// Class and constructor declaration
+class_declaration(Array, ARRAY,
+    Container   base;
+    ssize_t     total_size;
+)
 ctor_declaration(Object *, ARRAY, Object *class; t_data **to_copy; ssize_t copy_amount;)
 
 t_bool  array_alloc(Container *array, ssize_t size, t_array_opr operation, ...);
