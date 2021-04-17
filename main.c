@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <stddef.h>
 #include "arrays.h"
 #include "lists.h"
 #include "stringsdef.h"
@@ -8,7 +9,10 @@
 #include "dicts.h"
 #include "variadic.h"
 
-class_definition(Test, TEST, .base = { .__size__ = sizeof(Test), .__init__ = _shallow__test_ctor })
+class_definition(Test, TEST,
+    class_metadata(Test, TEST, TYPE_ABSTRACT, NULL),
+    12
+)
 Object      *ctor_definition(TEST) {
     Test    *test;
 
@@ -16,6 +20,23 @@ Object      *ctor_definition(TEST) {
     test->nb = args->nb;
     return (args->class);
 }
+
+typedef struct {
+    int z;
+    int k;
+} gr8parent;
+
+typedef struct {
+    gr8parent;
+    int y;
+} parent;
+
+struct child {
+    parent;
+    int toto;
+};
+
+struct child childzer;
 
 int     main(int ac, char **av)
 {
@@ -30,5 +51,10 @@ int     main(int ac, char **av)
 
     test = new_obj(TEST, .nb=555);
     printf("Test nb: %d %d\n", ((Class *)test)->__type__, test->nb);
+
+
+    gr8parent gr8 = {100, 200};
+    unsigned char *bar = (void *)&gr8;
+    printf("%d\n", *(int *)(bar + offsetof( gr8parent, k )));
     return (1);
 }

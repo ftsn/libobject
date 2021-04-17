@@ -56,6 +56,25 @@ Object      *_init_new_obj(const Class *class);
         class_declaration_(class_type, blueprint_name,##__VA_ARGS__)
 
 // Class definition macros
+#define abstract_class_metadata_(class_type)    \
+        {                                       \
+            TYPE_ABSTRACT,                      \
+            sizeof(class_type),                 \
+            NULL,                               \
+            NULL                                \
+        },
+#define abstract_class_metadata(class_type)     \
+        abstract_class_metadata_(class_type)
+#define class_metadata_(class_type, blueprint_name, type, dtor) \
+        {                                                       \
+            type,                                               \
+            sizeof(class_type),                                 \
+            _shallow_##blueprint_name##_ctor,                   \
+            dtor                                                \
+        }
+#define class_metadata(class_type, blueprint_name, type, dtor)  \
+        class_metadata_(class_type, blueprint_name, type, dtor)
+
 #define abstract_class_definition_(class_type, blueprint_name, ...) \
         static class_type blueprint_name##_ = {                     \
             __VA_ARGS__                                             \
@@ -75,7 +94,7 @@ Object      *_init_new_obj(const Class *class);
 #define class_definition(class_type, blueprint_name, ...)   class_definition_(class_type, blueprint_name,##__VA_ARGS__)
 
 #define TEST    _test
-class_declaration(Test, TEST, Class base; int nb;)
+class_declaration(Test, TEST, Class; int nb;)
 ctor_declaration(Object *, TEST, Object *class; int nb;)
 
 #endif /* !OBJECT_H_ */

@@ -38,6 +38,7 @@ typedef enum e_type
     _TYPE_PRIMARY_END,
 
     /* Classes types */
+    TYPE_ABSTRACT,
 
     /* Containers */
     _TYPE_CONTAINER_BEGIN,

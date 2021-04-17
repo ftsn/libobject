@@ -10,7 +10,7 @@ OBJDIR	=	build
 
 LIBSDIR	=	libs
 
-CFLAGS	=	-Wall -Wextra -std=c99 -g3
+CFLAGS	=	-Wall -Wextra -std=c11 -fms-extensions -Wno-microsoft-anon-tag -g3
 CFLAGS	+=	-I./includes/
 
 VPATH	=	src/

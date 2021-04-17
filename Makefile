@@ -9,7 +9,7 @@ LIBDIR	=	libobject
 
 TESTDIR =       tests
 
-CFLAGS	=	-Wall -Wextra -g3 -D_GNU_SOURCE
+CFLAGS	=	-Wall -Wextra -std=c11 -fms-extensions -Wno-microsoft-anon-tag -g3 -D_GNU_SOURCE
 CFLAGS	+=	-I./srcs/includes/	\
 		-I./$(LIBDIR)/includes/
 LDFLAGS	+=	-L$(LIBDIR) -lobject

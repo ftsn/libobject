@@ -8,7 +8,7 @@ OBJDIR	=	build
 
 LIBDIR	=	../libobject
 
-CFLAGS	=	-Wall -Wextra -std=c99 -g3
+CFLAGS	=	-Wall -Wextra -std=c11 -fms-extensions -Wno-microsoft-anon-tag -g3
 CFLAGS	+=	-I$(LIBDIR)/includes
 
 LDFLAGS	+=	-L$(LIBDIR) -lobject -lcmocka
