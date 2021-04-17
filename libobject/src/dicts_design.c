@@ -19,12 +19,7 @@ Object          *ctor_definition(DICT) {
     return (dict);
 }
 
-static Object   *_shallow_dict_ctor()
-{
-    return (new_obj(DICT));
-}
-
-static void     _dict_dtor(Object *self)
+static void     dict_dtor(Object *self)
 {
     ((Container *)self)->erase(self);
     free(((Container *)self)->contained);
@@ -32,45 +27,37 @@ static void     _dict_dtor(Object *self)
     ((Container *)self)->contained_size = 0;
 }
 
-static Dict _dict_descr =
+class_definition(Dict, DICT,
     {
-        {
-            {
-                TYPE_DICT,
-                sizeof(Dict),
-                &_shallow_dict_ctor,
-                &_dict_dtor
-            },
-            NULL,
-            0,
-
-            &_container_data,
-            &_container_size,
-            &_container_empty,
-
-            NULL, // insert_at
-            NULL, // push_back
-            NULL, // delete_at
-            &_dict_erase, // erase
-            NULL,
-
-            NULL, // front
-            NULL, // back
-            NULL, // at
-
-            &_container_print,
-
-            NULL,
-            NULL,
-            NULL,
-
-            &_container_begin,
-            &_container_end
-        },
+        class_metadata(Dict, DICT, TYPE_DICT, dict_dtor),
+        NULL,
         0,
-        &_get_obj_by_key,
-        &_dict_push,
-        &_dict_remove,
-    };
 
-Class   *DICT = (Class *)&_dict_descr;
+        &_container_data,
+        &_container_size,
+        &_container_empty,
+
+        NULL, // insert_at
+        NULL, // push_back
+        NULL, // delete_at
+        &_dict_erase, // erase
+        NULL,
+
+        NULL, // front
+        NULL, // back
+        NULL, // at
+
+        &_container_print,
+
+        NULL,
+        NULL,
+        NULL,
+
+        &_container_begin,
+        &_container_end
+    },
+    0,
+    &_get_obj_by_key,
+    &_dict_push,
+    &_dict_remove,
+)
