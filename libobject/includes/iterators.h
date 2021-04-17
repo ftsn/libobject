@@ -11,10 +11,10 @@ typedef enum
     BEGIN
 } t_it_type;
 
-typedef struct s_iterator       Iterator;
-typedef struct s_iterator       ForwardIterator;
-typedef struct s_iterator       BidirectionalIterator;
-typedef struct s_ra_iterator    RandomAccessIterator;
+forward_class_declaration(Iterator)
+forward_class_declaration(ForwardIterator)
+forward_class_declaration(BidirectionalIterator)
+forward_class_declaration(RandomAccessIterator)
 
 typedef t_bool  (*t_it_compare)(Iterator *it1, Iterator *it2);
 t_bool          _it_equals(Iterator *it1, Iterator *it2);
@@ -46,7 +46,19 @@ typedef Object  *(*t_ra_it_data_access)(RandomAccessIterator *it, ssize_t idx);
 Object          *_array_ra_it_at(RandomAccessIterator *it, ssize_t idx);
 Object          *_string_ra_it_at(RandomAccessIterator *it, ssize_t idx);
 
-struct s_iterator {
+#define ITERATOR            _iterator
+#define FWD_IT              _fwd_it
+#define BIDIRECTIONAL_IT    _bidirectional_it
+#define RA_IT               _ra_it
+
+#define SPL_LIST_IT         _spl_list_it
+#define DBL_LIST_IT         _dbl_list_it
+#define ARRAY_IT            _array_it
+#define STRING_IT           _string_it
+#define DICT_IT             _dict_it
+
+// Constructor declaration
+forward_declared_class_declaration(Iterator, ITERATOR,
     Class               base;
 
     t_it_compare        equals;
@@ -61,14 +73,54 @@ struct s_iterator {
     ssize_t             it_idx;
     size_t              reached_the_end;
     size_t              reached_the_beginning;
-};
+)
 
-typedef struct s_dict_bidirectional_iterator {
+// Forward iterators
+forward_declared_class_declaration(ForwardIterator, FWD_IT,
+    Iterator            base;
+)
+class_declaration(SplListFwdIterator, SPL_LIST_IT,
+    Class               base;
+
+    t_it_compare        equals;
+
+    t_it_move           previous;
+    t_it_move           next;
+
+    t_it_data_access    dereference;
+
+    Object              *iterated_obj;
+    Object              *cur;
+    ssize_t             it_idx;
+    size_t              reached_the_end;
+    size_t              reached_the_beginning;
+)
+
+// BiDirectional iterators
+forward_declared_class_declaration(BidirectionalIterator, BIDIRECTIONAL_IT,
+    Iterator            base;
+)
+class_declaration(DblListBidirectionalIterator, DBL_LIST_IT,
+    Class               base;
+
+    t_it_compare        equals;
+
+    t_it_move           previous;
+    t_it_move           next;
+
+    t_it_data_access    dereference;
+
+    Object              *iterated_obj;
+    Object              *cur;
+    ssize_t             it_idx;
+    size_t              reached_the_end;
+    size_t              reached_the_beginning;
+)
+class_declaration(DictBidirectionalIterator, DICT_IT,
     Iterator    base;
     ssize_t     internal_idx;
-} DictBidirectionalIterator;
-
-struct s_ra_iterator {
+)
+forward_declared_class_declaration(RandomAccessIterator, RA_IT,
     Iterator            base;
 
     t_ra_it_compare     lt;
@@ -79,15 +131,32 @@ struct s_ra_iterator {
     t_ra_it_data_access at;
 
     ssize_t             ra_idx;
-};
+)
+class_declaration(ArrayRaIterator, ARRAY_IT,
+    Iterator            base;
 
-#define SPL_LIST_IT _spl_list_it
-#define DBL_LIST_IT _dbl_list_it
-#define ARRAY_IT    _array_it
-#define STRING_IT   _string_it
-#define DICT_IT     _dict_it
+    t_ra_it_compare     lt;
+    t_ra_it_compare     gt;
 
-// Constructor declaration
+    t_ra_it_move        jump;
+
+    t_ra_it_data_access at;
+
+    ssize_t             ra_idx;
+)
+class_declaration(StringRaIterator, STRING_IT,
+    Iterator            base;
+
+    t_ra_it_compare     lt;
+    t_ra_it_compare     gt;
+
+    t_ra_it_move        jump;
+
+    t_ra_it_data_access at;
+
+    ssize_t             ra_idx;
+)
+
 ctor_declaration(Object *, SPL_LIST_IT, Object *class; Object *iterable; t_it_type start_pos;)
 ctor_declaration(Object *, DBL_LIST_IT, Object *class; Object *iterable; t_it_type start_pos;)
 ctor_declaration(Object *, ARRAY_IT, Object *class; Object *iterable; t_it_type start_pos;)
