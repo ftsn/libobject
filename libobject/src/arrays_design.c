@@ -23,12 +23,7 @@ Object          *ctor_definition(ARRAY) {
     return (array);
 }
 
-static Object   *_shallow_array_ctor()
-{
-    return (new_obj(ARRAY));
-}
-
-static void     _array_dtor(Object *self)
+static void     array_dtor(Object *self)
 {
     ssize_t     i;
     void        **contained;
@@ -48,42 +43,34 @@ static void     _array_dtor(Object *self)
     ((Container *)self)->contained_size = 0;
 }
 
-static Array _array_descr =
+class_definition(Array, ARRAY,
     {
-        {
-            {
-                TYPE_ARRAY,
-                sizeof(Array),
-                &_shallow_array_ctor,
-                &_array_dtor
-            },
-            NULL,
-            0,
+        class_metadata(Array, ARRAY, TYPE_ARRAY, array_dtor),
+        NULL,
+        0,
 
-            &_container_data,
-            &_container_size,
-            &_container_empty,
+        &_container_data,
+        &_container_size,
+        &_container_empty,
 
-            &_array_insert_at,
-            &_container_push_back,
-            &_array_delete_at,
-            &_array_erase,
-            NULL,
+        &_array_insert_at,
+        &_container_push_back,
+        &_array_delete_at,
+        &_array_erase,
+        NULL,
 
-            &_array_front,
-            &_array_back,
-            &_array_at,
+        &_array_front,
+        &_array_back,
+        &_array_at,
 
-            &_container_print,
+        &_container_print,
 
-            &_container_to_type,
-            &_container_sub,
-            &_container_map,
+        &_container_to_type,
+        &_container_sub,
+        &_container_map,
 
-            &_container_begin,
-            &_container_end,
-        },
-        0
-    };
-
-Class *ARRAY = (Class *)&_array_descr;
+        &_container_begin,
+        &_container_end,
+    },
+    0
+)
