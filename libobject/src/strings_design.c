@@ -18,7 +18,7 @@ static t_bool   copy_ctor(String *string, char *copy, ssize_t size)
     return (TRUE);
 }
 
-Object      *ctor_definition(STRING) {
+Object      *ctor_definition(String) {
     String  *string;
 
     string = args->class;
@@ -39,8 +39,8 @@ static void string_dtor(Object *self)
     ((Container *)self)->contained = NULL;
 }
 
-class_definition(String, STRING,
-    class_metadata(String, STRING, TYPE_STRING, string_dtor),
+class_definition(String,
+    class_metadata(String, TYPE_STRING, string_dtor),
     NULL,
     0,
 

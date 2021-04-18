@@ -13,14 +13,12 @@ typedef enum e_array_opr
     ARRAY_DELETION,
 } t_array_opr;
 
-#define ARRAY   array_blueprint
-
 // Class and constructor declaration
-class_declaration(Array, ARRAY,
+class_declaration(Array,
     Container   base;
     ssize_t     total_size;
 )
-ctor_declaration(Object *, ARRAY, Object *class; t_data **to_copy; ssize_t copy_amount;)
+ctor_declaration(Object *, Array, Object *class; t_data **to_copy; ssize_t copy_amount;)
 
 t_bool  array_alloc(Container *array, ssize_t size, t_array_opr operation, ...);
 
@@ -33,7 +31,5 @@ Object  *_array_back(const Object *self);
 Object  *_array_at(const Object *self, ssize_t pos);
 
 void    array_basic_print(ssize_t i, const t_data *elem, const char *prefix);
-
-extern Class    *ARRAY;
 
 #endif /* !ARRAYS_H_ */

@@ -46,19 +46,8 @@ typedef Object  *(*t_ra_it_data_access)(RandomAccessIterator *it, ssize_t idx);
 Object          *_array_ra_it_at(RandomAccessIterator *it, ssize_t idx);
 Object          *_string_ra_it_at(RandomAccessIterator *it, ssize_t idx);
 
-#define ITERATOR            iterator_blueprint
-#define FWD_IT              fwd_it_blueprint
-#define BIDIRECTIONAL_IT    bidirectional_it_blueprint
-#define RA_IT               ra_it_blueprint
-
-#define SPL_LIST_IT         spl_list_it_blueprint
-#define DBL_LIST_IT         dbl_list_it_blueprint
-#define ARRAY_IT            array_it_blueprint
-#define STRING_IT           string_it_blueprint
-#define DICT_IT             dict_it_blueprint
-
 // Constructor declaration
-forward_declared_class_declaration(Iterator, ITERATOR,
+forward_declared_class_declaration(Iterator,
     Class               base;
 
     t_it_compare        equals;
@@ -76,10 +65,10 @@ forward_declared_class_declaration(Iterator, ITERATOR,
 )
 
 // Forward iterators
-forward_declared_class_declaration(ForwardIterator, FWD_IT,
+forward_declared_class_declaration(ForwardIterator,
     Iterator            base;
 )
-class_declaration(SplListFwdIterator, SPL_LIST_IT,
+class_declaration(SplListFwdIterator,
     Class               base;
 
     t_it_compare        equals;
@@ -97,10 +86,10 @@ class_declaration(SplListFwdIterator, SPL_LIST_IT,
 )
 
 // BiDirectional iterators
-forward_declared_class_declaration(BidirectionalIterator, BIDIRECTIONAL_IT,
+forward_declared_class_declaration(BidirectionalIterator,
     Iterator            base;
 )
-class_declaration(DblListBidirectionalIterator, DBL_LIST_IT,
+class_declaration(DblListBidirectionalIterator,
     Class               base;
 
     t_it_compare        equals;
@@ -116,11 +105,11 @@ class_declaration(DblListBidirectionalIterator, DBL_LIST_IT,
     size_t              reached_the_end;
     size_t              reached_the_beginning;
 )
-class_declaration(DictBidirectionalIterator, DICT_IT,
+class_declaration(DictBidirectionalIterator,
     Iterator    base;
     ssize_t     internal_idx;
 )
-forward_declared_class_declaration(RandomAccessIterator, RA_IT,
+forward_declared_class_declaration(RandomAccessIterator,
     Iterator            base;
 
     t_ra_it_compare     lt;
@@ -132,7 +121,7 @@ forward_declared_class_declaration(RandomAccessIterator, RA_IT,
 
     ssize_t             ra_idx;
 )
-class_declaration(ArrayRaIterator, ARRAY_IT,
+class_declaration(ArrayRaIterator,
     Iterator            base;
 
     t_ra_it_compare     lt;
@@ -144,7 +133,7 @@ class_declaration(ArrayRaIterator, ARRAY_IT,
 
     ssize_t             ra_idx;
 )
-class_declaration(StringRaIterator, STRING_IT,
+class_declaration(StringRaIterator,
     Iterator            base;
 
     t_ra_it_compare     lt;
@@ -157,18 +146,12 @@ class_declaration(StringRaIterator, STRING_IT,
     ssize_t             ra_idx;
 )
 
-ctor_declaration(Object *, SPL_LIST_IT, Object *class; Object *iterable; t_it_type start_pos;)
-ctor_declaration(Object *, DBL_LIST_IT, Object *class; Object *iterable; t_it_type start_pos;)
-ctor_declaration(Object *, ARRAY_IT, Object *class; Object *iterable; t_it_type start_pos;)
-ctor_declaration(Object *, STRING_IT, Object *class; Object *iterable; t_it_type start_pos;)
-ctor_declaration(Object *, DICT_IT, Object *class; Object *iterable; t_it_type start_pos;)
+ctor_declaration(Object *, SplListFwdIterator, Object *class; Object *iterable; t_it_type start_pos;)
+ctor_declaration(Object *, DblListBidirectionalIterator, Object *class; Object *iterable; t_it_type start_pos;)
+ctor_declaration(Object *, ArrayRaIterator, Object *class; Object *iterable; t_it_type start_pos;)
+ctor_declaration(Object *, StringRaIterator, Object *class; Object *iterable; t_it_type start_pos;)
+ctor_declaration(Object *, DictBidirectionalIterator, Object *class; Object *iterable; t_it_type start_pos;)
 
 Object  *generate_it(Object *self, t_it_type type);
-
-extern Class *ARRAY_IT;
-extern Class *STRING_IT;
-extern Class *DICT_IT;
-extern Class *SPL_LIST_IT;
-extern Class *DBL_LIST_IT;
 
 #endif /* !ITERATORS_H_ */

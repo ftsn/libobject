@@ -269,14 +269,14 @@ Object              *generate_it(Object *self, t_it_type type)
 
     it = NULL;
     if (is_spl_list(self) == TRUE)
-        it = new_obj(SPL_LIST_IT, .iterable = self, .start_pos = type);
+        it = new_obj(SplListFwdIterator, .iterable = self, .start_pos = type);
     else if (is_dbl_list(self) == TRUE)
-        it = new_obj(DBL_LIST_IT, .iterable = self, .start_pos = type);
+        it = new_obj(DblListBidirectionalIterator, .iterable = self, .start_pos = type);
     else if (is_of_type(self, TYPE_ARRAY) == TRUE)
-        it = new_obj(ARRAY_IT, .iterable = self, .start_pos = type);
+        it = new_obj(ArrayRaIterator, .iterable = self, .start_pos = type);
     else if (is_of_type(self, TYPE_DICT) == TRUE)
-        it = new_obj(DICT_IT, .iterable = self, .start_pos = type);
+        it = new_obj(DictBidirectionalIterator, .iterable = self, .start_pos = type);
     else if (is_of_type(self, TYPE_STRING) == TRUE)
-        it = new_obj(STRING_IT, .iterable = self, .start_pos = type);
+        it = new_obj(StringRaIterator, .iterable = self, .start_pos = type);
     return (it);
 }

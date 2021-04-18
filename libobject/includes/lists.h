@@ -21,38 +21,32 @@ typedef enum    e_list_type
     CIRC_DOUBLE
 } t_list_type;
 
-#define LIST        list_blueprint
-#define SPL_LIST    spl_list_blueprint
-#define SPL_CLIST   spl_clist_blueprint
-#define DBL_LIST    dbl_list_blueprint
-#define DBL_CLIST   dbl_clist_blueprint
-
 // Class and constructors declarations
-class_declaration(List, LIST,
+class_declaration(List,
     Container   base;
     t_get_node  nth_node;
 )
-class_declaration(SplList, SPL_LIST,
+class_declaration(SplList,
     Container   base;
     t_get_node  nth_node;
 )
-class_declaration(SplClist, SPL_CLIST,
+class_declaration(SplClist,
     Container   base;
     t_get_node  nth_node;
 )
-class_declaration(DblList, DBL_LIST,
+class_declaration(DblList,
     Container   base;
     t_get_node  nth_node;
 )
-class_declaration(DblClist, DBL_CLIST,
+class_declaration(DblClist,
     Container   base;
     t_get_node  nth_node;
 )
 
-ctor_declaration(Object *, SPL_LIST, Object *class; t_data **to_copy; ssize_t copy_amount;)
-ctor_declaration(Object *, SPL_CLIST, Object *class; t_data **to_copy; ssize_t copy_amount;)
-ctor_declaration(Object *, DBL_LIST, Object *class; t_data **to_copy; ssize_t copy_amount;)
-ctor_declaration(Object *, DBL_CLIST, Object *class; t_data **to_copy; ssize_t copy_amount;)
+ctor_declaration(Object *, SplList, Object *class; t_data **to_copy; ssize_t copy_amount;)
+ctor_declaration(Object *, SplClist, Object *class; t_data **to_copy; ssize_t copy_amount;)
+ctor_declaration(Object *, DblList, Object *class; t_data **to_copy; ssize_t copy_amount;)
+ctor_declaration(Object *, DblClist, Object *class; t_data **to_copy; ssize_t copy_amount;)
 
 t_bool  _spl_list_add(Object *list, void *data, t_type type, ssize_t pos);
 t_bool  _spl_clist_add(Object *list, void *data, t_type type, ssize_t pos);
@@ -69,10 +63,5 @@ t_bool  _list_erase(Object *self);
 Object  *_list_front(const Object *list);
 Object  *_list_end(const Object *list);
 Object  *_list_at(const Object *list, ssize_t pos);
-
-extern Class *SPL_LIST;
-extern Class *SPL_CLIST;
-extern Class *DBL_LIST;
-extern Class *DBL_CLIST;
 
 #endif /* !LISTS_H_ */

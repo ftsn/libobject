@@ -18,22 +18,22 @@ static Object   *_shared_list_ctor(Object *class, t_data **to_copy, ssize_t copy
     return (list);
 }
 
-Object          *ctor_definition(SPL_LIST)
+Object          *ctor_definition(SplList)
 {
     return (_shared_list_ctor(args->class, args->to_copy, args->copy_amount));
 }
 
-Object          *ctor_definition(SPL_CLIST)
+Object          *ctor_definition(SplClist)
 {
     return (_shared_list_ctor(args->class, args->to_copy, args->copy_amount));
 }
 
-Object          *ctor_definition(DBL_LIST)
+Object          *ctor_definition(DblList)
 {
     return (_shared_list_ctor(args->class, args->to_copy, args->copy_amount));
 }
 
-Object          *ctor_definition(DBL_CLIST)
+Object          *ctor_definition(DblClist)
 {
     return (_shared_list_ctor(args->class, args->to_copy, args->copy_amount));
 }
@@ -48,9 +48,9 @@ static void     list_dtor(Object *self)
     list->contained_size = 0;
 }
 
-class_definition(SplList, SPL_LIST,
+class_definition(SplList,
     {
-        class_metadata(SplList, SPL_LIST, TYPE_LINKED_LIST, list_dtor),
+        class_metadata(SplList, TYPE_LINKED_LIST, list_dtor),
         NULL,
         0,
 
@@ -80,9 +80,9 @@ class_definition(SplList, SPL_LIST,
     &get_nth_node      
 )
 
-class_definition(SplClist, SPL_CLIST,
+class_definition(SplClist,
     {
-        class_metadata(SplClist, SPL_CLIST, TYPE_CIRCULAR_LINKED_LIST, list_dtor),
+        class_metadata(SplClist, TYPE_CIRCULAR_LINKED_LIST, list_dtor),
         NULL,
         0,
 
@@ -112,9 +112,9 @@ class_definition(SplClist, SPL_CLIST,
     &get_nth_node      
 )
 
-class_definition(DblList, DBL_LIST,
+class_definition(DblList,
     {
-        class_metadata(DblList, DBL_LIST, TYPE_DOUBLY_LINKED_LIST, list_dtor),
+        class_metadata(DblList, TYPE_DOUBLY_LINKED_LIST, list_dtor),
         NULL,
         0,
 
@@ -144,9 +144,9 @@ class_definition(DblList, DBL_LIST,
     &get_nth_node      
 )
 
-class_definition(DblClist, DBL_CLIST,
+class_definition(DblClist,
     {
-        class_metadata(DblClist, DBL_CLIST, TYPE_CIRCULAR_DOUBLY_LINKED_LIST, list_dtor),
+        class_metadata(DblClist, TYPE_CIRCULAR_DOUBLY_LINKED_LIST, list_dtor),
         NULL,
         0,
 

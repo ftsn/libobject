@@ -108,7 +108,7 @@ static t_bool   _dict_push_no_resizing(Object *self, unsigned char *key, void *d
     idx = djb2a_hash(key) % ((Dict *)self)->total_size;
     if ((list = ((void **)self_c->contained)[idx]) == NULL)
     {
-        if (!(list = new_obj(DBL_LIST)))
+        if (!(list = new_obj(DblList)))
             return (FALSE);
     }
     pair = get_pair_from_list(list, key);

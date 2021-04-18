@@ -32,7 +32,7 @@ static void     iterator_empty_array_begin(void **state)
     Container   *ctn;
     Iterator    *it;
 
-    ctn = new_obj(ARRAY);
+    ctn = new_obj(Array);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
@@ -54,7 +54,7 @@ static void     iterator_empty_array_end(void **state)
     Container   *ctn;
     Iterator    *it;
 
-    ctn = new_obj(ARRAY);
+    ctn = new_obj(Array);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
@@ -76,7 +76,7 @@ static void     iterator_non_empty_array_begin(void **state)
     Container   *ctn;
     Iterator    *it;
 
-    ctn = new_obj(ARRAY, .to_copy = *state, .copy_amount = COPY_ALL);
+    ctn = new_obj(Array, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
@@ -107,7 +107,7 @@ static void     iterator_non_empty_array_end(void **state)
     Container   *ctn;
     Iterator    *it;
 
-    ctn = new_obj(ARRAY, .to_copy = *state, .copy_amount = COPY_ALL);
+    ctn = new_obj(Array, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
@@ -140,7 +140,7 @@ static void                 iterator_non_empty_array_arithmetic(void **state)
     Iterator                *it;
     RandomAccessIterator    *ra;
 
-    ctn = new_obj(ARRAY, .to_copy = *state, .copy_amount = COPY_ALL);
+    ctn = new_obj(Array, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_int_equal(ctn->push_back(ctn, "baz", TYPE_CSTRING), TRUE);
     assert_int_equal(ctn->push_back(ctn, "barz", TYPE_CSTRING), TRUE);
     assert_non_null(ctn);
@@ -184,7 +184,7 @@ static void                 iterator_non_empty_array_compare_its(void **state)
     Iterator                *it1, *it2;
     RandomAccessIterator    *ra1, *ra2;
 
-    ctn = new_obj(ARRAY, .to_copy = *state, .copy_amount = COPY_ALL);
+    ctn = new_obj(Array, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
@@ -223,7 +223,7 @@ static void     iterator_null_string_begin(void **state)
     String      *str;
     Iterator    *it;
 
-    str = new_obj(STRING);
+    str = new_obj(String);
     assert_non_null(str);
     assert_null(str->contained);
     assert_int_equal(str->contained_size, 0);
@@ -244,7 +244,7 @@ static void     iterator_null_string_end(void **state)
     String      *str;
     Iterator    *it;
 
-    str = new_obj(STRING);
+    str = new_obj(String);
     assert_non_null(str);
     assert_null(str->contained);
     assert_int_equal(str->contained_size, 0);
@@ -265,7 +265,7 @@ static void     iterator_empty_string_begin(void **state)
     String      *str;
     Iterator    *it;
 
-    str = new_obj(STRING, .to_copy = "", .copy_amount = COPY_ALL);
+    str = new_obj(String, .to_copy = "", .copy_amount = COPY_ALL);
     assert_non_null(str);
     assert_non_null(str->contained);
     assert_int_equal(str->contained_size, 0);
@@ -286,7 +286,7 @@ static void     iterator_empty_string_end(void **state)
     String      *str;
     Iterator    *it;
 
-    str = new_obj(STRING, .to_copy = "", .copy_amount = COPY_ALL);
+    str = new_obj(String, .to_copy = "", .copy_amount = COPY_ALL);
     assert_non_null(str);
     assert_non_null(str->contained);
     assert_int_equal(str->contained_size, 0);
@@ -308,7 +308,7 @@ static void     iterator_non_empty_string_begin(void **state)
     Iterator    *it;
     char        foobar[] = "foobar";
 
-    str = new_obj(STRING, .to_copy = foobar, .copy_amount = COPY_ALL);
+    str = new_obj(String, .to_copy = foobar, .copy_amount = COPY_ALL);
     assert_non_null(str);
     assert_non_null(str->contained);
     assert_int_equal(str->contained_size, 6);
@@ -336,7 +336,7 @@ static void     iterator_non_empty_string_end(void **state)
     Iterator    *it;
     char        foobar[] = "foobar";
 
-    str = new_obj(STRING, .to_copy = foobar, .copy_amount = COPY_ALL);
+    str = new_obj(String, .to_copy = foobar, .copy_amount = COPY_ALL);
     assert_non_null(str);
     assert_non_null(str->contained);
     assert_int_equal(str->contained_size, 6);
@@ -364,7 +364,7 @@ static void                 iterator_non_empty_string_arithmetic(void **state)
     Iterator                *it;
     RandomAccessIterator    *ra;
 
-    str = new_obj(STRING, .to_copy = "foobar", .copy_amount = COPY_ALL);
+    str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
     assert_non_null(str);
     assert_non_null(str->contained);
     assert_int_equal(str->contained_size, 6);
@@ -405,7 +405,7 @@ static void                 iterator_non_empty_string_compare_its(void **state)
     Iterator                *it1, *it2;
     RandomAccessIterator    *ra1, *ra2;
 
-    str = new_obj(STRING, .to_copy = "foobar", .copy_amount = COPY_ALL);
+    str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
     assert_non_null(str);
     assert_non_null(str->contained);
     assert_int_equal(str->contained_size, 6);
@@ -443,7 +443,7 @@ static void     iterator_empty_spl_list_begin(void **state)
     Container *ctn;
     Iterator *it;
 
-    ctn = new_obj(SPL_LIST);
+    ctn = new_obj(SplList);
     assert_non_null(ctn);
     assert_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
@@ -463,7 +463,7 @@ static void     iterator_empty_spl_list_end(void **state)
     Container *ctn;
     Iterator *it;
 
-    ctn = new_obj(SPL_LIST);
+    ctn = new_obj(SplList);
     assert_non_null(ctn);
     assert_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
@@ -483,7 +483,7 @@ static void     iterator_non_empty_spl_list_begin(void **state)
     Container *ctn;
     Iterator *it;
 
-    ctn = new_obj(SPL_LIST, .to_copy = *state, .copy_amount = COPY_ALL);
+    ctn = new_obj(SplList, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
@@ -523,7 +523,7 @@ static void     iterator_non_empty_spl_list_end(void **state)
     Container *ctn;
     Iterator *it;
 
-    ctn = new_obj(SPL_LIST, .to_copy = *state, .copy_amount = COPY_ALL);
+    ctn = new_obj(SplList, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
@@ -566,7 +566,7 @@ static void     iterator_empty_spl_clist_begin(void **state)
     Container *ctn;
     Iterator *it;
 
-    ctn = new_obj(SPL_CLIST);
+    ctn = new_obj(SplClist);
     assert_non_null(ctn);
     assert_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
@@ -586,7 +586,7 @@ static void     iterator_empty_spl_clist_end(void **state)
     Container *ctn;
     Iterator *it;
 
-    ctn = new_obj(SPL_CLIST);
+    ctn = new_obj(SplClist);
     assert_non_null(ctn);
     assert_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
@@ -606,7 +606,7 @@ static void     iterator_non_empty_spl_clist_begin(void **state)
     Container *ctn;
     Iterator *it;
 
-    ctn = new_obj(SPL_CLIST, .to_copy = *state, .copy_amount = COPY_ALL);
+    ctn = new_obj(SplClist, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
@@ -646,7 +646,7 @@ static void     iterator_non_empty_spl_clist_end(void **state)
     Container *ctn;
     Iterator *it;
 
-    ctn = new_obj(SPL_CLIST, .to_copy = *state, .copy_amount = COPY_ALL);
+    ctn = new_obj(SplClist, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
@@ -689,7 +689,7 @@ static void     iterator_empty_dbl_list_begin(void **state)
     Container *ctn;
     Iterator *it;
 
-    ctn = new_obj(DBL_LIST);
+    ctn = new_obj(DblList);
     assert_non_null(ctn);
     assert_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
@@ -709,7 +709,7 @@ static void     iterator_empty_dbl_list_end(void **state)
     Container *ctn;
     Iterator *it;
 
-    ctn = new_obj(DBL_LIST);
+    ctn = new_obj(DblList);
     assert_non_null(ctn);
     assert_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
@@ -729,7 +729,7 @@ static void     iterator_non_empty_dbl_list_begin(void **state)
     Container *ctn;
     Iterator *it;
 
-    ctn = new_obj(DBL_LIST, .to_copy = *state, .copy_amount = COPY_ALL);
+    ctn = new_obj(DblList, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
@@ -769,7 +769,7 @@ static void     iterator_non_empty_dbl_list_end(void **state)
     Container *ctn;
     Iterator *it;
 
-    ctn = new_obj(DBL_LIST, .to_copy = *state, .copy_amount = COPY_ALL);
+    ctn = new_obj(DblList, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
@@ -812,7 +812,7 @@ static void     iterator_empty_dbl_clist_begin(void **state)
     Container *ctn;
     Iterator *it;
 
-    ctn = new_obj(DBL_CLIST);
+    ctn = new_obj(DblClist);
     assert_non_null(ctn);
     assert_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
@@ -832,7 +832,7 @@ static void     iterator_empty_dbl_clist_end(void **state)
     Container *ctn;
     Iterator *it;
 
-    ctn = new_obj(DBL_CLIST);
+    ctn = new_obj(DblClist);
     assert_non_null(ctn);
     assert_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
@@ -852,7 +852,7 @@ static void     iterator_non_empty_dbl_clist_begin(void **state)
     Container *ctn;
     Iterator *it;
 
-    ctn = new_obj(DBL_CLIST, .to_copy = *state, .copy_amount = COPY_ALL);
+    ctn = new_obj(DblClist, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
@@ -892,7 +892,7 @@ static void     iterator_non_empty_dbl_clist_end(void **state)
     Container *ctn;
     Iterator *it;
 
-    ctn = new_obj(DBL_CLIST, .to_copy = *state, .copy_amount = COPY_ALL);
+    ctn = new_obj(DblClist, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
@@ -930,22 +930,12 @@ static void     iterator_non_empty_dbl_clist_end(void **state)
     (void)state;
 }
 
-
-
-
-
-
-
-
-
-
-
 static void     iterator_empty_dict_begin(void **state)
 {
     Container   *ctn;
     Iterator    *it;
 
-    ctn = new_obj(DICT);
+    ctn = new_obj(Dict);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
@@ -966,7 +956,7 @@ static void     iterator_empty_dict_end(void **state)
     Container   *ctn;
     Iterator    *it;
 
-    ctn = new_obj(DICT);
+    ctn = new_obj(Dict);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
@@ -988,7 +978,7 @@ static void     iterator_non_empty_dict_begin(void **state)
     Iterator    *it;
     t_pair      *pair;
 
-    ctn = new_obj(DICT);
+    ctn = new_obj(Dict);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(((Dict *)ctn)->push(ctn, (unsigned char *)"baz", "barz", TYPE_CSTRING), TRUE);
@@ -1025,7 +1015,7 @@ static void     iterator_non_empty_dict_end(void **state)
     Iterator    *it;
     t_pair      *pair;
 
-    ctn = new_obj(DICT);
+    ctn = new_obj(Dict);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(((Dict *)ctn)->push(ctn, (unsigned char *)"baz", "barz", TYPE_CSTRING), TRUE);

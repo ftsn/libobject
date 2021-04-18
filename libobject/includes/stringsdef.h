@@ -57,10 +57,8 @@ Object          *_string_split(const String *self, const Class *type, const char
 typedef char    *(*t_str_sub)(const String *self, ssize_t begin, ssize_t len);
 char            *_string_sub(const String *self, ssize_t begin, ssize_t len);
 
-#define STRING  string_blueprint
-
 // Class and constructor declaration
-forward_declared_class_declaration(String, STRING,
+forward_declared_class_declaration(String,
     Class               base;
     char                *contained;
     ssize_t             contained_size;
@@ -94,8 +92,6 @@ forward_declared_class_declaration(String, STRING,
     t_str_split         split;
     t_str_sub           sub;
 )
-ctor_declaration(Object *, STRING, Object *class; char *to_copy; ssize_t copy_amount;)
-
-extern Class    *STRING;
+ctor_declaration(Object *, String, Object *class; char *to_copy; ssize_t copy_amount;)
 
 #endif /* !STRINGSDEF_H_ */

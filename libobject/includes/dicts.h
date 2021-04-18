@@ -26,21 +26,17 @@ t_bool          _dict_push(Object *self, unsigned char *key, void *data, t_type 
 typedef t_bool  (*t_dict_remove)(Object *self, const unsigned char *key);
 t_bool          _dict_remove(Object *self, const unsigned char *key);
 
-#define DICT  dict_blueprint
-
 // Class and constructor declaration
-class_declaration(Dict, DICT,
+class_declaration(Dict,
     Container       base;
     ssize_t         total_size;
     t_obj_by_key    get_by_key;
     t_dict_push     push;
     t_dict_remove   remove;
 )
-ctor_declaration(Object *, DICT, Object *class;)
+ctor_declaration(Object *, Dict, Object *class;)
 
 t_bool  _dict_erase(Object *self);
 t_bool  dict_alloc(Container *dict, ssize_t new_size);
-
-extern Class *DICT;
 
 #endif /* !DICTS_H_ */

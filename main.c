@@ -9,11 +9,57 @@
 #include "dicts.h"
 #include "variadic.h"
 
-class_definition(Test, TEST,
-    class_metadata(Test, TEST, TYPE_ABSTRACT, NULL),
+#define declare_type(type, blueprint_name)  \
+        typedef struct                      \
+        {                                   \
+            CAT(blueprint_name,_fields)     \
+        } type;
+
+typedef struct
+{
+    size_t  size;
+} TestClass;
+
+#define child_fields    \
+        int toto;
+#define child_def       \
+        1
+typedef struct
+{
+    TestClass base;
+    child_fields
+} child;
+
+#define grand_child_fields  \
+        child_fields        \
+        int tata;
+#define grand_child_def     \
+        child_def,          \
+        2
+typedef struct
+{
+    TestClass base;
+    grand_child_fields
+} grand_child;
+
+grand_child foobar = {
+    {
+        666
+    },
+    grand_child_def
+};
+
+#define child4__fields      \
+        grand_child_fields  \
+        int zbleeeh;
+declare_type(child4, child4_)
+// Pour une class n + 1 on a besoin 
+
+class_definition(Test,
+    class_metadata(Test, TYPE_ABSTRACT, NULL),
     12
 )
-Object      *ctor_definition(TEST) {
+Object      *ctor_definition(Test) {
     Test    *test;
 
     test = args->class;
@@ -21,40 +67,18 @@ Object      *ctor_definition(TEST) {
     return (args->class);
 }
 
-typedef struct {
-    int z;
-    int k;
-} gr8parent;
-
-typedef struct {
-    gr8parent;
-    int y;
-} parent;
-
-struct child {
-    parent;
-    int toto;
-};
-
-struct child childzer;
-
 int     main(int ac, char **av)
 {
     (void)ac;
     (void)av;
     Container *array;
-    array = new_obj(ARRAY, .to_copy = (t_data *[]){&(t_data){TYPE_CSTRING, "fabinho"}, &(t_data ){TYPE_CSTRING, "HELL0000"}, NULL}, .copy_amount = 1);
+    array = new_obj(Array, .to_copy = (t_data *[]){&(t_data){TYPE_CSTRING, "fabinho"}, &(t_data ){TYPE_CSTRING, "HELL0000"}, NULL}, .copy_amount = 1);
     array->dump(array, "Title smile", typed_basic_print, "");
     //((String *)STRING)->dup = &_string_dup;
 
     Test *test;
 
-    test = new_obj(TEST, .nb=555);
+    test = new_obj(Test, .nb=555);
     printf("Test nb: %d %d\n", ((Class *)test)->__type__, test->nb);
-
-
-    gr8parent gr8 = {100, 200};
-    unsigned char *bar = (void *)&gr8;
-    printf("%d\n", *(int *)(bar + offsetof( gr8parent, k )));
     return (1);
 }

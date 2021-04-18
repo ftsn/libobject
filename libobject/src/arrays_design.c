@@ -3,7 +3,7 @@
 #include "arrays.h"
 #include "iterators.h"
 
-Object          *ctor_definition(ARRAY) {
+Object          *ctor_definition(Array) {
     Container   *array;
 
     array = args->class;
@@ -43,9 +43,9 @@ static void     array_dtor(Object *self)
     ((Container *)self)->contained_size = 0;
 }
 
-class_definition(Array, ARRAY,
+class_definition(Array,
     {
-        class_metadata(Array, ARRAY, TYPE_ARRAY, array_dtor),
+        class_metadata(Array, TYPE_ARRAY, array_dtor),
         NULL,
         0,
 

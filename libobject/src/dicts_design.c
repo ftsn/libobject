@@ -5,7 +5,7 @@
 #include "iterators.h"
 #include "lists.h"
 
-Object          *ctor_definition(DICT) {
+Object          *ctor_definition(Dict) {
     Container   *dict;
 
     dict = args->class;
@@ -27,9 +27,9 @@ static void     dict_dtor(Object *self)
     ((Container *)self)->contained_size = 0;
 }
 
-class_definition(Dict, DICT,
+class_definition(Dict,
     {
-        class_metadata(Dict, DICT, TYPE_DICT, dict_dtor),
+        class_metadata(Dict, TYPE_DICT, dict_dtor),
         NULL,
         0,
 

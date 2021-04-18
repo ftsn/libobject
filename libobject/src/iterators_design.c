@@ -6,7 +6,7 @@
 #include "dicts.h"
 #include "stringsdef.h"
 
-Object          *ctor_definition(SPL_LIST_IT)
+Object          *ctor_definition(SplListFwdIterator)
 {
     Container   *iterated_obj;
     Iterator    *it;
@@ -38,7 +38,7 @@ Object          *ctor_definition(SPL_LIST_IT)
     return (it);
 }
 
-Object          *ctor_definition(DBL_LIST_IT)
+Object          *ctor_definition(DblListBidirectionalIterator)
 {
     Container   *iterated_obj;
     Iterator    *it;
@@ -70,7 +70,7 @@ Object          *ctor_definition(DBL_LIST_IT)
     return (it);
 }
 
-Object                      *ctor_definition(ARRAY_IT)
+Object                      *ctor_definition(ArrayRaIterator)
 {
     Container               *iterated_obj;
     Iterator                *it;
@@ -95,7 +95,7 @@ Object                      *ctor_definition(ARRAY_IT)
     return (it);
 }
 
-Object                      *ctor_definition(STRING_IT)
+Object                      *ctor_definition(StringRaIterator)
 {
     String                  *iterated_obj;
     Iterator                *it;
@@ -120,7 +120,7 @@ Object                      *ctor_definition(STRING_IT)
     return (it);
 }
 
-Object                          *ctor_definition(DICT_IT)
+Object                          *ctor_definition(DictBidirectionalIterator)
 {
     Dict                        *iterated_obj;
     Iterator                    *it;
@@ -156,9 +156,9 @@ static void _iterator_dtor(Object *self)
     (void)self;
 }
 
-class_definition(ArrayRaIterator, ARRAY_IT,
+class_definition(ArrayRaIterator,
     {
-        class_metadata(ArrayRaIterator, ARRAY_IT, TYPE_ARRAY_ITERATOR, _iterator_dtor),
+        class_metadata(ArrayRaIterator, TYPE_ARRAY_ITERATOR, _iterator_dtor),
         &_it_equals,
 
         &_array_ra_it_previous,
@@ -182,9 +182,9 @@ class_definition(ArrayRaIterator, ARRAY_IT,
     0
 )
 
-class_definition(StringRaIterator, STRING_IT,
+class_definition(StringRaIterator,
     {
-        class_metadata(StringRaIterator, STRING_IT, TYPE_STRING_ITERATOR, _iterator_dtor),
+        class_metadata(StringRaIterator, TYPE_STRING_ITERATOR, _iterator_dtor),
         &_it_equals,
 
         &_string_ra_it_previous,
@@ -208,8 +208,8 @@ class_definition(StringRaIterator, STRING_IT,
     0
 )
 
-class_definition(SplListFwdIterator, SPL_LIST_IT,
-    class_metadata(SplListFwdIterator, SPL_LIST_IT, TYPE_SPL_LIST_ITERATOR, _iterator_dtor),
+class_definition(SplListFwdIterator,
+    class_metadata(SplListFwdIterator, TYPE_SPL_LIST_ITERATOR, _iterator_dtor),
     &_it_equals,
 
     NULL,
@@ -224,8 +224,8 @@ class_definition(SplListFwdIterator, SPL_LIST_IT,
     0
 )
 
-class_definition(DblListBidirectionalIterator, DBL_LIST_IT,
-    class_metadata(DblListBidirectionalIterator, DBL_LIST_IT, TYPE_DBL_LIST_ITERATOR, _iterator_dtor),
+class_definition(DblListBidirectionalIterator,
+    class_metadata(DblListBidirectionalIterator, TYPE_DBL_LIST_ITERATOR, _iterator_dtor),
     &_it_equals,
 
     &_list_it_previous,
@@ -240,9 +240,9 @@ class_definition(DblListBidirectionalIterator, DBL_LIST_IT,
     0,
 )
 
-class_definition(DictBidirectionalIterator, DICT_IT,
+class_definition(DictBidirectionalIterator,
     {
-        class_metadata(DictBidirectionalIterator, DICT_IT, TYPE_DICT_ITERATOR, _iterator_dtor),
+        class_metadata(DictBidirectionalIterator, TYPE_DICT_ITERATOR, _iterator_dtor),
         &_it_equals,
 
         &_dict_bidirectional_it_previous,
