@@ -35,8 +35,11 @@ Object      *ctor_definition(String) {
 
 static void string_dtor(Object *self)
 {
-    free(((Container *)self)->contained);
-    ((Container *)self)->contained = NULL;
+    String  *s;
+
+    s = self;
+    free(s->contained);
+    s->contained = NULL;
 }
 
 class_definition(String,
