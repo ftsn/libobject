@@ -27,20 +27,16 @@ class_declaration(List,
     t_get_node  nth_node;
 )
 class_declaration(SplList,
-    Container;
-    t_get_node  nth_node;
+    List;
 )
 class_declaration(SplClist,
-    Container;
-    t_get_node  nth_node;
+    List;
 )
 class_declaration(DblList,
-    Container;
-    t_get_node  nth_node;
+    List;
 )
 class_declaration(DblClist,
-    Container;
-    t_get_node  nth_node;
+    List;
 )
 
 ctor_declaration(Object *, SplList, Object *class; t_data **to_copy; ssize_t copy_amount;)
