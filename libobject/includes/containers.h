@@ -47,7 +47,7 @@ typedef Object  *(*t_it_create)(Object *self);
 Object          *_container_begin(Object *self);
 Object          *_container_end(Object *self);
 
-#define CONTAINER   _container
+#define CONTAINER   container_blueprint
 
 class_declaration(Container, CONTAINER,
     Class           base;

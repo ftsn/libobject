@@ -46,16 +46,16 @@ typedef Object  *(*t_ra_it_data_access)(RandomAccessIterator *it, ssize_t idx);
 Object          *_array_ra_it_at(RandomAccessIterator *it, ssize_t idx);
 Object          *_string_ra_it_at(RandomAccessIterator *it, ssize_t idx);
 
-#define ITERATOR            _iterator
-#define FWD_IT              _fwd_it
-#define BIDIRECTIONAL_IT    _bidirectional_it
-#define RA_IT               _ra_it
+#define ITERATOR            iterator_blueprint
+#define FWD_IT              fwd_it_blueprint
+#define BIDIRECTIONAL_IT    bidirectional_it_blueprint
+#define RA_IT               ra_it_blueprint
 
-#define SPL_LIST_IT         _spl_list_it
-#define DBL_LIST_IT         _dbl_list_it
-#define ARRAY_IT            _array_it
-#define STRING_IT           _string_it
-#define DICT_IT             _dict_it
+#define SPL_LIST_IT         spl_list_it_blueprint
+#define DBL_LIST_IT         dbl_list_it_blueprint
+#define ARRAY_IT            array_it_blueprint
+#define STRING_IT           string_it_blueprint
+#define DICT_IT             dict_it_blueprint
 
 // Constructor declaration
 forward_declared_class_declaration(Iterator, ITERATOR,

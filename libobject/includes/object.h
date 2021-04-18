@@ -22,76 +22,47 @@ void        delete(Object *ptr);
 
 Object      *_init_new_obj(const Class *class);
 
-#define new_obj_(obj_type, ...)         call_variadic_func_wrapper(obj_type##_ctor, _init_new_obj(obj_type),##__VA_ARGS__)
-#define new_obj(obj_type, ...)          new_obj_(obj_type,##__VA_ARGS__)
+#define new_obj(obj_type, ...)          call_variadic_func_wrapper(CAT(obj_type,_ctor), _init_new_obj(obj_type),##__VA_ARGS__)
 
-#define ctor_declaration_(type, name, ...)      variadic_func_declare(type, name##_ctor,##__VA_ARGS__)
-#define ctor_declaration(type, name, ...)       ctor_declaration_(type, name,##__VA_ARGS__)
+#define ctor_declaration(type, name, ...)       variadic_func_declare(type, CAT(name,_ctor),##__VA_ARGS__)
 
-#define ctor_definition_(name)                  variadic_func_definition(name##_ctor)
+#define ctor_definition_(name)                  variadic_func_definition(CAT(name,_ctor))
 #define ctor_definition(name)                   ctor_definition_(name)
 
 // Forward class declaration macros
-#define forward_abstract_class_declaration_(class_type)     typedef struct s_##class_type   class_type;
-#define forward_abstract_class_declaration(class_type)      forward_abstract_class_declaration_(class_type)
-#define forward_class_declaration_(class_type)              typedef struct s_##class_type   class_type;
-#define forward_class_declaration(class_type)               forward_class_declaration_(class_type)
+#define forward_class_declaration(class_type)               typedef struct CAT(s_,class_type)   class_type;
 
 // Class declaration macros
-#define forward_declared_class_declaration_(class_type, blueprint_name, ...)    \
-        struct s_##class_type {                                                 \
+#define forward_declared_class_declaration(class_type, blueprint_name, ...)     \
+        struct CAT(s_,class_type) {                                             \
             __VA_ARGS__                                                         \
         };                                                                      \
         extern Class    *blueprint_name;
-#define forward_declared_class_declaration(class_type, blueprint_name, ...)         \
-        forward_declared_class_declaration_(class_type, blueprint_name,##__VA_ARGS__)
 
-#define class_declaration_(class_type, blueprint_name, ...) \
-        typedef struct                                      \
-        {                                                   \
-            __VA_ARGS__                                     \
-        } class_type;                                       \
+#define class_declaration(class_type, blueprint_name, ...)      \
+        typedef struct                                          \
+        {                                                       \
+            __VA_ARGS__                                         \
+        } class_type;                                           \
         extern Class    *blueprint_name;
-#define class_declaration(class_type, blueprint_name, ...)              \
-        class_declaration_(class_type, blueprint_name,##__VA_ARGS__)
 
 // Class definition macros
-#define abstract_class_metadata_(class_type)    \
-        {                                       \
-            TYPE_ABSTRACT,                      \
-            sizeof(class_type),                 \
-            NULL,                               \
-            NULL                                \
-        },
-#define abstract_class_metadata(class_type)     \
-        abstract_class_metadata_(class_type)
-#define class_metadata_(class_type, blueprint_name, type, dtor) \
+#define class_metadata(class_type, blueprint_name, type, dtor)  \
         {                                                       \
             type,                                               \
             sizeof(class_type),                                 \
-            _shallow_##blueprint_name##_ctor,                   \
+            CAT(_shallow_,CAT(blueprint_name,_ctor)),           \
             dtor                                                \
         }
-#define class_metadata(class_type, blueprint_name, type, dtor)  \
-        class_metadata_(class_type, blueprint_name, type, dtor)
-
-#define abstract_class_definition_(class_type, blueprint_name, ...) \
-        static class_type blueprint_name##_ = {                     \
-            __VA_ARGS__                                             \
-        };                                                          \
-        Class *blueprint_name = (Class *)&blueprint_name##_;
-#define abstract_class_definition(class_type, blueprint_name, ...)   abstract_class_definition_(class_type, blueprint_name,##__VA_ARGS__)
-
-#define class_definition_(class_type, blueprint_name, ...)  \
-        static Object   *_shallow_##blueprint_name##_ctor() \
-        {                                                   \
-            return (new_obj(blueprint_name));               \
-        }                                                   \
-        static class_type blueprint_name##_ = {             \
-            __VA_ARGS__                                     \
-        };                                                  \
-        Class *blueprint_name = (Class *)&blueprint_name##_;
-#define class_definition(class_type, blueprint_name, ...)   class_definition_(class_type, blueprint_name,##__VA_ARGS__)
+#define class_definition(class_type, blueprint_name, ...)               \
+        static Object   *CAT(_shallow_,CAT(blueprint_name,_ctor()))     \
+        {                                                               \
+            return (new_obj(blueprint_name));                           \
+        }                                                               \
+        static class_type CAT(blueprint_name,_) = {                     \
+            __VA_ARGS__                                                 \
+        };                                                              \
+        Class *blueprint_name = (Class *)&CAT(blueprint_name,_);
 
 #define TEST    _test
 class_declaration(Test, TEST, Class; int nb;)

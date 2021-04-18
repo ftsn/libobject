@@ -13,7 +13,7 @@ typedef enum e_array_opr
     ARRAY_DELETION,
 } t_array_opr;
 
-#define ARRAY   _array
+#define ARRAY   array_blueprint
 
 // Class and constructor declaration
 class_declaration(Array, ARRAY,

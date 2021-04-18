@@ -57,7 +57,7 @@ Object          *_string_split(const String *self, const Class *type, const char
 typedef char    *(*t_str_sub)(const String *self, ssize_t begin, ssize_t len);
 char            *_string_sub(const String *self, ssize_t begin, ssize_t len);
 
-#define STRING  _string
+#define STRING  string_blueprint
 
 // Class and constructor declaration
 forward_declared_class_declaration(String, STRING,

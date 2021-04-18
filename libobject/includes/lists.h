@@ -21,11 +21,11 @@ typedef enum    e_list_type
     CIRC_DOUBLE
 } t_list_type;
 
-#define LIST        _list
-#define SPL_LIST    _spl_list
-#define SPL_CLIST   _spl_clist
-#define DBL_LIST    _dbl_list
-#define DBL_CLIST   _dbl_clist
+#define LIST        list_blueprint
+#define SPL_LIST    spl_list_blueprint
+#define SPL_CLIST   spl_clist_blueprint
+#define DBL_LIST    dbl_list_blueprint
+#define DBL_CLIST   dbl_clist_blueprint
 
 // Class and constructors declarations
 class_declaration(List, LIST,

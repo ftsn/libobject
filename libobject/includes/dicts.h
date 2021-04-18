@@ -26,7 +26,7 @@ t_bool          _dict_push(Object *self, unsigned char *key, void *data, t_type 
 typedef t_bool  (*t_dict_remove)(Object *self, const unsigned char *key);
 t_bool          _dict_remove(Object *self, const unsigned char *key);
 
-#define DICT  _dict
+#define DICT  dict_blueprint
 
 // Class and constructor declaration
 class_declaration(Dict, DICT,
