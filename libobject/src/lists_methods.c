@@ -121,117 +121,137 @@ static t_bool   list_del(t_list_data **list, ssize_t pos, t_list_type type)
     return (TRUE);
 }
 
-t_bool      _spl_list_add(Object *list, void *data, t_type type, ssize_t pos)
+t_bool      _spl_list_add(Object *self, void *data, t_type type, ssize_t pos)
 {
     t_data  *typed_data;
+    List    *list;
 
-    if (pos < 0 || pos > ((Container *)list)->contained_size)
+    list = self;
+    if (pos < 0 || pos > list->contained_size)
         return (FALSE);
     if (!(typed_data = malloc(sizeof(t_data))))
         return (FALSE);
     typed_data->type = type;
     typed_data->data = data;
-    if (list_add((t_list_data **)&((Container *)list)->contained, typed_data, pos, SIMPLE) == TRUE)
+    if (list_add((t_list_data **)&list->contained, typed_data, pos, SIMPLE) == TRUE)
     {
-        ++((Container *)list)->contained_size;
+        ++list->contained_size;
         return (TRUE);
     }
     return (FALSE);
 }
 
-t_bool      _spl_clist_add(Object *list, void *data, t_type type, ssize_t pos)
+t_bool      _spl_clist_add(Object *self, void *data, t_type type, ssize_t pos)
 {
     t_data  *typed_data;
+    List    *list;
 
-    if (pos < 0 || pos > ((Container *)list)->contained_size)
+    list = self;
+    if (pos < 0 || pos > list->contained_size)
         return (FALSE);
     if (!(typed_data = malloc(sizeof(t_data))))
         return (FALSE);
     typed_data->type = type;
     typed_data->data = data;
-    if (list_add((t_list_data **)&((Container *)list)->contained, typed_data, pos, CIRC_SIMPLE) == TRUE)
+    if (list_add((t_list_data **)&list->contained, typed_data, pos, CIRC_SIMPLE) == TRUE)
     {
-        ++((Container *)list)->contained_size;
+        ++list->contained_size;
         return (TRUE);
     }
     return (FALSE);
 }
 
-t_bool      _dbl_list_add(Object *list, void *data, t_type type, ssize_t pos)
+t_bool      _dbl_list_add(Object *self, void *data, t_type type, ssize_t pos)
 {
     t_data  *typed_data;
+    List    *list;
 
-    if (pos < 0 || pos > ((Container *)list)->contained_size)
+    list = self;
+    if (pos < 0 || pos > list->contained_size)
         return (FALSE);
     if (!(typed_data = malloc(sizeof(t_data))))
         return (FALSE);
     typed_data->type = type;
     typed_data->data = data;
-    if (list_add((t_list_data **)&((Container *)list)->contained, typed_data, pos, DOUBLE) == TRUE)
+    if (list_add((t_list_data **)&list->contained, typed_data, pos, DOUBLE) == TRUE)
     {
-        ++((Container *)list)->contained_size;
+        ++list->contained_size;
         return (TRUE);
     }
     return (FALSE);
 }
 
-t_bool      _dbl_clist_add(Object *list, void *data, t_type type, ssize_t pos)
+t_bool      _dbl_clist_add(Object *self, void *data, t_type type, ssize_t pos)
 {
     t_data  *typed_data;
+    List    *list;
 
-    if (pos < 0 || pos > ((Container *)list)->contained_size)
+    list = self;
+    if (pos < 0 || pos > list->contained_size)
         return (FALSE);
     if (!(typed_data = malloc(sizeof(t_data))))
         return (FALSE);
     typed_data->type = type;
     typed_data->data = data;
-    if (list_add((t_list_data **)&((Container *)list)->contained, typed_data, pos, CIRC_DOUBLE) == TRUE)
+    if (list_add((t_list_data **)&list->contained, typed_data, pos, CIRC_DOUBLE) == TRUE)
     {
-        ++((Container *)list)->contained_size;
+        ++list->contained_size;
         return (TRUE);
     }
     return (FALSE);
 }
 
-t_bool  _spl_list_del(Object *list, ssize_t pos)
+t_bool      _spl_list_del(Object *self, ssize_t pos)
 {
-    if (pos < 0 || pos > ((Container *)list)->contained_size - 1)
+    List    *list;
+
+    list = self;
+    if (pos < 0 || pos > list->contained_size - 1)
         return (FALSE);
-    list_del((t_list_data **)&((Container *)list)->contained, pos, SIMPLE);
-    --((Container *)list)->contained_size;
+    list_del((t_list_data **)&list->contained, pos, SIMPLE);
+    --list->contained_size;
     return (TRUE);
 }
 
-t_bool  _spl_clist_del(Object *list, ssize_t pos)
+t_bool      _spl_clist_del(Object *self, ssize_t pos)
 {
-    if (pos < 0 || pos > ((Container *)list)->contained_size - 1)
+    List    *list;
+
+    list = self;
+    if (pos < 0 || pos > list->contained_size - 1)
         return (FALSE);
-    list_del((t_list_data **)&((Container *)list)->contained, pos, CIRC_SIMPLE);
-    --((Container *)list)->contained_size;
+    list_del((t_list_data **)&list->contained, pos, CIRC_SIMPLE);
+    --list->contained_size;
     return (TRUE);
 }
 
-t_bool  _dbl_list_del(Object *list, ssize_t pos)
+t_bool      _dbl_list_del(Object *self, ssize_t pos)
 {
-    if (pos < 0 || pos > ((Container *)list)->contained_size - 1)
+    List    *list;
+
+    list = self;
+    if (pos < 0 || pos > list->contained_size - 1)
         return (FALSE);
-    list_del((t_list_data **)&((Container *)list)->contained, pos, DOUBLE);
-    --((Container *)list)->contained_size;
+    list_del((t_list_data **)&list->contained, pos, DOUBLE);
+    --list->contained_size;
     return (TRUE);
 }
 
-t_bool  _dbl_clist_del(Object *list, ssize_t pos)
+t_bool      _dbl_clist_del(Object *self, ssize_t pos)
 {
-    if (pos < 0 || pos > ((Container *)list)->contained_size - 1)
+    List    *list;
+
+    list = self;
+    if (pos < 0 || pos > list->contained_size - 1)
         return (FALSE);
-    list_del((t_list_data **)&((Container *)list)->contained, pos, CIRC_DOUBLE);
-    --((Container *)list)->contained_size;
+    list_del((t_list_data **)&list->contained, pos, CIRC_DOUBLE);
+    --list->contained_size;
     return (TRUE);
 }
 
 Object  *_list_front(const Object *list)
 {
-    return (((Container *)list)->contained);
+    return (((List *)list)->contained);
 }
 
 Object          *_list_end(const Object *list)
@@ -239,7 +259,7 @@ Object          *_list_end(const Object *list)
     t_list_data *begin;
     t_list_data *res;
 
-    res = begin = (t_list_data *)((Container *)list)->contained;
+    res = begin = (t_list_data *)((List *)list)->contained;
     if (res && res->next)
         res = res->next;
     while (res && res->next && res->next != begin)
@@ -247,15 +267,16 @@ Object          *_list_end(const Object *list)
     return (res);
 }
 
-Object          *_list_at(const Object *list, ssize_t pos)
+Object          *_list_at(const Object *self, ssize_t pos)
 {
+    const List  *list = self;
     t_list_data *list_data;
     t_list_data *begin;
     ssize_t     i;
 
-    if (pos < 0 || pos > ((Container *)list)->contained_size)
+    if (pos < 0 || pos > list->contained_size)
         return (NULL);
-    begin = list_data = (t_list_data *)((Container *)list)->contained;
+    begin = list_data = (t_list_data *)list->contained;
     i = 0;
     if (list_data && i < pos)
     {
@@ -270,9 +291,9 @@ Object          *_list_at(const Object *list, ssize_t pos)
     return (list_data);
 }
 
-t_bool          _list_erase(Object *self)
+t_bool      _list_erase(Object *self)
 {
-    Container   *list;
+    List    *list;
 
     list = self;
     while (list->contained)
@@ -286,7 +307,7 @@ t_list_data     *get_nth_node(const Object *list, ssize_t pos)
     t_list_data *begin;
     ssize_t     i;
 
-    begin = list_data = (t_list_data *)((Container *)list)->contained;
+    begin = list_data = (t_list_data *)((const List *)list)->contained;
     i = 0;
     if (list_data && i < pos)
     {

@@ -4,13 +4,13 @@
 
 static Object   *_shared_list_ctor(Object *class, t_data **to_copy, ssize_t copy_amount)
 {
-    Container   *list;
+    List        *list;
 
     list = class;
     if (!list)
         return (NULL);
     if (to_copy)
-        if (ctn_copy_ctor(list, to_copy, copy_amount) == FALSE)
+        if (ctn_copy_ctor((Container *)list, to_copy, copy_amount) == FALSE)
         {
             delete(list);
             return (NULL);
