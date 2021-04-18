@@ -40,14 +40,14 @@ Object      *_init_new_obj(const Class *class);
         struct CAT(s_,class_type) {                         \
             __VA_ARGS__                                     \
         };                                                  \
-        extern Class    * CAT(class_type,BLUEPRINT_SUFFIX);
+        extern Class    *CAT(class_type,BLUEPRINT_SUFFIX);
 
 #define class_declaration(class_type, ...)                  \
         typedef struct                                      \
         {                                                   \
             __VA_ARGS__                                     \
         } class_type;                                       \
-        extern Class    * CAT(class_type,BLUEPRINT_SUFFIX);
+        extern Class    *CAT(class_type,BLUEPRINT_SUFFIX);
 
 // Class definition macros
 #define class_metadata(class_type, type, dtor)          \
