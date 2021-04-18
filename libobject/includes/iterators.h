@@ -69,20 +69,7 @@ forward_declared_class_declaration(ForwardIterator,
     Iterator;
 )
 class_declaration(SplListFwdIterator,
-    Class;
-
-    t_it_compare        equals;
-
-    t_it_move           previous;
-    t_it_move           next;
-
-    t_it_data_access    dereference;
-
-    Object              *iterated_obj;
-    Object              *cur;
-    ssize_t             it_idx;
-    size_t              reached_the_end;
-    size_t              reached_the_beginning;
+    ForwardIterator;
 )
 
 // BiDirectional iterators
@@ -90,23 +77,10 @@ forward_declared_class_declaration(BidirectionalIterator,
     Iterator;
 )
 class_declaration(DblListBidirectionalIterator,
-    Class;
-
-    t_it_compare        equals;
-
-    t_it_move           previous;
-    t_it_move           next;
-
-    t_it_data_access    dereference;
-
-    Object              *iterated_obj;
-    Object              *cur;
-    ssize_t             it_idx;
-    size_t              reached_the_end;
-    size_t              reached_the_beginning;
+    BidirectionalIterator;
 )
 class_declaration(DictBidirectionalIterator,
-    Iterator;
+    BidirectionalIterator;
     ssize_t     internal_idx;
 )
 forward_declared_class_declaration(RandomAccessIterator,
@@ -122,28 +96,10 @@ forward_declared_class_declaration(RandomAccessIterator,
     ssize_t             ra_idx;
 )
 class_declaration(ArrayRaIterator,
-    Iterator;
-
-    t_ra_it_compare     lt;
-    t_ra_it_compare     gt;
-
-    t_ra_it_move        jump;
-
-    t_ra_it_data_access at;
-
-    ssize_t             ra_idx;
+    RandomAccessIterator;
 )
 class_declaration(StringRaIterator,
-    Iterator;
-
-    t_ra_it_compare     lt;
-    t_ra_it_compare     gt;
-
-    t_ra_it_move        jump;
-
-    t_ra_it_data_access at;
-
-    ssize_t             ra_idx;
+    RandomAccessIterator;
 )
 
 ctor_declaration(Object *, SplListFwdIterator, Object *class; Object *iterable; t_it_type start_pos;)
