@@ -23,23 +23,23 @@ typedef enum    e_list_type
 
 // Class and constructors declarations
 class_declaration(List,
-    Container   base;
+    Container;
     t_get_node  nth_node;
 )
 class_declaration(SplList,
-    Container   base;
+    Container;
     t_get_node  nth_node;
 )
 class_declaration(SplClist,
-    Container   base;
+    Container;
     t_get_node  nth_node;
 )
 class_declaration(DblList,
-    Container   base;
+    Container;
     t_get_node  nth_node;
 )
 class_declaration(DblClist,
-    Container   base;
+    Container;
     t_get_node  nth_node;
 )
 

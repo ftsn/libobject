@@ -48,7 +48,7 @@ Object          *_container_begin(Object *self);
 Object          *_container_end(Object *self);
 
 class_declaration(Container,
-    Class           base;
+    Class;
     Object          *contained;
 
     ssize_t         contained_size;

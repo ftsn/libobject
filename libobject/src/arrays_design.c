@@ -3,8 +3,8 @@
 #include "arrays.h"
 #include "iterators.h"
 
-Object          *ctor_definition(Array) {
-    Container   *array;
+Object      *ctor_definition(Array) {
+    Array   *array;
 
     array = args->class;
     if (!array)
@@ -15,7 +15,7 @@ Object          *ctor_definition(Array) {
         return (NULL);
     }
     if (args->to_copy)
-        if (ctn_copy_ctor(array, args->to_copy, args->copy_amount) == FALSE)
+        if (ctn_copy_ctor((Container *)array, args->to_copy, args->copy_amount) == FALSE)
         {
             delete(array);
             return (NULL);

@@ -59,7 +59,7 @@ char            *_string_sub(const String *self, ssize_t begin, ssize_t len);
 
 // Class and constructor declaration
 forward_declared_class_declaration(String,
-    Class               base;
+    Class;
     char                *contained;
     ssize_t             contained_size;
 

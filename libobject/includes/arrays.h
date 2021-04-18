@@ -15,12 +15,12 @@ typedef enum e_array_opr
 
 // Class and constructor declaration
 class_declaration(Array,
-    Container   base;
+    Container;
     ssize_t     total_size;
 )
 ctor_declaration(Object *, Array, Object *class; t_data **to_copy; ssize_t copy_amount;)
 
-t_bool  array_alloc(Container *array, ssize_t size, t_array_opr operation, ...);
+t_bool  array_alloc(Array *array, ssize_t size, t_array_opr operation, ...);
 
 t_bool  _array_insert_at(Object *container, void *data, t_type type, ssize_t pos);
 t_bool  _array_delete_at(Object *self, ssize_t pos);

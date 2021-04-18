@@ -9,10 +9,10 @@
 #include "dicts.h"
 #include "variadic.h"
 
-#define declare_type(type, blueprint_name)  \
+#define declare_type(type)  \
         typedef struct                      \
         {                                   \
-            CAT(blueprint_name,_fields)     \
+            CAT(type,_fields)     \
         } type;
 
 typedef struct
@@ -49,10 +49,10 @@ grand_child foobar = {
     grand_child_def
 };
 
-#define child4__fields      \
+#define child4_fields      \
         grand_child_fields  \
         int zbleeeh;
-declare_type(child4, child4_)
+declare_type(child4)
 // Pour une class n + 1 on a besoin 
 
 class_definition(Test,
@@ -71,7 +71,7 @@ int     main(int ac, char **av)
 {
     (void)ac;
     (void)av;
-    Container *array;
+    Array *array;
     array = new_obj(Array, .to_copy = (t_data *[]){&(t_data){TYPE_CSTRING, "fabinho"}, &(t_data ){TYPE_CSTRING, "HELL0000"}, NULL}, .copy_amount = 1);
     array->dump(array, "Title smile", typed_basic_print, "");
     //((String *)STRING)->dup = &_string_dup;

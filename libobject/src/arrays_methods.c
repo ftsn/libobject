@@ -69,7 +69,7 @@ static void     copy_performs_deletion(void **dest, void **src, ssize_t pos, ssi
     }
 }
 
-t_bool      array_alloc(Container *array, ssize_t new_size, t_array_opr operation, ...)
+t_bool      array_alloc(Array *array, ssize_t new_size, t_array_opr operation, ...)
 {
     ssize_t i;
     void    **contained;
@@ -118,7 +118,7 @@ t_bool      array_alloc(Container *array, ssize_t new_size, t_array_opr operatio
 
 t_bool          _array_insert_at(Object *container, void *data, t_type type, ssize_t pos)
 {
-    Container   *self;
+    Array       *self;
     t_data      *typed_data;
 
     self = container;
@@ -136,9 +136,9 @@ t_bool          _array_insert_at(Object *container, void *data, t_type type, ssi
     return (TRUE);
 }
 
-t_bool          _array_delete_at(Object *container, ssize_t pos)
+t_bool      _array_delete_at(Object *container, ssize_t pos)
 {
-    Container   *self;
+    Array   *self;
 
     self = container;
     if (pos < 0 || self->contained_size == 0 || pos >= self->contained_size)
@@ -148,9 +148,9 @@ t_bool          _array_delete_at(Object *container, ssize_t pos)
     return (TRUE);
 }
 
-t_bool          _array_erase(Object *container)
+t_bool      _array_erase(Object *container)
 {
-    Container *self;
+    Array   *self;
     ssize_t i;
 
     self = container;
@@ -164,25 +164,25 @@ t_bool          _array_erase(Object *container)
     return (TRUE);
 }
 
-Object              *_array_front(const Object *array)
+Object          *_array_front(const Object *array)
 {
-    const Container *container;
+    const Array *container;
 
     container = array;
     return (container->contained && container->contained_size ? ((void **)container->contained)[0] : NULL);
 }
 
-Object              *_array_back(const Object *array)
+Object          *_array_back(const Object *array)
 {
-    const Container *container;
+    const Array *container;
 
     container = array;
     return (container->contained && container->contained_size ? ((void **)container->contained)[container->contained_size - 1] : NULL);
 }
 
-Object              *_array_at(const Object *self, ssize_t pos)
+Object          *_array_at(const Object *self, ssize_t pos)
 {
-    const Container *container;
+    const Array *container;
 
     container = self;
     return (pos >= 0 && pos < container->contained_size && container->contained ? ((void **)container->contained)[pos] : NULL);

@@ -28,7 +28,7 @@ t_bool          _dict_remove(Object *self, const unsigned char *key);
 
 // Class and constructor declaration
 class_declaration(Dict,
-    Container       base;
+    Container;
     ssize_t         total_size;
     t_obj_by_key    get_by_key;
     t_dict_push     push;

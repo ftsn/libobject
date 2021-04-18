@@ -48,7 +48,7 @@ Object          *_string_ra_it_at(RandomAccessIterator *it, ssize_t idx);
 
 // Constructor declaration
 forward_declared_class_declaration(Iterator,
-    Class               base;
+    Class;
 
     t_it_compare        equals;
 
@@ -66,10 +66,10 @@ forward_declared_class_declaration(Iterator,
 
 // Forward iterators
 forward_declared_class_declaration(ForwardIterator,
-    Iterator            base;
+    Iterator;
 )
 class_declaration(SplListFwdIterator,
-    Class               base;
+    Class;
 
     t_it_compare        equals;
 
@@ -87,10 +87,10 @@ class_declaration(SplListFwdIterator,
 
 // BiDirectional iterators
 forward_declared_class_declaration(BidirectionalIterator,
-    Iterator            base;
+    Iterator;
 )
 class_declaration(DblListBidirectionalIterator,
-    Class               base;
+    Class;
 
     t_it_compare        equals;
 
@@ -110,7 +110,7 @@ class_declaration(DictBidirectionalIterator,
     ssize_t     internal_idx;
 )
 forward_declared_class_declaration(RandomAccessIterator,
-    Iterator            base;
+    Iterator;
 
     t_ra_it_compare     lt;
     t_ra_it_compare     gt;
@@ -122,7 +122,7 @@ forward_declared_class_declaration(RandomAccessIterator,
     ssize_t             ra_idx;
 )
 class_declaration(ArrayRaIterator,
-    Iterator            base;
+    Iterator;
 
     t_ra_it_compare     lt;
     t_ra_it_compare     gt;
@@ -134,7 +134,7 @@ class_declaration(ArrayRaIterator,
     ssize_t             ra_idx;
 )
 class_declaration(StringRaIterator,
-    Iterator            base;
+    Iterator;
 
     t_ra_it_compare     lt;
     t_ra_it_compare     gt;
