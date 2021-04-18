@@ -1,7 +1,7 @@
 #ifndef DICTS_H_
 # define DICTS_H_
 
-# include "containers.h"
+# include "arrays.h"
 
 # define CHUNK_SIZE 50
 # define LOAD_FACTOR(dict)                  ((float)dict->contained_size / (float)dict->total_size)
@@ -28,8 +28,7 @@ t_bool          _dict_remove(Object *self, const unsigned char *key);
 
 // Class and constructor declaration
 class_declaration(Dict,
-    Container;
-    ssize_t         total_size;
+    Array;
     t_obj_by_key    get_by_key;
     t_dict_push     push;
     t_dict_remove   remove;

@@ -32,34 +32,36 @@ static void dict_dtor(Object *self)
 
 class_definition(Dict,
     {
-        class_metadata(Dict, TYPE_DICT, dict_dtor),
-        NULL,
+        {
+            class_metadata(Dict, TYPE_DICT, dict_dtor),
+            NULL,
+            0,
+
+            &_container_data,
+            &_container_size,
+            &_container_empty,
+
+            NULL, // insert_at
+            NULL, // push_back
+            NULL, // delete_at
+            &_dict_erase, // erase
+            NULL,
+
+            NULL, // front
+            NULL, // back
+            NULL, // at
+
+            &_container_print,
+
+            NULL,
+            NULL,
+            NULL,
+
+            &_container_begin,
+            &_container_end
+        },
         0,
-
-        &_container_data,
-        &_container_size,
-        &_container_empty,
-
-        NULL, // insert_at
-        NULL, // push_back
-        NULL, // delete_at
-        &_dict_erase, // erase
-        NULL,
-
-        NULL, // front
-        NULL, // back
-        NULL, // at
-
-        &_container_print,
-
-        NULL,
-        NULL,
-        NULL,
-
-        &_container_begin,
-        &_container_end
     },
-    0,
     &_get_obj_by_key,
     &_dict_push,
     &_dict_remove,
