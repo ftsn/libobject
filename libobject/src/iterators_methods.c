@@ -2,6 +2,7 @@
 #include "iterators.h"
 #include "lists.h"
 #include "stringsdef.h"
+#include "arrays.h"
 #include "dicts.h"
 
 inline t_bool  _it_equals(Iterator *it1, Iterator *it2)
@@ -9,17 +10,17 @@ inline t_bool  _it_equals(Iterator *it1, Iterator *it2)
     return (it1->dereference(it1) == it2->dereference(it2) ? TRUE : FALSE);
 }
 
-t_bool          _list_it_previous(Iterator *it)
+t_bool      _list_it_previous(Iterator *it)
 {
-    Container   *ctn;
+    List    *list;
 
-    ctn = it->iterated_obj;
-    if (is_of_type(ctn, TYPE_CIRCULAR_DOUBLY_LINKED_LIST) && it->it_idx == 0)
+    list = it->iterated_obj;
+    if (is_of_type(list, TYPE_CIRCULAR_DOUBLY_LINKED_LIST) && it->it_idx == 0)
     {
         ++it->reached_the_beginning;
-        if (ctn->contained_size > 1)
+        if (list->contained_size > 1)
         {
-            it->it_idx = ctn->contained_size - 1;
+            it->it_idx = list->contained_size - 1;
             it->cur = ((t_list_data *)it->cur)->prev;
         }
         return (TRUE);
@@ -38,19 +39,19 @@ t_bool          _list_it_previous(Iterator *it)
     return (TRUE);
 }
 
-t_bool          _list_it_next(Iterator *it)
+t_bool      _list_it_next(Iterator *it)
 {
-    Container   *ctn;
+    List    *list;
 
-    ctn = it->iterated_obj;
-    if (is_clist(ctn) && it->it_idx + 1 >= ctn->contained_size)
+    list = it->iterated_obj;
+    if (is_clist(list) && it->it_idx + 1 >= list->contained_size)
     {
         ++it->reached_the_end;
         it->it_idx = 0;
         it->cur = ((t_list_data *)it->cur)->next;
         return (TRUE);
     }
-    else if (it->it_idx + 1 >= ctn->contained_size)
+    else if (it->it_idx + 1 >= list->contained_size)
     {
         if (!it->reached_the_end)
             ++it->reached_the_end;
@@ -76,113 +77,123 @@ inline Object  *_ra_it_dereference(Iterator *it)
 
 inline t_bool  _ra_it_lt(RandomAccessIterator *it1, RandomAccessIterator *it2)
 {
-    return (((Iterator *)it1)->it_idx < ((Iterator *)it2)->it_idx ? TRUE : FALSE);
+    return (it1->it_idx < it2->it_idx ? TRUE : FALSE);
 }
 
 inline t_bool  _ra_it_gt(RandomAccessIterator *it1, RandomAccessIterator *it2)
 {
-    return (((Iterator *)it1)->it_idx > ((Iterator *)it2)->it_idx ? TRUE : FALSE);
+    return (it1->it_idx > it2->it_idx ? TRUE : FALSE);
 }
 
-t_bool          _array_ra_it_next(Iterator *it)
+t_bool                      _array_ra_it_next(Iterator *self)
 {
-    Container   *ctn;
+    Array                   *array;
+    RandomAccessIterator    *it;
 
-    ctn = it->iterated_obj;
-    if (((RandomAccessIterator *)it)->ra_idx + 1 >= ctn->contained_size)
+    it = (RandomAccessIterator *)self;
+    array = it->iterated_obj;
+    if (it->ra_idx + 1 >= array->contained_size)
     {
         if (!it->reached_the_end)
             ++it->reached_the_end;
         return (FALSE);
     }
     ++it->it_idx;
-    ++((RandomAccessIterator *)it)->ra_idx;
-    ((Iterator *)it)->cur = ((t_data **)ctn->contained)[((RandomAccessIterator *)it)->ra_idx];
+    ++it->ra_idx;
+    it->cur = ((t_data **)array->contained)[it->ra_idx];
     return (TRUE);
 }
 
-t_bool          _array_ra_it_previous(Iterator *it)
+t_bool                      _array_ra_it_previous(Iterator *self)
 {
-    Container   *ctn;
+    Array                   *array;
+    RandomAccessIterator    *it;
 
-    ctn = it->iterated_obj;
-    if (((RandomAccessIterator *)it)->ra_idx == 0)
+    it = (RandomAccessIterator *)self;
+    array = it->iterated_obj;
+    if (it->ra_idx == 0)
     {
         if (!it->reached_the_beginning)
             ++it->reached_the_beginning;
         return (FALSE);
     }
     --it->it_idx;
-    --((RandomAccessIterator *)it)->ra_idx;
-    ((Iterator *)it)->cur = ((t_data **)ctn->contained)[((RandomAccessIterator *)it)->ra_idx];
+    --it->ra_idx;
+    it->cur = ((t_data **)array->contained)[it->ra_idx];
     return (TRUE);
 }
 
-t_bool          _array_ra_it_jump(RandomAccessIterator *it, ssize_t idx)
+t_bool      _array_ra_it_jump(RandomAccessIterator *it, ssize_t idx)
 {
-    Container   *ctn;
+    Array   *array;
 
-    ctn = ((Iterator *)it)->iterated_obj;
-    if (it->ra_idx + idx >= ctn->contained_size || it->ra_idx + idx < 0)
+    array = it->iterated_obj;
+    if (it->ra_idx + idx >= array->contained_size || it->ra_idx + idx < 0)
         return (FALSE);
     it->ra_idx += idx;
-    ((Iterator *)it)->it_idx += idx;
-    ((Iterator *)it)->cur = ((t_data **)ctn->contained)[it->ra_idx];
+    it->it_idx += idx;
+    it->cur = ((t_data **)array->contained)[it->ra_idx];
     return (TRUE);
 }
 
-Object          *_array_ra_it_at(RandomAccessIterator *it, ssize_t idx)
+Object      *_array_ra_it_at(RandomAccessIterator *it, ssize_t idx)
 {
-    Container   *ctn;
+    Array   *array;
 
-    ctn = ((Iterator *)it)->iterated_obj;
-    return (ctn->at(ctn, idx));
+    array = it->iterated_obj;
+    return (array->at(array, idx));
 }
 
-t_bool      _string_ra_it_next(Iterator *it)
+t_bool                      _string_ra_it_next(Iterator *self)
 {
-    String  *s;
+    String                  *s;
+    RandomAccessIterator    *it;
 
+    it = (RandomAccessIterator *)self;
     s = it->iterated_obj;
-    if (((RandomAccessIterator *)it)->ra_idx + 1 >= s->contained_size)
+    if (it->ra_idx + 1 >= s->contained_size)
     {
         if (!it->reached_the_end)
             ++it->reached_the_end;
         return (FALSE);
     }
     ++it->it_idx;
-    ++((RandomAccessIterator *)it)->ra_idx;
-    ((Iterator *)it)->cur = &((char*)s->contained)[((RandomAccessIterator *)it)->ra_idx];
+    ++it->ra_idx;
+    it->cur = &((char*)s->contained)[it->ra_idx];
     return (TRUE);
 }
 
-t_bool      _string_ra_it_previous(Iterator *it)
+t_bool                      _string_ra_it_previous(Iterator *self)
 {
-    String  *s;
+    String                  *s;
+    RandomAccessIterator    *it;
 
+    it = (RandomAccessIterator *)self;
     s = it->iterated_obj;
-    if (((RandomAccessIterator *)it)->ra_idx == 0)
+    if (it->ra_idx == 0)
     {
         if (!it->reached_the_beginning)
             ++it->reached_the_beginning;
         return (FALSE);
     }
     --it->it_idx;
-    --((RandomAccessIterator *)it)->ra_idx;
-    ((Iterator *)it)->cur = &((char *)s->contained)[((RandomAccessIterator *)it)->ra_idx];
+    --it->ra_idx;
+    it->cur = &((char *)s->contained)[it->ra_idx];
     return (TRUE);
 }
 
-t_bool      _string_ra_it_jump(RandomAccessIterator *it, ssize_t idx)
+t_bool                      _string_ra_it_jump(RandomAccessIterator *self, ssize_t idx)
 {
-    String  *s;
+    String                  *s;
+    RandomAccessIterator    *it;
 
-    s = ((Iterator *)it)->iterated_obj;
+    it = (RandomAccessIterator *)self;
+    s = it->iterated_obj;
     if (it->ra_idx + idx >= s->contained_size || it->ra_idx + idx < 0)
         return (FALSE);
     it->ra_idx += idx;
-    ((Iterator *)it)->it_idx += idx;
-    ((Iterator *)it)->cur = &((char *)s->contained)[it->ra_idx];
+    it->it_idx += idx;
+    it->cur = &((char *)s->contained)[it->ra_idx];
     return (TRUE);
 }
 
@@ -190,21 +201,21 @@ Object      *_string_ra_it_at(RandomAccessIterator *it, ssize_t idx)
 {
     String  *s;
 
-    s = ((Iterator *)it)->iterated_obj;
+    s = it->iterated_obj;
     return (s->at(s, idx));
 }
 
 t_bool                          _dict_bidirectional_it_next(Iterator *it)
 {
     DictBidirectionalIterator   *dict_it;
-    void                        **contained;
+    DblList                     **contained;
 
     dict_it = (DictBidirectionalIterator *)it;
-    contained = ((Container *)it->iterated_obj)->contained;
+    contained = ((Dict *)it->iterated_obj)->contained;
     if (it->it_idx == 0 && ((Dict *)it->iterated_obj)->total_size && contained[0])
     {
         ++it->it_idx;
-        it->cur = ((Container *)contained[0])->contained;
+        it->cur = ((DblList *)contained[0])->contained;
         return (TRUE);
     }
     if (it->cur && ((t_list_data *)it->cur)->next)
@@ -225,17 +236,17 @@ t_bool                          _dict_bidirectional_it_next(Iterator *it)
         return (FALSE);
     }
     ++it->it_idx;
-    it->cur = ((Container *)contained[dict_it->internal_idx])->contained;
+    it->cur = ((DblList *)contained[dict_it->internal_idx])->contained;
     return (TRUE);
 }
 
 t_bool                          _dict_bidirectional_it_previous(Iterator *it)
 {
     DictBidirectionalIterator   *dict_it;
-    void                        **contained;
+    DblList                     **contained;
 
     dict_it = (DictBidirectionalIterator *)it;
-    contained = ((Container *)it->iterated_obj)->contained;
+    contained = ((Dict *)it->iterated_obj)->contained;
     if (it->cur && ((t_list_data *)it->cur)->prev)
     {
         --it->it_idx;
@@ -248,13 +259,13 @@ t_bool                          _dict_bidirectional_it_previous(Iterator *it)
         if (contained[dict_it->internal_idx] != NULL)
             break;
     }
-    if (dict_it->internal_idx == 0 && (contained[dict_it->internal_idx] == NULL || ((Container *)contained[0])->contained == it->cur))
+    if (dict_it->internal_idx == 0 && (contained[dict_it->internal_idx] == NULL || ((DblList *)contained[0])->contained == it->cur))
     {
         it->reached_the_beginning = 1;
         return (FALSE);
     }
     --it->it_idx;
-    it->cur = ((Container *)contained[dict_it->internal_idx])->contained;
+    it->cur = ((DblList *)contained[dict_it->internal_idx])->contained;
     return (TRUE);
 }
 

@@ -106,7 +106,7 @@ class_declaration(DblListBidirectionalIterator,
     size_t              reached_the_beginning;
 )
 class_declaration(DictBidirectionalIterator,
-    Iterator    base;
+    Iterator;
     ssize_t     internal_idx;
 )
 forward_declared_class_declaration(RandomAccessIterator,
