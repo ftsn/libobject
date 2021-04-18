@@ -78,7 +78,7 @@ t_bool      array_alloc(Array *array, ssize_t new_size, t_array_opr operation, .
 
     contained = NULL;
     va_start(ap, operation);
-    if ((operation == ARRAY_ADDITION && array->contained_size < ((Array *)array)->total_size) ||
+    if ((operation == ARRAY_ADDITION && array->contained_size < array->total_size) ||
         (operation == ARRAY_DELETION && array->contained_size % CHUNK_SIZE))
     {
         same_dest_src = TRUE;
@@ -89,7 +89,7 @@ t_bool      array_alloc(Array *array, ssize_t new_size, t_array_opr operation, .
         same_dest_src = FALSE;
         if (!(contained = calloc(new_size + 1, sizeof(void *))))
             return (FALSE);
-        ((Array *)array)->total_size = new_size;
+        array->total_size = new_size;
     }
     if (operation == ARRAY_ADDITION)
     {
@@ -186,25 +186,4 @@ Object          *_array_at(const Object *self, ssize_t pos)
 
     container = self;
     return (pos >= 0 && pos < container->contained_size && container->contained ? ((void **)container->contained)[pos] : NULL);
-}
-
-/*
-** Basic function provided to the user to allow him to print the container
-** without having to create his own function
-*/
-void    array_basic_print(ssize_t i, const t_data *elem, const char *prefix)
-{
-    switch (elem->type)
-    {
-    case TYPE_CHAR:
-        printf("%s%d: [%c]\n", prefix, (int)i, *(char *)elem->data);
-        break;
-    case TYPE_CSTRING:
-        printf("%s%d: [%s]\n", prefix, (int)i, (char *)elem->data);
-        break;
-    case TYPE_INT:
-        printf("%s%d: [%d]\n", prefix, (int)i, *(int *)elem->data);
-        break;
-    default:;
-    }
 }

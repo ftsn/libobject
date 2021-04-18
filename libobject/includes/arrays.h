@@ -30,6 +30,4 @@ Object  *_array_front(const Object *self);
 Object  *_array_back(const Object *self);
 Object  *_array_at(const Object *self, ssize_t pos);
 
-void    array_basic_print(ssize_t i, const t_data *elem, const char *prefix);
-
 #endif /* !ARRAYS_H_ */
