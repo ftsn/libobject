@@ -5,8 +5,8 @@
 #include "iterators.h"
 #include "lists.h"
 
-Object          *ctor_definition(Dict) {
-    Container   *dict;
+Object      *ctor_definition(Dict) {
+    Dict    *dict;
 
     dict = args->class;
     if (!dict)
@@ -19,12 +19,15 @@ Object          *ctor_definition(Dict) {
     return (dict);
 }
 
-static void     dict_dtor(Object *self)
+static void dict_dtor(Object *self)
 {
-    ((Container *)self)->erase(self);
-    free(((Container *)self)->contained);
-    ((Container *)self)->contained = NULL;
-    ((Container *)self)->contained_size = 0;
+    Dict    *dict;
+
+    dict = self;
+    dict->erase(self);
+    free(dict->contained);
+    dict->contained = NULL;
+    dict->contained_size = 0;
 }
 
 class_definition(Dict,

@@ -4,7 +4,7 @@
 # include "containers.h"
 
 # define CHUNK_SIZE 50
-# define LOAD_FACTOR(dict_obj)              ((float)((Container *)dict_obj)->contained_size / (float)((Dict *)dict_obj)->total_size)
+# define LOAD_FACTOR(dict)                  ((float)dict->contained_size / (float)dict->total_size)
 # define MAX_LOAD_BEFORE_REALLOC            ((float)0.70)
 # define MIN_LOAD_BEFORE_REALLOC            ((float)0.20)
 # define LOAD_AFTER_REALLOC                 ((float)0.40)
@@ -37,6 +37,6 @@ class_declaration(Dict,
 ctor_declaration(Object *, Dict, Object *class;)
 
 t_bool  _dict_erase(Object *self);
-t_bool  dict_alloc(Container *dict, ssize_t new_size);
+t_bool  dict_alloc(Dict *dict, ssize_t new_size);
 
 #endif /* !DICTS_H_ */
