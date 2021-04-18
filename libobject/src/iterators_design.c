@@ -152,118 +152,101 @@ static void _iterator_dtor(Object *self)
 }
 
 class_definition(ArrayRaIterator,
-    {
-        {
-            class_metadata(ArrayRaIterator, TYPE_ARRAY_ITERATOR, _iterator_dtor),
-            &_it_equals,
+    class_metadata(ArrayRaIterator, TYPE_ARRAY_ITERATOR, _iterator_dtor),
+    _it_equals,
 
-            &_array_ra_it_previous,
-            &_array_ra_it_next,
+    _array_ra_it_previous,
+    _array_ra_it_next,
 
-            &_ra_it_dereference,
+    _ra_it_dereference,
 
-            NULL,
-            NULL,
-            0,
-            0,
-            0
-        },
-        &_ra_it_lt,
-        &_ra_it_gt,
+    NULL,
+    NULL,
+    0,
+    0,
+    0,
 
-        &_array_ra_it_jump,
+    _ra_it_lt,
+    _ra_it_gt,
 
-        &_array_ra_it_at,
+    _array_ra_it_jump,
 
-        0
-    }
+    _array_ra_it_at,
+
+    0,
 )
 
 class_definition(StringRaIterator,
-    {
-        {
-            class_metadata(StringRaIterator, TYPE_STRING_ITERATOR, _iterator_dtor),
-            &_it_equals,
+    class_metadata(StringRaIterator, TYPE_STRING_ITERATOR, _iterator_dtor),
+    _it_equals,
 
-            &_string_ra_it_previous,
-            &_string_ra_it_next,
+    _string_ra_it_previous,
+    _string_ra_it_next,
 
-            &_ra_it_dereference,
+    _ra_it_dereference,
 
-            NULL,
-            NULL,
-            0,
-            0,
-            0
-        },
-        &_ra_it_lt,
-        &_ra_it_gt,
+    NULL,
+    NULL,
+    0,
+    0,
+    0,
 
-        &_string_ra_it_jump,
+    _ra_it_lt,
+    _ra_it_gt,
 
-        &_string_ra_it_at,
+    _string_ra_it_jump,
 
-        0
-    }
+    _string_ra_it_at,
+
+    0,
 )
 
 class_definition(SplListFwdIterator,
-    {
-        {
-            class_metadata(SplListFwdIterator, TYPE_SPL_LIST_ITERATOR, _iterator_dtor),
-            &_it_equals,
+    class_metadata(SplListFwdIterator, TYPE_SPL_LIST_ITERATOR, _iterator_dtor),
+    _it_equals,
 
-            NULL,
-            &_list_it_next,
+    NULL,
+    _list_it_next,
 
-            &_list_it_dereference,
+    _list_it_dereference,
 
-            NULL,
-            NULL,
-            0,
-            0,
-            0,
-        },
-    }
+    NULL,
+    NULL,
+    0,
+    0,
+    0,
 )
 
 class_definition(DblListBidirectionalIterator,
-    {
-        {
-            class_metadata(DblListBidirectionalIterator, TYPE_DBL_LIST_ITERATOR, _iterator_dtor),
-            &_it_equals,
+    class_metadata(DblListBidirectionalIterator, TYPE_DBL_LIST_ITERATOR, _iterator_dtor),
+    _it_equals,
 
-            &_list_it_previous,
-            &_list_it_next,
+    _list_it_previous,
+    _list_it_next,
 
-            &_list_it_dereference,
+    _list_it_dereference,
 
-            NULL,
-            NULL,
-            0,
-            0,
-            0,
-        },
-    }
+    NULL,
+    NULL,
+    0,
+    0,
+    0,
 )
 
 class_definition(DictBidirectionalIterator,
-    {
-        {
-            class_metadata(DictBidirectionalIterator, TYPE_DICT_ITERATOR, _iterator_dtor),
-            &_it_equals,
+    class_metadata(DictBidirectionalIterator, TYPE_DICT_ITERATOR, _iterator_dtor),
+    _it_equals,
 
-            &_dict_bidirectional_it_previous,
-            &_dict_bidirectional_it_next,
+    _dict_bidirectional_it_previous,
+    _dict_bidirectional_it_next,
 
-            &_dict_bidirectional_it_dereference,
+    _dict_bidirectional_it_dereference,
 
-            NULL,
-            NULL,
-            0,
-            0,
-            0,
-        },
-    },
+    NULL,
+    NULL,
+    0,
+    0,
+    0,
+
     0,
 )

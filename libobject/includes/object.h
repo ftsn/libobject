@@ -36,16 +36,18 @@ Object      *_init_new_obj(const Class *class);
 #define forward_class_declaration(class_type)   typedef struct CAT(s_,class_type)   class_type;
 
 // Class declaration macros
-#define forward_declared_class_declaration(class_type, ...) \
+#define forward_declared_class_declaration(class_type)     \
         struct CAT(s_,class_type) {                         \
-            __VA_ARGS__                                     \
+            Class;                                          \
+            CAT(class_type,_fields)                         \
         };                                                  \
         extern Class    *CAT(class_type,BLUEPRINT_SUFFIX);
 
-#define class_declaration(class_type, ...)                  \
+#define class_declaration(class_type)                      \
         typedef struct                                      \
         {                                                   \
-            __VA_ARGS__                                     \
+            Class;                                          \
+            CAT(class_type,_fields)                         \
         } class_type;                                       \
         extern Class    *CAT(class_type,BLUEPRINT_SUFFIX);
 
@@ -66,8 +68,5 @@ Object      *_init_new_obj(const Class *class);
             __VA_ARGS__                                                                         \
         };                                                                                      \
         Class * CAT(class_type,BLUEPRINT_SUFFIX) = (Class *)&CAT(class_type,DEFINITION_SUFFIX);
-
-class_declaration(Test, Class; int nb;)
-ctor_declaration(Object *, Test, Object *class; int nb;)
 
 #endif /* !OBJECT_H_ */

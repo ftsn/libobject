@@ -47,60 +47,65 @@ Object          *_array_ra_it_at(RandomAccessIterator *it, ssize_t idx);
 Object          *_string_ra_it_at(RandomAccessIterator *it, ssize_t idx);
 
 // Constructor declaration
-forward_declared_class_declaration(Iterator,
-    Class;
-
-    t_it_compare        equals;
-
-    t_it_move           previous;
-    t_it_move           next;
-
-    t_it_data_access    dereference;
-
-    Object              *iterated_obj;
-    Object              *cur;
-    ssize_t             it_idx;
-    size_t              reached_the_end;
-    size_t              reached_the_beginning;
-)
+#define Iterator_fields                             \
+        t_it_compare        equals;                 \
+                                                    \
+        t_it_move           previous;               \
+        t_it_move           next;                   \
+                                                    \
+        t_it_data_access    dereference;            \
+                                                    \
+        Object              *iterated_obj;          \
+        Object              *cur;                   \
+        ssize_t             it_idx;                 \
+        size_t              reached_the_end;        \
+        size_t              reached_the_beginning;
+forward_declared_class_declaration(Iterator)
 
 // Forward iterators
-forward_declared_class_declaration(ForwardIterator,
-    Iterator;
-)
-class_declaration(SplListFwdIterator,
-    ForwardIterator;
-)
+#define ForwardIterator_fields  \
+        Iterator_fields
+forward_declared_class_declaration(ForwardIterator)
+
+#define SplListFwdIterator_fields   \
+        ForwardIterator_fields
+class_declaration(SplListFwdIterator)
 
 // BiDirectional iterators
-forward_declared_class_declaration(BidirectionalIterator,
-    Iterator;
-)
-class_declaration(DblListBidirectionalIterator,
-    BidirectionalIterator;
-)
-class_declaration(DictBidirectionalIterator,
-    BidirectionalIterator;
-    ssize_t     internal_idx;
-)
-forward_declared_class_declaration(RandomAccessIterator,
-    Iterator;
+#define BidirectionalIterator_fields    \
+        Iterator_fields
+forward_declared_class_declaration(BidirectionalIterator)
 
-    t_ra_it_compare     lt;
-    t_ra_it_compare     gt;
+#define DblListBidirectionalIterator_fields \
+        BidirectionalIterator_fields
+class_declaration(DblListBidirectionalIterator)
 
-    t_ra_it_move        jump;
+#define DictBidirectionalIterator_fields    \
+        BidirectionalIterator_fields        \
+        ssize_t internal_idx;
+class_declaration(DictBidirectionalIterator)
 
-    t_ra_it_data_access at;
+// Random access iterators
+#define RandomAccessIterator_fields \
+        Iterator_fields             \
+                                    \
+        t_ra_it_compare     lt;     \
+        t_ra_it_compare     gt;     \
+                                    \
+        t_ra_it_move        jump;   \
+                                    \
+        t_ra_it_data_access at;     \
+                                    \
+        ssize_t             ra_idx;
+forward_declared_class_declaration(RandomAccessIterator)
 
-    ssize_t             ra_idx;
-)
-class_declaration(ArrayRaIterator,
-    RandomAccessIterator;
-)
-class_declaration(StringRaIterator,
-    RandomAccessIterator;
-)
+#define ArrayRaIterator_fields      \
+        RandomAccessIterator_fields
+class_declaration(ArrayRaIterator)
+
+#define StringRaIterator_fields     \
+        RandomAccessIterator_fields
+class_declaration(StringRaIterator)
 
 ctor_declaration(Object *, SplListFwdIterator, Object *class; Object *iterable; t_it_type start_pos;)
 ctor_declaration(Object *, DblListBidirectionalIterator, Object *class; Object *iterable; t_it_type start_pos;)

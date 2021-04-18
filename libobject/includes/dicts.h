@@ -27,12 +27,12 @@ typedef t_bool  (*t_dict_remove)(Object *self, const unsigned char *key);
 t_bool          _dict_remove(Object *self, const unsigned char *key);
 
 // Class and constructor declaration
-class_declaration(Dict,
-    Array;
-    t_obj_by_key    get_by_key;
-    t_dict_push     push;
-    t_dict_remove   remove;
-)
+#define Dict_fields                 \
+        Array_fields                \
+        t_obj_by_key    get_by_key; \
+        t_dict_push     push;       \
+        t_dict_remove   remove;
+class_declaration(Dict)
 ctor_declaration(Object *, Dict, Object *class;)
 
 t_bool  _dict_erase(Object *self);

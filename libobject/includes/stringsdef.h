@@ -58,40 +58,39 @@ typedef char    *(*t_str_sub)(const String *self, ssize_t begin, ssize_t len);
 char            *_string_sub(const String *self, ssize_t begin, ssize_t len);
 
 // Class and constructor declaration
-forward_declared_class_declaration(String,
-    Class;
-    char                *contained;
-    ssize_t             contained_size;
-
-    t_get_data          cstr;
-
-    t_size              size;
-    t_empty             empty;
-
-    t_str_rand_insert   insert_at;
-    t_str_insert        push_back;
-    t_str_rand_delete   delete_at;
-    t_str_delete        erase;
-    t_str_affect        affect;
-
-    t_str_access        front;
-    t_str_access        back;
-    t_str_rand_access   at;
-
-    t_str_dump          dump;
-
-    t_str_it_create     begin;
-    t_str_it_create     end;
-    
-    t_dup               dup;        // NOT TESTED
-    t_str_findstr       find_str;
-    t_str_find          find;
-    t_str_find          rfind;
-    t_str_match         match;
-    t_str_nmatch        nmatch;
-    t_str_split         split;
-    t_str_sub           sub;
-)
+#define String_fields                       \
+        char                *contained;     \
+        ssize_t             contained_size; \
+                                            \
+        t_get_data          cstr;           \
+                                            \
+        t_size              size;           \
+        t_empty             empty;          \
+                                            \
+        t_str_rand_insert   insert_at;      \
+        t_str_insert        push_back;      \
+        t_str_rand_delete   delete_at;      \
+        t_str_delete        erase;          \
+        t_str_affect        affect;         \
+                                            \
+        t_str_access        front;          \
+        t_str_access        back;           \
+        t_str_rand_access   at;             \
+                                            \
+        t_str_dump          dump;           \
+                                            \
+        t_str_it_create     begin;          \
+        t_str_it_create     end;            \
+                                            \
+        t_dup               dup;            \
+        t_str_findstr       find_str;       \
+        t_str_find          find;           \
+        t_str_find          rfind;          \
+        t_str_match         match;          \
+        t_str_nmatch        nmatch;         \
+        t_str_split         split;          \
+        t_str_sub           sub;
+forward_declared_class_declaration(String)
 ctor_declaration(Object *, String, Object *class; char *to_copy; ssize_t copy_amount;)
 
 #endif /* !STRINGSDEF_H_ */

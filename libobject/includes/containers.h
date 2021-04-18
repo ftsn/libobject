@@ -47,35 +47,35 @@ typedef Object  *(*t_it_create)(Object *self);
 Object          *_container_begin(Object *self);
 Object          *_container_end(Object *self);
 
-class_declaration(Container,
-    Class;
-    Object          *contained;
+#define Container_fields                \
+        Object          *contained;     \
+                                        \
+        ssize_t         contained_size; \
+        t_get_data      data;           \
+                                        \
+        t_size          size;           \
+        t_empty         empty;          \
+                                        \
+        t_rand_insert   insert_at;      \
+        t_insert        push_back;      \
+        t_rand_delete   delete_at;      \
+        t_delete        erase;          \
+        t_affect        affect;         \
+                                        \
+        t_access        front;          \
+        t_access        back;           \
+        t_rand_access   at;             \
+                                        \
+        t_dump          dump;           \
+                                        \
+        t_converter     convert;        \
+        t_sub           sub;            \
+        t_map           map;            \
+                                        \
+        t_it_create     begin;          \
+        t_it_create     end;
 
-    ssize_t         contained_size;
-    t_get_data      data;
-
-    t_size          size;
-    t_empty         empty;
-
-    t_rand_insert   insert_at;
-    t_insert        push_back;
-    t_rand_delete   delete_at;
-    t_delete        erase;
-    t_affect        affect;
-
-    t_access        front;
-    t_access        back;
-    t_rand_access   at;
-
-    t_dump          dump;
-
-    t_converter     convert;
-    t_sub           sub;
-    t_map           map;
-
-    t_it_create     begin;
-    t_it_create     end;
-)
+class_declaration(Container)
 
 t_bool  ctn_copy_ctor(Container *ctn, t_data **copy, ssize_t size);
 

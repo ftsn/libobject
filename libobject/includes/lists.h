@@ -22,22 +22,26 @@ typedef enum    e_list_type
 } t_list_type;
 
 // Class and constructors declarations
-class_declaration(List,
-    Container;
-    t_get_node  nth_node;
-)
-class_declaration(SplList,
-    List;
-)
-class_declaration(SplClist,
-    List;
-)
-class_declaration(DblList,
-    List;
-)
-class_declaration(DblClist,
-    List;
-)
+#define List_fields             \
+        Container_fields        \
+        t_get_node  nth_node;
+class_declaration(List)
+
+#define SplList_fields  \
+        List_fields
+class_declaration(SplList)
+
+#define SplClist_fields \
+        List_fields
+class_declaration(SplClist)
+
+#define DblList_fields  \
+        List_fields
+class_declaration(DblList)
+
+#define DblClist_fields \
+        List_fields
+class_declaration(DblClist)
 
 ctor_declaration(Object *, SplList, Object *class; t_data **to_copy; ssize_t copy_amount;)
 ctor_declaration(Object *, SplClist, Object *class; t_data **to_copy; ssize_t copy_amount;)
