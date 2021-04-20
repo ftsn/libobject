@@ -7,7 +7,7 @@
 
 inline t_bool  it_equals(Iterator *it1, Iterator *it2)
 {
-    return (it1->dereference(it1) == it2->dereference(it2) ? TRUE : FALSE);
+    return (it1->vtable->dereference(it1) == it2->vtable->dereference(it2) ? TRUE : FALSE);
 }
 
 t_bool      list_it_previous(Iterator *it)

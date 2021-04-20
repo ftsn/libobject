@@ -33,7 +33,7 @@ Object                  *ctor_definition(SplListFwdIterator)
     i = 0;
     while (i < idx_start)
     {
-        it->next((Iterator *)it);
+        it->vtable->next((Iterator *)it);
         ++i;
     }
     return (it);
@@ -65,7 +65,7 @@ Object                              *ctor_definition(DblListBidirectionalIterato
     i = 0;
     while (i < idx_start)
     {
-        it->next((Iterator *)it);
+        it->vtable->next((Iterator *)it);
         ++i;
     }
     return (it);
@@ -85,7 +85,7 @@ Object              *ctor_definition(ArrayRaIterator)
     idx_start = args->start_pos;
     if (idx_start == END)
         idx_start = iterated_obj->contained_size ? iterated_obj->contained_size - 1 : 0;
-    it->jump((RandomAccessIterator *)it, idx_start);
+    it->vtable->jump((RandomAccessIterator *)it, idx_start);
     if (iterated_obj->contained_size == 0)
     {
         it->reached_the_beginning = 1;
@@ -108,7 +108,7 @@ Object                  *ctor_definition(StringRaIterator)
     idx_start = args->start_pos;
     if (idx_start == END)
         idx_start = iterated_obj->contained_size ? iterated_obj->contained_size - 1 : 0;
-    it->jump((RandomAccessIterator *)it, idx_start);
+    it->vtable->jump((RandomAccessIterator *)it, idx_start);
     if (iterated_obj->contained_size == 0)
     {
         it->reached_the_beginning = 1;
@@ -130,12 +130,12 @@ Object                          *ctor_definition(DictBidirectionalIterator)
     if (args->start_pos == END)
     {
         it->internal_idx = iterated_obj->total_size;
-        it->previous((Iterator *)it);
+        it->vtable->previous((Iterator *)it);
         it->it_idx = iterated_obj->contained_size ? iterated_obj->contained_size - 1 : 0;
     }
     else
     {
-        it->next((Iterator *)it);
+        it->vtable->next((Iterator *)it);
         it->it_idx = 0;
     }
     if (iterated_obj->contained_size == 0)
@@ -151,8 +151,8 @@ static void _iterator_dtor(Object *self)
     (void)self;
 }
 
-class_definition(ArrayRaIterator, TYPE_ARRAY_ITERATOR, _iterator_dtor)
-class_definition(StringRaIterator, TYPE_STRING_ITERATOR, _iterator_dtor)
-class_definition(SplListFwdIterator, TYPE_SPL_LIST_ITERATOR, _iterator_dtor)
-class_definition(DblListBidirectionalIterator, TYPE_DBL_LIST_ITERATOR, _iterator_dtor)
-class_definition(DictBidirectionalIterator, TYPE_DICT_ITERATOR, _iterator_dtor)
+_class_definition(ArrayRaIterator, TYPE_ARRAY_ITERATOR, _iterator_dtor)
+_class_definition(StringRaIterator, TYPE_STRING_ITERATOR, _iterator_dtor)
+_class_definition(SplListFwdIterator, TYPE_SPL_LIST_ITERATOR, _iterator_dtor)
+_class_definition(DblListBidirectionalIterator, TYPE_DBL_LIST_ITERATOR, _iterator_dtor)
+_class_definition(DictBidirectionalIterator, TYPE_DICT_ITERATOR, _iterator_dtor)

@@ -181,7 +181,7 @@ void            container_print(Object *container, const char *title, void (*f)(
         printf("%sContained size: %zd / In memory size: %zd\n", concat_prefix, ((const Container *)container)->contained_size, ((const Dict *)container)->total_size);
     while (!it->reached_the_end)
     {
-        cur = it->dereference(it);
+        cur = it->vtable->dereference(it);
         if (is_container(cur) == TRUE)
         {
             if (is_of_type(cur, TYPE_ARRAY) == TRUE)
@@ -200,7 +200,7 @@ void            container_print(Object *container, const char *title, void (*f)(
             printf("%s%zd: ", concat_prefix, i);
             f(cur, concat_prefix);
         }
-        it->next(it);
+        it->vtable->next(it);
         ++i;
     }
     printf("%s]\n", prefix);
@@ -224,13 +224,13 @@ Object          *container_to_type(Object *self, Class *type)
     }
     while (!it->reached_the_end)
     {
-        if (ctn->push_back(ctn, ((t_data *)it->dereference(it))->data, ((t_data *)it->dereference(it))->type) == FALSE)
+        if (ctn->push_back(ctn, ((t_data *)it->vtable->dereference(it))->data, ((t_data *)it->vtable->dereference(it))->type) == FALSE)
         {
             delete(ctn);
             delete(it);
             return (NULL);
         }
-        it->next(it);
+        it->vtable->next(it);
     }
     delete(it);
     return (ctn);
@@ -261,20 +261,20 @@ Object          *container_sub(Object *self, Class *type, ssize_t begin, ssize_t
     }
     while (i < begin)
     {
-        it->next(it);
+        it->vtable->next(it);
         ++i;
     }
     i = 0;
     while (i < len)
     {
-        if (ctn->push_back(ctn, ((t_data *)it->dereference(it))->data, ((t_data *)it->dereference(it))->type) == FALSE)
+        if (ctn->push_back(ctn, ((t_data *)it->vtable->dereference(it))->data, ((t_data *)it->vtable->dereference(it))->type) == FALSE)
         {
             delete (ctn);
             delete (it);
             return (NULL);
         }
         ++i;
-        it->next(it);
+        it->vtable->next(it);
     }
     delete (it);
     return (ctn);
@@ -297,7 +297,7 @@ Object          *container_map(Object *self, Class *type, t_data (*fptr)(ssize_t
     i = 0;
     while (!it->reached_the_end)
     {
-        typed_data = fptr(i, it->dereference(it));
+        typed_data = fptr(i, it->vtable->dereference(it));
         if (ctn->push_back(ctn, typed_data.data, typed_data.type) == FALSE)
         {
             delete (it);
@@ -305,7 +305,7 @@ Object          *container_map(Object *self, Class *type, t_data (*fptr)(ssize_t
             return (NULL);
         }
         ++i;
-        it->next(it);
+        it->vtable->next(it);
     }
     delete (it);
     return (ctn);

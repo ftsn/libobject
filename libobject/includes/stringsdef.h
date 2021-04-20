@@ -69,25 +69,19 @@ char            *string_sub(const String *self, ssize_t begin, ssize_t len);
         ssize_t             contained_size;
 #define String_vtable_fields                \
         t_str_get_data      cstr;           \
-                                            \
         t_str_size          size;           \
         t_str_empty         empty;          \
-                                            \
         t_str_rand_insert   insert_at;      \
         t_str_insert        push_back;      \
         t_str_rand_delete   delete_at;      \
         t_str_delete        erase;          \
         t_str_affect        affect;         \
-                                            \
         t_str_access        front;          \
         t_str_access        back;           \
         t_str_rand_access   at;             \
-                                            \
         t_str_dump          dump;           \
-                                            \
         t_str_it_create     begin;          \
         t_str_it_create     end;            \
-                                            \
         t_str_findstr       find_str;       \
         t_str_find          find;           \
         t_str_find          lfind;          \
