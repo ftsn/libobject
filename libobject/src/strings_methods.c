@@ -5,6 +5,21 @@
 #include "utils.h"
 #include "iterators.h"
 
+Object  *string_data(const String *self)
+{
+    return (self->contained);
+}
+
+ssize_t string_size(const String *self)
+{
+    return (self->contained_size);
+}
+
+t_bool  string_empty(const String *self)
+{
+    return (self->contained_size == 0 ? TRUE : FALSE);
+}
+
 t_bool      string_insert_at(String *self, char c, ssize_t pos)
 {
     char    *res;
@@ -23,7 +38,7 @@ t_bool      string_insert_at(String *self, char c, ssize_t pos)
 
 t_bool  string_push_back(String *self, char c)
 {
-    return (self->insert_at(self, c, self->contained_size));
+    return (self->vtable->insert_at(self, c, self->contained_size));
 }
 
 t_bool      string_delete_at(String *self, ssize_t pos)

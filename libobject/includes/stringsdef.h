@@ -6,6 +6,15 @@
 // Forward declaration of the String class so we can use the type in our methods
 forward_class_declaration(String)
 
+typedef Object  *(*t_str_get_data)(const String *self);
+Object          *string_data(const String *self);
+
+typedef ssize_t (*t_str_size)(const String *self);
+ssize_t         string_size(const String *self);
+
+typedef t_bool  (*t_str_empty)(const String *self);
+t_bool          string_empty(const String *self);
+
 typedef t_bool  (*t_str_rand_insert)(String *self, char c, ssize_t pos);
 t_bool          string_insert_at(String *string, char c, ssize_t pos);
 
@@ -57,12 +66,12 @@ char            *string_sub(const String *self, ssize_t begin, ssize_t len);
 // Class and constructor declaration
 #define String_fields                       \
         char                *contained;     \
-        ssize_t             contained_size; \
+        ssize_t             contained_size;
+#define String_vtable_fields                \
+        t_str_get_data      cstr;           \
                                             \
-        t_get_data          cstr;           \
-                                            \
-        t_size              size;           \
-        t_empty             empty;          \
+        t_str_size          size;           \
+        t_str_empty         empty;          \
                                             \
         t_str_rand_insert   insert_at;      \
         t_str_insert        push_back;      \
@@ -88,10 +97,11 @@ char            *string_sub(const String *self, ssize_t begin, ssize_t len);
         t_str_sub           sub;
 #define String_definition               \
         .contained = NULL,              \
-        .contained_size = 0,            \
-        .cstr = container_data,         \
-        .size = container_size,         \
-        .empty = container_empty,       \
+        .contained_size = 0
+#define String_vtable_definition        \
+        .cstr = string_data,            \
+        .size = string_size,            \
+        .empty = string_empty,          \
         .insert_at = string_insert_at,  \
         .push_back = string_push_back,  \
         .delete_at = string_delete_at,  \
@@ -111,7 +121,7 @@ char            *string_sub(const String *self, ssize_t begin, ssize_t len);
         .split = string_split,          \
         .sub = string_sub
 
-forward_declared_class_declaration(String)
+_forward_declared_class_declaration(String)
 ctor_declaration(Object *, String, Object *class; char *to_copy; ssize_t copy_amount;)
 
 #endif /* !STRINGSDEF_H_ */

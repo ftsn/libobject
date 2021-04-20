@@ -227,7 +227,7 @@ static void     iterator_null_string_begin(void **state)
     assert_non_null(str);
     assert_null(str->contained);
     assert_int_equal(str->contained_size, 0);
-    it = str->begin(str);
+    it = str->vtable->begin(str);
     assert_non_null(it);
     assert_int_equal(it->reached_the_beginning, 1);
     assert_int_equal(it->reached_the_end, 1);
@@ -248,7 +248,7 @@ static void     iterator_null_string_end(void **state)
     assert_non_null(str);
     assert_null(str->contained);
     assert_int_equal(str->contained_size, 0);
-    it = str->end(str);
+    it = str->vtable->end(str);
     assert_non_null(it);
     assert_int_equal(it->reached_the_beginning, 1);
     assert_int_equal(it->reached_the_end, 1);
@@ -269,7 +269,7 @@ static void     iterator_empty_string_begin(void **state)
     assert_non_null(str);
     assert_non_null(str->contained);
     assert_int_equal(str->contained_size, 0);
-    it = str->begin(str);
+    it = str->vtable->begin(str);
     assert_non_null(it);
     assert_int_equal(it->reached_the_beginning, 1);
     assert_int_equal(it->reached_the_end, 1);
@@ -290,7 +290,7 @@ static void     iterator_empty_string_end(void **state)
     assert_non_null(str);
     assert_non_null(str->contained);
     assert_int_equal(str->contained_size, 0);
-    it = str->end(str);
+    it = str->vtable->end(str);
     assert_non_null(it);
     assert_int_equal(it->reached_the_beginning, 1);
     assert_int_equal(it->reached_the_end, 1);
@@ -312,7 +312,7 @@ static void     iterator_non_empty_string_begin(void **state)
     assert_non_null(str);
     assert_non_null(str->contained);
     assert_int_equal(str->contained_size, 6);
-    it = str->begin(str);
+    it = str->vtable->begin(str);
     assert_non_null(it);
     assert_int_equal(it->reached_the_beginning, 0);
     assert_int_equal(it->reached_the_end, 0);
@@ -340,7 +340,7 @@ static void     iterator_non_empty_string_end(void **state)
     assert_non_null(str);
     assert_non_null(str->contained);
     assert_int_equal(str->contained_size, 6);
-    it = str->end(str);
+    it = str->vtable->end(str);
     assert_non_null(it);
     assert_int_equal(it->reached_the_beginning, 0);
     assert_int_equal(it->reached_the_end, 0);
@@ -368,7 +368,7 @@ static void                 iterator_non_empty_string_arithmetic(void **state)
     assert_non_null(str);
     assert_non_null(str->contained);
     assert_int_equal(str->contained_size, 6);
-    it = str->begin(str);
+    it = str->vtable->begin(str);
     ra = (RandomAccessIterator *)it;
     assert_non_null(it);
     assert_int_equal(it->reached_the_beginning, 0);
@@ -409,13 +409,13 @@ static void                 iterator_non_empty_string_compare_its(void **state)
     assert_non_null(str);
     assert_non_null(str->contained);
     assert_int_equal(str->contained_size, 6);
-    it1 = str->begin(str);
+    it1 = str->vtable->begin(str);
     assert_non_null(it1);
     assert_int_equal(it1->reached_the_beginning, 0);
     assert_int_equal(it1->reached_the_end, 0);
     assert_int_equal(it1->it_idx, 0);
     assert_string_equal(it1->dereference(it1), "foobar");
-    it2 = str->begin(str);
+    it2 = str->vtable->begin(str);
     assert_non_null(it2);
     assert_int_equal(it2->reached_the_beginning, 0);
     assert_int_equal(it2->reached_the_end, 0);

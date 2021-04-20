@@ -9,7 +9,7 @@ typedef Object  *(*t_get_data)(const Object *self);
 Object          *container_data(const Object *self);
 
 typedef ssize_t (*t_size)(const Object *self);
-ssize_t		    container_size(const Object *self);
+ssize_t         container_size(const Object *self);
 
 typedef t_bool  (*t_empty)(const Object *self);
 t_bool          container_empty(const Object *self);

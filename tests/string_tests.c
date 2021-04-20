@@ -51,7 +51,7 @@ static void string_null_string_cstr(void **state)
     String  *str;
 
     str = new_obj(String);
-    assert_null(str->cstr(str));
+    assert_null(str->vtable->cstr(str));
     delete(str);
     (void)state;
 }
@@ -61,7 +61,7 @@ static void string_empty_string_cstr(void **state)
     String  *str;
 
     str = new_obj(String, .to_copy = "", .copy_amount = COPY_ALL);
-    assert_string_equal(str->cstr(str), "");
+    assert_string_equal(str->vtable->cstr(str), "");
     delete(str);
     (void)state;
 }
@@ -71,7 +71,7 @@ static void string_normal_string_cstr(void **state)
     String  *str;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    assert_string_equal(str->cstr(str), "foobar");
+    assert_string_equal(str->vtable->cstr(str), "foobar");
     delete(str);
     (void)state;
 }
@@ -81,7 +81,7 @@ static void string_null_string_size(void **state)
     String  *str;
 
     str = new_obj(String);
-    assert_int_equal(str->size(str), 0);
+    assert_int_equal(str->vtable->size(str), 0);
     delete(str);
     (void)state;
 }
@@ -91,7 +91,7 @@ static void string_empty_string_size(void **state)
     String  *str;
 
     str = new_obj(String, .to_copy = "", .copy_amount = COPY_ALL);
-    assert_int_equal(str->size(str), 0);
+    assert_int_equal(str->vtable->size(str), 0);
     delete(str);
     (void)state;
 }
@@ -101,7 +101,7 @@ static void string_normal_string_size(void **state)
     String  *str;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    assert_int_equal(str->size(str), 6);
+    assert_int_equal(str->vtable->size(str), 6);
     delete(str);
     (void)state;
 }
@@ -111,7 +111,7 @@ static void string_null_string_empty(void **state)
     String  *str;
 
     str = new_obj(String);
-    assert_int_equal(str->empty(str), TRUE);
+    assert_int_equal(str->vtable->empty(str), TRUE);
     delete(str);
     (void)state;
 }
@@ -121,7 +121,7 @@ static void string_empty_string_empty(void **state)
     String  *str;
 
     str = new_obj(String, .to_copy = "", .copy_amount = COPY_ALL);
-    assert_int_equal(str->empty(str), TRUE);
+    assert_int_equal(str->vtable->empty(str), TRUE);
     delete(str);
     (void)state;
 }
@@ -131,7 +131,7 @@ static void string_normal_string_empty(void **state)
     String  *str;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    assert_int_equal(str->empty(str), FALSE);
+    assert_int_equal(str->vtable->empty(str), FALSE);
     delete(str);
     (void)state;
 }
@@ -141,7 +141,7 @@ static void string_insert_at_pos_0_null_string(void **state)
     String  *str;
 
     str = new_obj(String);
-    assert_int_equal(str->insert_at(str, 'a', 0), TRUE);
+    assert_int_equal(str->vtable->insert_at(str, 'a', 0), TRUE);
     assert_string_equal(str->contained, "a");
     delete(str);
     (void)state;
@@ -152,7 +152,7 @@ static void string_insert_at_pos_0_empty_string(void **state)
     String  *str;
 
     str = new_obj(String, .to_copy = "", .copy_amount = COPY_ALL);
-    assert_int_equal(str->insert_at(str, 'a', 0), TRUE);
+    assert_int_equal(str->vtable->insert_at(str, 'a', 0), TRUE);
     assert_string_equal(str->contained, "a");
     delete(str);
     (void)state;
@@ -163,7 +163,7 @@ static void string_insert_at_pos_0_normal_string(void **state)
     String  *str;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    assert_int_equal(str->insert_at(str, 'a', 0), TRUE);
+    assert_int_equal(str->vtable->insert_at(str, 'a', 0), TRUE);
     assert_string_equal(str->contained, "afoobar");
     delete(str);
     (void)state;
@@ -174,7 +174,7 @@ static void string_insert_at_pos_1_normal_string(void **state)
     String  *str;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    assert_int_equal(str->insert_at(str, 'a', 1), TRUE);
+    assert_int_equal(str->vtable->insert_at(str, 'a', 1), TRUE);
     assert_string_equal(str->contained, "faoobar");
     delete(str);
     (void)state;
@@ -185,7 +185,7 @@ static void string_insert_at_last_pos_normal_string(void **state)
     String  *str;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    assert_int_equal(str->insert_at(str, 'a', 6), TRUE);
+    assert_int_equal(str->vtable->insert_at(str, 'a', 6), TRUE);
     assert_string_equal(str->contained, "foobara");
     delete(str);
     (void)state;
@@ -196,7 +196,7 @@ static void string_insert_at_negative_pos(void **state)
     String  *str;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    assert_int_equal(str->insert_at(str, 'a', -2), FALSE);
+    assert_int_equal(str->vtable->insert_at(str, 'a', -2), FALSE);
     assert_string_equal(str->contained, "foobar");
     delete(str);
     (void)state;
@@ -207,7 +207,7 @@ static void string_insert_at_out_of_range(void **state)
     String  *str;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    assert_int_equal(str->insert_at(str, 'a', 7), FALSE);
+    assert_int_equal(str->vtable->insert_at(str, 'a', 7), FALSE);
     assert_string_equal(str->contained, "foobar");
     delete(str);
     (void)state;
@@ -218,7 +218,7 @@ static void string_push_back_null_string(void **state)
     String  *str;
 
     str = new_obj(String);
-    assert_int_equal(str->push_back(str, 'a'), TRUE);
+    assert_int_equal(str->vtable->push_back(str, 'a'), TRUE);
     assert_string_equal(str->contained, "a");
     delete(str);
     (void)state;
@@ -229,7 +229,7 @@ static void string_push_back_empty_string(void **state)
     String  *str;
 
     str = new_obj(String, .to_copy = "", .copy_amount = COPY_ALL);
-    assert_int_equal(str->push_back(str, 'a'), TRUE);
+    assert_int_equal(str->vtable->push_back(str, 'a'), TRUE);
     assert_string_equal(str->contained, "a");
     delete(str);
     (void)state;
@@ -240,7 +240,7 @@ static void string_push_back_normal_string(void **state)
     String  *str;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    assert_int_equal(str->push_back(str, 'a'), TRUE);
+    assert_int_equal(str->vtable->push_back(str, 'a'), TRUE);
     assert_string_equal(str->contained, "foobara");
     delete(str);
     (void)state;
@@ -251,7 +251,7 @@ static void string_delete_at_pos_0_null_string(void **state)
     String  *str;
 
     str = new_obj(String);
-    assert_int_equal(str->delete_at(str, 0), FALSE);
+    assert_int_equal(str->vtable->delete_at(str, 0), FALSE);
     assert_null(str->contained);
     delete(str);
     (void)state;
@@ -262,7 +262,7 @@ static void string_delete_at_pos_0_empty_string(void **state)
     String  *str;
 
     str = new_obj(String, .to_copy = "", .copy_amount = COPY_ALL);
-    assert_int_equal(str->delete_at(str, 0), FALSE);
+    assert_int_equal(str->vtable->delete_at(str, 0), FALSE);
     assert_string_equal(str->contained, "");
     delete(str);
     (void)state;
@@ -273,7 +273,7 @@ static void string_delete_at_pos_0_normal_string(void **state)
     String  *str;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    assert_int_equal(str->delete_at(str, 0), TRUE);
+    assert_int_equal(str->vtable->delete_at(str, 0), TRUE);
     assert_string_equal(str->contained, "oobar");
     delete(str);
     (void)state;
@@ -284,7 +284,7 @@ static void string_delete_at_pos_3_normal_string(void **state)
     String  *str;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    assert_int_equal(str->delete_at(str, 3), TRUE);
+    assert_int_equal(str->vtable->delete_at(str, 3), TRUE);
     assert_string_equal(str->contained, "fooar");
     delete(str);
     (void)state;
@@ -295,7 +295,7 @@ static void string_delete_at_last_pos_normal_string(void **state)
     String  *str;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    assert_int_equal(str->delete_at(str, 5), TRUE);
+    assert_int_equal(str->vtable->delete_at(str, 5), TRUE);
     assert_string_equal(str->contained, "fooba");
     delete(str);
     (void)state;
@@ -306,7 +306,7 @@ static void string_delete_at_negative_pos(void **state)
     String  *str;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    assert_int_equal(str->delete_at(str, -2), FALSE);
+    assert_int_equal(str->vtable->delete_at(str, -2), FALSE);
     assert_string_equal(str->contained, "foobar");
     delete(str);
     (void)state;
@@ -317,7 +317,7 @@ static void string_delete_at_out_of_range(void **state)
     String  *str;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    assert_int_equal(str->delete_at(str, 6), FALSE);
+    assert_int_equal(str->vtable->delete_at(str, 6), FALSE);
     assert_string_equal(str->contained, "foobar");
     delete(str);
     (void)state;
@@ -328,7 +328,7 @@ static void string_erase_null_string(void **state)
     String  *str;
 
     str = new_obj(String);
-    assert_int_equal(str->erase(str), TRUE);
+    assert_int_equal(str->vtable->erase(str), TRUE);
     assert_null(str->contained);
     assert_int_equal(str->contained_size, 0);
     delete(str);
@@ -340,7 +340,7 @@ static void string_erase_normal_string(void **state)
     String  *str;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    assert_int_equal(str->erase(str), TRUE);
+    assert_int_equal(str->vtable->erase(str), TRUE);
     assert_null(str->contained);
     assert_int_equal(str->contained_size, 0);
     delete(str);
@@ -352,7 +352,7 @@ static void string_affect_null_string(void **state)
     String  *str;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    assert_int_equal(str->affect(str, NULL), TRUE);
+    assert_int_equal(str->vtable->affect(str, NULL), TRUE);
     assert_null(str->contained);
     assert_int_equal(str->contained_size, 0);
     delete(str);
@@ -364,7 +364,7 @@ static void string_affect_normal_string(void **state)
     String  *str;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    assert_int_equal(str->affect(str, "foobarz"), TRUE);
+    assert_int_equal(str->vtable->affect(str, "foobarz"), TRUE);
     assert_string_equal(str->contained, "foobarz");
     assert_int_equal(str->contained_size, 7);
     delete(str);
@@ -376,7 +376,7 @@ static void string_front_null_string(void **state)
     String  *str;
 
     str = new_obj(String);
-    assert_null(str->front(str));
+    assert_null(str->vtable->front(str));
     delete(str);
     (void)state;
 }
@@ -386,7 +386,7 @@ static void string_front_empty_string(void **state)
     String  *str;
 
     str = new_obj(String, .to_copy = "", .copy_amount = COPY_ALL);
-    assert_string_equal(str->front(str), "");
+    assert_string_equal(str->vtable->front(str), "");
     delete(str);
     (void)state;
 }
@@ -396,7 +396,7 @@ static void string_front_normal_string(void **state)
     String  *str;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    assert_string_equal(str->front(str), "foobar");
+    assert_string_equal(str->vtable->front(str), "foobar");
     delete(str);
     (void)state;
 }
@@ -406,7 +406,7 @@ static void string_back_null_string(void **state)
     String  *str;
 
     str = new_obj(String);
-    assert_null(str->back(str));
+    assert_null(str->vtable->back(str));
     delete(str);
     (void)state;
 }
@@ -416,7 +416,7 @@ static void string_back_empty_string(void **state)
     String  *str;
 
     str = new_obj(String, .to_copy = "", .copy_amount = COPY_ALL);
-    assert_string_equal(str->back(str), "");
+    assert_string_equal(str->vtable->back(str), "");
     delete(str);
     (void)state;
 }
@@ -426,7 +426,7 @@ static void string_back_normal_string(void **state)
     String  *str;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    assert_string_equal(str->back(str), "r");
+    assert_string_equal(str->vtable->back(str), "r");
     delete(str);
     (void)state;
 }
@@ -436,7 +436,7 @@ static void string_at_pos_0_null_string(void **state)
     String  *str;
 
     str = new_obj(String);
-    assert_null(str->at(str, 0));
+    assert_null(str->vtable->at(str, 0));
     delete(str);
     (void)state;
 }
@@ -446,7 +446,7 @@ static void string_at_pos_0_empty_string(void **state)
     String  *str;
 
     str = new_obj(String, .to_copy = "", .copy_amount = COPY_ALL);
-    assert_string_equal(str->at(str, 0), "");
+    assert_string_equal(str->vtable->at(str, 0), "");
     delete(str);
     (void)state;
 }
@@ -456,7 +456,7 @@ static void string_at_pos_0_normal_string(void **state)
     String  *str;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    assert_string_equal(str->at(str, 0), "foobar");
+    assert_string_equal(str->vtable->at(str, 0), "foobar");
     delete(str);
     (void)state;
 }
@@ -466,7 +466,7 @@ static void string_at_pos_1_normal_string(void **state)
     String  *str;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    assert_string_equal(str->at(str, 1), "oobar");
+    assert_string_equal(str->vtable->at(str, 1), "oobar");
     delete(str);
     (void)state;
 }
@@ -476,7 +476,7 @@ static void string_at_last_pos_normal_string(void **state)
     String  *str;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    assert_string_equal(str->at(str, 5), "r");
+    assert_string_equal(str->vtable->at(str, 5), "r");
     delete(str);
     (void)state;
 }
@@ -486,7 +486,7 @@ static void string_at_negative_pos_normal_string(void **state)
     String  *str;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    assert_null(str->at(str, -2));
+    assert_null(str->vtable->at(str, -2));
     delete(str);
     (void)state;
 }
@@ -496,7 +496,7 @@ static void string_at_out_of_range_normal_string(void **state)
     String  *str;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    assert_null(str->at(str, 6));
+    assert_null(str->vtable->at(str, 6));
     delete(str);
     (void)state;
 }
@@ -506,7 +506,7 @@ static void string_find_null_str_null_string(void **state)
     String  *str;
 
     str = new_obj(String);
-    assert_null(str->find_str(str, NULL));
+    assert_null(str->vtable->find_str(str, NULL));
     delete(str);
     (void)state;
 }
@@ -516,7 +516,7 @@ static void string_find_null_str_normal_string(void **state)
     String  *str;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    assert_null(str->find_str(str, NULL));
+    assert_null(str->vtable->find_str(str, NULL));
     delete(str);
     (void)state;
 }
@@ -526,7 +526,7 @@ static void string_find_normal_str_null_string(void **state)
     String  *str;
 
     str = new_obj(String);
-    assert_null(str->find_str(str, "bar"));
+    assert_null(str->vtable->find_str(str, "bar"));
     delete(str);
     (void)state;
 }
@@ -536,7 +536,7 @@ static void string_find_normal_str_normal_string(void **state)
     String  *str;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    assert_string_equal(str->find_str(str, "ba"), "bar");
+    assert_string_equal(str->vtable->find_str(str, "ba"), "bar");
     delete(str);
     (void)state;
 }
@@ -546,7 +546,7 @@ static void string_find_1st_occurence_normal_char_null_string(void **state)
     String  *str;
 
     str = new_obj(String);
-    assert_null(str->find(str, 'o'));
+    assert_null(str->vtable->find(str, 'o'));
     delete(str);
     (void)state;
 }
@@ -556,7 +556,7 @@ static void string_find_1st_occurence_normal_char_normal_string(void **state)
     String  *str;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    assert_string_equal(str->find(str, 'o'), "oobar");
+    assert_string_equal(str->vtable->find(str, 'o'), "oobar");
     delete(str);
     (void)state;
 }
@@ -566,7 +566,7 @@ static void string_find_1st_occurence_normal_char_not_present_normal_string(void
     String  *str;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    assert_null(str->find(str, 'z'));
+    assert_null(str->vtable->find(str, 'z'));
     delete(str);
     (void)state;
 }
@@ -576,7 +576,7 @@ static void string_find_last_occurence_normal_char_null_string(void **state)
     String  *str;
 
     str = new_obj(String);
-    assert_null(str->lfind(str, 'o'));
+    assert_null(str->vtable->lfind(str, 'o'));
     delete(str);
     (void)state;
 }
@@ -586,7 +586,7 @@ static void string_find_last_occurence_normal_char_normal_string(void **state)
     String  *str;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    assert_string_equal(str->lfind(str, 'o'), "obar");
+    assert_string_equal(str->vtable->lfind(str, 'o'), "obar");
     delete(str);
     (void)state;
 }
@@ -596,7 +596,7 @@ static void string_find_last_occurence_normal_char_not_present_normal_string(voi
     String  *str;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    assert_null(str->lfind(str, 'z'));
+    assert_null(str->vtable->lfind(str, 'z'));
     delete(str);
     (void)state;
 }
@@ -606,7 +606,7 @@ static void string_match_null_string_with_null_string(void **state)
     String  *str;
 
     str = new_obj(String);
-    assert_int_equal(str->match(str, NULL), FALSE);
+    assert_int_equal(str->vtable->match(str, NULL), FALSE);
     delete(str);
     (void)state;
 }
@@ -616,7 +616,7 @@ static void string_match_normal_string_with_null_string(void **state)
     String  *str;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    assert_int_equal(str->match(str, NULL), FALSE);
+    assert_int_equal(str->vtable->match(str, NULL), FALSE);
     delete(str);
     (void)state;
 }
@@ -626,7 +626,7 @@ static void string_match_normal_string_with_empty_string(void **state)
     String  *str;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    assert_int_equal(str->match(str, ""), FALSE);
+    assert_int_equal(str->vtable->match(str, ""), FALSE);
     delete(str);
     (void)state;
 }
@@ -636,7 +636,7 @@ static void string_match_normal_string_with_non_matching_normal_string(void **st
     String  *str;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    assert_int_equal(str->match(str, "foo"), FALSE);
+    assert_int_equal(str->vtable->match(str, "foo"), FALSE);
     delete(str);
     (void)state;
 }
@@ -646,7 +646,7 @@ static void string_match_normal_string_with_matching_normal_string_no_wildcard(v
     String  *str;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    assert_int_equal(str->match(str, "foobar"), TRUE);
+    assert_int_equal(str->vtable->match(str, "foobar"), TRUE);
     delete(str);
     (void)state;
 }
@@ -656,7 +656,7 @@ static void string_match_normal_string_with_one_wildcard(void **state)
     String  *str;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    assert_int_equal(str->match(str, "*"), TRUE);
+    assert_int_equal(str->vtable->match(str, "*"), TRUE);
     delete(str);
     (void)state;
 }
@@ -666,7 +666,7 @@ static void string_match_normal_string_with_multiple_wildcard(void **state)
     String  *str;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    assert_int_equal(str->match(str, "***"), TRUE);
+    assert_int_equal(str->vtable->match(str, "***"), TRUE);
     delete(str);
     (void)state;
 }
@@ -676,7 +676,7 @@ static void string_match_normal_string_with_matching_normal_string_including_one
     String  *str;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    assert_int_equal(str->match(str, "f*"), TRUE);
+    assert_int_equal(str->vtable->match(str, "f*"), TRUE);
     delete(str);
     (void)state;
 }
@@ -686,7 +686,7 @@ static void string_match_normal_string_with_matching_normal_string_including_mul
     String  *str;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    assert_int_equal(str->match(str, "*ba*"), TRUE);
+    assert_int_equal(str->vtable->match(str, "*ba*"), TRUE);
     delete(str);
     (void)state;
 }
@@ -696,7 +696,7 @@ static void string_nmatch_null_string_with_null_string(void **state)
     String  *str;
 
     str = new_obj(String);
-    assert_int_equal(str->nmatch(str, NULL), -1);
+    assert_int_equal(str->vtable->nmatch(str, NULL), -1);
     delete(str);
     (void)state;
 }
@@ -706,7 +706,7 @@ static void string_nmatch_normal_string_with_null_string(void **state)
     String  *str;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    assert_int_equal(str->nmatch(str, NULL), -1);
+    assert_int_equal(str->vtable->nmatch(str, NULL), -1);
     delete(str);
     (void)state;
 }
@@ -716,7 +716,7 @@ static void string_nmatch_normal_string_with_empty_string(void **state)
     String  *str;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    assert_int_equal(str->nmatch(str, ""), 0);
+    assert_int_equal(str->vtable->nmatch(str, ""), 0);
     delete(str);
     (void)state;
 }
@@ -726,7 +726,7 @@ static void string_nmatch_normal_string_with_non_matching_normal_string(void **s
     String  *str;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    assert_int_equal(str->nmatch(str, "foo"), 0);
+    assert_int_equal(str->vtable->nmatch(str, "foo"), 0);
     delete(str);
     (void)state;
 }
@@ -736,7 +736,7 @@ static void string_nmatch_normal_string_with_matching_normal_string_no_wildcard(
     String  *str;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    assert_int_equal(str->nmatch(str, "foobar"), 1);
+    assert_int_equal(str->vtable->nmatch(str, "foobar"), 1);
     delete(str);
     (void)state;
 }
@@ -746,7 +746,7 @@ static void string_nmatch_normal_string_with_one_wildcard(void **state)
     String  *str;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    assert_int_equal(str->nmatch(str, "*"), 1);
+    assert_int_equal(str->vtable->nmatch(str, "*"), 1);
     delete(str);
     (void)state;
 }
@@ -756,11 +756,11 @@ static void string_nmatch_multiple_normal_with_wildcards_tests(void **state)
     String  *str;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    assert_int_equal(str->nmatch(str, "f*"), 1);
-    assert_int_equal(str->nmatch(str, "*r"), 1);
-    assert_int_equal(str->nmatch(str, "*b*"), 1);
-    assert_int_equal(str->nmatch(str, "*r*"), 1);
-    assert_int_equal(str->nmatch(str, "*o*"), 2);
+    assert_int_equal(str->vtable->nmatch(str, "f*"), 1);
+    assert_int_equal(str->vtable->nmatch(str, "*r"), 1);
+    assert_int_equal(str->vtable->nmatch(str, "*b*"), 1);
+    assert_int_equal(str->vtable->nmatch(str, "*r*"), 1);
+    assert_int_equal(str->vtable->nmatch(str, "*o*"), 2);
     delete(str);
     (void)state;
 }
@@ -770,7 +770,7 @@ static void string_split_null_string_with_null_token_string(void **state)
     String  *str;
 
     str = new_obj(String);
-    assert_null(str->split(str, BLUEPRINT(Array), NULL));
+    assert_null(str->vtable->split(str, BLUEPRINT(Array), NULL));
     delete(str);
     (void)state;
 }
@@ -780,7 +780,7 @@ static void string_split_null_string_with_empty_token_string(void **state)
     String  *str;
 
     str = new_obj(String);
-    assert_null(str->split(str, BLUEPRINT(Array), ""));
+    assert_null(str->vtable->split(str, BLUEPRINT(Array), ""));
     delete(str);
     (void)state;
 }
@@ -790,7 +790,7 @@ static void string_split_normal_string_with_null_token_string(void **state)
     String  *str;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    assert_null(str->split(str, BLUEPRINT(Array), NULL));
+    assert_null(str->vtable->split(str, BLUEPRINT(Array), NULL));
     delete(str);
     (void)state;
 }
@@ -801,7 +801,7 @@ static void     string_split_normal_string_with_empty_token_string(void **state)
     Container   *array;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    array = str->split(str, BLUEPRINT(Array), "");
+    array = str->vtable->split(str, BLUEPRINT(Array), "");
     assert_non_null(array);
     assert_non_null(array->contained);
     assert_int_equal(array->contained_size, 1);
@@ -817,7 +817,7 @@ static void     string_split_normal_string_with_non_matching_single_char_token_s
     Container   *array;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    array = str->split(str, BLUEPRINT(Array), ",");
+    array = str->vtable->split(str, BLUEPRINT(Array), ",");
     assert_non_null(array);
     assert_non_null(array->contained);
     assert_int_equal(array->contained_size, 1);
@@ -833,7 +833,7 @@ static void     string_split_normal_string_with_non_matching_multiple_char_token
     Container   *array;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    array = str->split(str, BLUEPRINT(Array), ",;");
+    array = str->vtable->split(str, BLUEPRINT(Array), ",;");
     assert_non_null(array);
     assert_non_null(array->contained);
     assert_int_equal(array->contained_size, 1);
@@ -849,7 +849,7 @@ static void     string_split_normal_string_with_matching_single_char_token_strin
     Container   *array;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    array = str->split(str, BLUEPRINT(Array), "o");
+    array = str->vtable->split(str, BLUEPRINT(Array), "o");
     assert_non_null(array);
     assert_non_null(array->contained);
     assert_int_equal(array->contained_size, 2);
@@ -866,7 +866,7 @@ static void     string_split_normal_string_with_matching_multiple_char_token_str
     Container   *array;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    array = str->split(str, BLUEPRINT(Array), "oa");
+    array = str->vtable->split(str, BLUEPRINT(Array), "oa");
     assert_non_null(array);
     assert_non_null(array->contained);
     assert_int_equal(array->contained_size, 3);
@@ -884,7 +884,7 @@ static void string_sub_null_string_pos_0_len_0(void **state)
     char    *sub;
 
     str = new_obj(String);
-    sub = str->sub(str, 0, 0);
+    sub = str->vtable->sub(str, 0, 0);
     assert_null(sub);
     free(sub);
     delete(str);
@@ -897,7 +897,7 @@ static void string_sub_empty_string_pos_0_len_0(void **state)
     char    *sub;
 
     str = new_obj(String, .to_copy = "", .copy_amount = COPY_ALL);
-    sub = str->sub(str, 0, 0);
+    sub = str->vtable->sub(str, 0, 0);
     assert_string_equal(sub, "");
     free(sub);
     delete(str);
@@ -910,7 +910,7 @@ static void string_sub_normal_string_pos_0_len_0(void **state)
     char    *sub;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    sub = str->sub(str, 0, 0);
+    sub = str->vtable->sub(str, 0, 0);
     assert_string_equal(sub, "");
     free(sub);
     delete(str);
@@ -923,7 +923,7 @@ static void string_sub_normal_string_out_of_range_pos_len_0(void **state)
     char    *sub;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    sub = str->sub(str, 666, 0);
+    sub = str->vtable->sub(str, 666, 0);
     assert_null(sub);
     free(sub);
     delete(str);
@@ -936,7 +936,7 @@ static void string_sub_normal_string_pos_0_too_long_length(void **state)
     char    *sub;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    sub = str->sub(str, 0, 666);
+    sub = str->vtable->sub(str, 0, 666);
     assert_null(sub);
     free(sub);
     delete(str);
@@ -949,7 +949,7 @@ static void string_sub_normal_string_pos_0_correct_length(void **state)
     char    *sub;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    sub = str->sub(str, 0, 3);
+    sub = str->vtable->sub(str, 0, 3);
     assert_string_equal(sub, "foo");
     free(sub);
     delete(str);
@@ -962,7 +962,7 @@ static void string_sub_normal_string_pos_3_correct_length(void **state)
     char    *sub;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    sub = str->sub(str, 3, 3);
+    sub = str->vtable->sub(str, 3, 3);
     assert_string_equal(sub, "bar");
     free(sub);
     delete(str);
@@ -975,7 +975,7 @@ static void string_sub_normal_string_negative_pos_too_long_length(void **state)
     char    *sub;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    sub = str->sub(str, -3, 666);
+    sub = str->vtable->sub(str, -3, 666);
     assert_null(sub);
     free(sub);
     delete(str);
@@ -988,7 +988,7 @@ static void string_sub_normal_string_negative_pos_correct_length(void **state)
     char    *sub;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    sub = str->sub(str, -3, 3);
+    sub = str->vtable->sub(str, -3, 3);
     assert_string_equal(sub, "bar");
     free(sub);
     delete(str);

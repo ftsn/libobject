@@ -202,7 +202,7 @@ Object      *string_ra_it_at(RandomAccessIterator *it, ssize_t idx)
     String  *s;
 
     s = it->iterated_obj;
-    return (s->at(s, idx));
+    return (s->vtable->at(s, idx));
 }
 
 t_bool                          dict_bidirectional_it_next(Iterator *it)
