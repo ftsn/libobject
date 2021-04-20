@@ -6,19 +6,19 @@
 # define COPY_ALL   ((ssize_t)-1)
 
 typedef Object  *(*t_get_data)(const Object *self);
-Object          *_container_data(const Object *self);
+Object          *container_data(const Object *self);
 
 typedef ssize_t (*t_size)(const Object *self);
-ssize_t		    _container_size(const Object *self);
+ssize_t		    container_size(const Object *self);
 
 typedef t_bool  (*t_empty)(const Object *self);
-t_bool          _container_empty(const Object *self);
+t_bool          container_empty(const Object *self);
 
 typedef t_bool  (*t_rand_insert)(Object *self, void *data, t_type type, ssize_t pos);
-t_bool          _container_insert_at(Object *self, void *data, t_type type, ssize_t pos);
+t_bool          container_insert_at(Object *self, void *data, t_type type, ssize_t pos);
 
 typedef t_bool  (*t_insert)(Object *self, void *data, t_type type);
-t_bool          _container_push_back(Object *self, void *data, t_type type);
+t_bool          container_push_back(Object *self, void *data, t_type type);
 
 typedef t_bool  (*t_rand_delete)(Object *self, ssize_t pos);
 
@@ -29,21 +29,21 @@ typedef Object  *(*t_access)(const Object *container);
 typedef Object  *(*t_rand_access)(const Object *contained, ssize_t pos);
 
 typedef void    (*t_dump)(Object *self, const char *title, void (*f)(const t_data *elem, const char *prefix), const char *prefix);
-void            _container_print(Object *container, const char *title, void (*f)(const t_data *elem, const char *prefix), const char *prefix);
+void            container_print(Object *container, const char *title, void (*f)(const t_data *elem, const char *prefix), const char *prefix);
 void            typed_basic_print(const t_data *elem, const char *prefix);
 
 typedef Object  *(*t_converter)(Object *self, Class *type);
-Object          *_container_to_type(Object *self, Class *type);
+Object          *container_to_type(Object *self, Class *type);
 
 typedef Object  *(*t_sub)(Object *self, Class *type, ssize_t begin, ssize_t len);
-Object          *_container_sub(Object *self, Class *type, ssize_t begin, ssize_t len);
+Object          *container_sub(Object *self, Class *type, ssize_t begin, ssize_t len);
 
 typedef Object  *(*t_map)(Object *self, Class *type, t_data (*fptr)(ssize_t i, void *cur));
-Object          *_container_map(Object *self, Class *type, t_data (*fptr)(ssize_t i, void *cur));
+Object          *container_map(Object *self, Class *type, t_data (*fptr)(ssize_t i, void *cur));
 
 typedef Object  *(*t_it_create)(Object *self);
-Object          *_container_begin(Object *self);
-Object          *_container_end(Object *self);
+Object          *container_begin(Object *self);
+Object          *container_end(Object *self);
 
 #define Container_fields                \
         Object          *contained;     \
@@ -75,22 +75,22 @@ Object          *_container_end(Object *self);
 #define Container_definition                \
         .contained = NULL,                  \
         .contained_size = 0,                \
-        .data = _container_data,            \
-        .size = _container_size,            \
-        .empty = _container_empty,          \
+        .data = container_data,				\
+        .size = container_size,            	\
+        .empty = container_empty,          	\
         .insert_at = NULL,                  \
-        .push_back = _container_push_back,  \
+        .push_back = container_push_back,  	\
         .delete_at = NULL,                  \
         .erase = NULL,                      \
         .front = NULL,                      \
         .back = NULL,                       \
         .at = NULL,                         \
-        .dump = _container_print,           \
-        .convert = _container_to_type,      \
-        .sub = _container_sub,              \
-        .map = _container_map,              \
-        .begin = _container_begin,          \
-        .end = _container_end
+        .dump = container_print,           	\
+        .convert = container_to_type,      	\
+        .sub = container_sub,              	\
+        .map = container_map,              	\
+        .begin = container_begin,          	\
+        .end = container_end
 
 class_declaration(Container)
 

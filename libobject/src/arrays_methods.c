@@ -116,7 +116,7 @@ t_bool      array_alloc(Array *array, ssize_t new_size, t_array_opr operation, .
     return (TRUE);
 }
 
-t_bool          _array_insert_at(Object *container, void *data, t_type type, ssize_t pos)
+t_bool          array_insert_at(Object *container, void *data, t_type type, ssize_t pos)
 {
     Array       *self;
     t_data      *typed_data;
@@ -136,7 +136,7 @@ t_bool          _array_insert_at(Object *container, void *data, t_type type, ssi
     return (TRUE);
 }
 
-t_bool      _array_delete_at(Object *container, ssize_t pos)
+t_bool      array_delete_at(Object *container, ssize_t pos)
 {
     Array   *self;
 
@@ -148,7 +148,7 @@ t_bool      _array_delete_at(Object *container, ssize_t pos)
     return (TRUE);
 }
 
-t_bool      _array_erase(Object *container)
+t_bool      array_erase(Object *container)
 {
     Array   *self;
     ssize_t i;
@@ -164,7 +164,7 @@ t_bool      _array_erase(Object *container)
     return (TRUE);
 }
 
-Object          *_array_front(const Object *array)
+Object          *array_front(const Object *array)
 {
     const Array *container;
 
@@ -172,7 +172,7 @@ Object          *_array_front(const Object *array)
     return (container->contained && container->contained_size ? ((void **)container->contained)[0] : NULL);
 }
 
-Object          *_array_back(const Object *array)
+Object          *array_back(const Object *array)
 {
     const Array *container;
 
@@ -180,7 +180,7 @@ Object          *_array_back(const Object *array)
     return (container->contained && container->contained_size ? ((void **)container->contained)[container->contained_size - 1] : NULL);
 }
 
-Object          *_array_at(const Object *self, ssize_t pos)
+Object          *array_at(const Object *self, ssize_t pos)
 {
     const Array *container;
 

@@ -7,55 +7,52 @@
 forward_class_declaration(String)
 
 typedef t_bool  (*t_str_rand_insert)(String *self, char c, ssize_t pos);
-t_bool          _string_insert_at(String *string, char c, ssize_t pos);
+t_bool          string_insert_at(String *string, char c, ssize_t pos);
 
 typedef t_bool  (*t_str_insert)(String *self, char c);
-t_bool          _string_push_back(String *self, char c);
+t_bool          string_push_back(String *self, char c);
 
 typedef t_bool  (*t_str_rand_delete)(String *self, ssize_t pos);
-t_bool          _string_delete_at(String *self, ssize_t pos);
+t_bool          string_delete_at(String *self, ssize_t pos);
 
 typedef t_bool  (*t_str_delete)(String *self);
-t_bool          _string_erase(String *self);
+t_bool          string_erase(String *self);
 
 typedef t_bool  (*t_str_affect)(String *self, void *data);
-t_bool          _string_affect(String *self, void *data);
+t_bool          string_affect(String *self, void *data);
 
 typedef char    *(*t_str_access)(const String *self);
-char            *_string_front(const String *self);
-char            *_string_back(const String *self);
+char            *string_front(const String *self);
+char            *string_back(const String *self);
 
 typedef char    *(*t_str_rand_access)(const String *self, ssize_t pos);
-char            *_string_at(const String *self, ssize_t pos);
+char            *string_at(const String *self, ssize_t pos);
 
 typedef void    (*t_str_dump)(const String *self, const char *title);
-void            _string_print(const String *self, const char *title);
+void            string_print(const String *self, const char *title);
 
 typedef Object  *(*t_str_it_create)(Object *self);
-Object          *_string_begin(Object *self);
-Object          *_string_end(Object *self);
-
-typedef String  *(*t_dup)(const String *self);
-String          *_string_dup(const String *self);
+Object          *string_begin(Object *self);
+Object          *string_end(Object *self);
 
 typedef char    *(*t_str_findstr)(const String *self, const char *substr);
-char            *_string_findstr(const String *self, const char *substr);
+char            *string_findstr(const String *self, const char *substr);
 
 typedef char    *(*t_str_find)(const String *self, int c);
-char            *_string_find(const String *self, int c);
-char            *_string_lfind(const String *self, int c);
+char            *string_find(const String *self, int c);
+char            *string_lfind(const String *self, int c);
 
 typedef t_bool  (*t_str_match)(const String *self, const char *compare);
-t_bool          _string_match(const String *self, const char *compare);
+t_bool          string_match(const String *self, const char *compare);
 
 typedef ssize_t (*t_str_nmatch)(const String *self, const char *compare);
-ssize_t         _string_nmatch(const String *self, const char *compare);
+ssize_t         string_nmatch(const String *self, const char *compare);
 
 typedef Object  *(*t_str_split)(const String *self, const Class *type, const char *sep);
-Object          *_string_split(const String *self, const Class *type, const char *sep);
+Object          *string_split(const String *self, const Class *type, const char *sep);
 
 typedef char    *(*t_str_sub)(const String *self, ssize_t begin, ssize_t len);
-char            *_string_sub(const String *self, ssize_t begin, ssize_t len);
+char            *string_sub(const String *self, ssize_t begin, ssize_t len);
 
 // Class and constructor declaration
 #define String_fields                       \
@@ -82,7 +79,6 @@ char            *_string_sub(const String *self, ssize_t begin, ssize_t len);
         t_str_it_create     begin;          \
         t_str_it_create     end;            \
                                             \
-        t_dup               dup;            \
         t_str_findstr       find_str;       \
         t_str_find          find;           \
         t_str_find          lfind;          \
@@ -93,34 +89,27 @@ char            *_string_sub(const String *self, ssize_t begin, ssize_t len);
 #define String_definition               \
         .contained = NULL,              \
         .contained_size = 0,            \
-                                        \
-        .cstr = _container_data,        \
-        .size = _container_size,        \
-        .empty = _container_empty,      \
-                                        \
-        .insert_at = _string_insert_at, \
-        .push_back = _string_push_back, \
-        .delete_at = _string_delete_at, \
-        .erase = _string_erase,         \
-        .affect = _string_affect,       \
-                                        \
-        .front = _string_front,         \
-        .back = _string_back,           \
-        .at = _string_at,               \
-                                        \
-        .dump = _string_print,          \
-                                        \
-        .begin = _string_begin,         \
-        .end = _string_end,             \
-                                        \
-        .dup = NULL,                    \
-        .find_str = _string_findstr,    \
-        .find = _string_find,           \
-        .lfind = _string_lfind,         \
-        .match = _string_match,         \
-        .nmatch = _string_nmatch,       \
-        .split = _string_split,         \
-        .sub = _string_sub
+        .cstr = container_data,         \
+        .size = container_size,         \
+        .empty = container_empty,       \
+        .insert_at = string_insert_at,  \
+        .push_back = string_push_back,  \
+        .delete_at = string_delete_at,  \
+        .erase = string_erase,          \
+        .affect = string_affect,        \
+        .front = string_front,          \
+        .back = string_back,            \
+        .at = string_at,                \
+        .dump = string_print,           \
+        .begin = string_begin,          \
+        .end = string_end,              \
+        .find_str = string_findstr,     \
+        .find = string_find,            \
+        .lfind = string_lfind,          \
+        .match = string_match,          \
+        .nmatch = string_nmatch,        \
+        .split = string_split,          \
+        .sub = string_sub
 
 forward_declared_class_declaration(String)
 ctor_declaration(Object *, String, Object *class; char *to_copy; ssize_t copy_amount;)

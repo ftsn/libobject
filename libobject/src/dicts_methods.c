@@ -47,7 +47,7 @@ static void release_contained(DblList **contained, ssize_t size)
     free(contained);
 }
 
-t_bool      _dict_erase(Object *self)
+t_bool      dict_erase(Object *self)
 {
     Dict    *dict;
 
@@ -56,7 +56,7 @@ t_bool      _dict_erase(Object *self)
     return (TRUE);
 }
 
-t_data          *_dict_get_by_key(const Object *dict_obj, const unsigned char *key)
+t_data          *dict_get_by_key(const Object *dict_obj, const unsigned char *key)
 {
     const Dict  *dict = dict_obj;
     DblList     *list;
@@ -194,7 +194,7 @@ t_bool      dict_alloc(Dict *dict, ssize_t new_size)
     return (TRUE);
 }
 
-t_bool      _dict_push(Object *self, unsigned char *key, void *data, t_type type)
+t_bool      dict_push(Object *self, unsigned char *key, void *data, t_type type)
 {
     Dict    *dict;
 
@@ -207,7 +207,7 @@ t_bool      _dict_push(Object *self, unsigned char *key, void *data, t_type type
     return (_dict_push_no_resizing(self, key, data, type));
 }
 
-t_bool          _dict_remove(Object *self, const unsigned char *key)
+t_bool          dict_remove(Object *self, const unsigned char *key)
 {
     Dict        *dict;
     DblList     *list;

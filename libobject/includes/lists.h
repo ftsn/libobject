@@ -27,10 +27,10 @@ typedef enum    e_list_type
         t_get_node  nth_node;
 #define List_definition                 \
         Container_definition,           \
-        .erase = _list_erase,           \
-        .front = _list_front,           \
-        .back = _list_end,              \
-        .at = _list_at,                 \
+        .erase = list_erase,           	\
+        .front = list_front,           	\
+        .back = list_end,              	\
+        .at = list_at,                 	\
         .nth_node = get_nth_node
 class_declaration(List)
 
@@ -38,32 +38,32 @@ class_declaration(List)
         List_fields
 #define SplList_definition              \
         List_definition,                \
-        .insert_at = _spl_list_add,     \
-        .delete_at = _spl_list_del
+        .insert_at = spl_list_add,     	\
+        .delete_at = spl_list_del
 class_declaration(SplList)
 
 #define SplClist_fields \
         List_fields
 #define SplClist_definition             \
         List_definition,                \
-        .insert_at = _spl_clist_add,    \
-        .delete_at = _spl_clist_del
+        .insert_at = spl_clist_add,    	\
+        .delete_at = spl_clist_del
 class_declaration(SplClist)
 
 #define DblList_fields  \
         List_fields
 #define DblList_definition              \
         List_definition,                \
-        .insert_at = _dbl_list_add,     \
-        .delete_at = _dbl_list_del
+        .insert_at = dbl_list_add,     	\
+        .delete_at = dbl_list_del
 class_declaration(DblList)
 
 #define DblClist_fields \
         List_fields
 #define DblClist_definition             \
         List_definition,                \
-        .insert_at = _dbl_clist_add,    \
-        .delete_at = _dbl_clist_del
+        .insert_at = dbl_clist_add,    	\
+        .delete_at = dbl_clist_del
 class_declaration(DblClist)
 
 ctor_declaration(Object *, SplList, Object *class; t_data **to_copy; ssize_t copy_amount;)
@@ -71,20 +71,20 @@ ctor_declaration(Object *, SplClist, Object *class; t_data **to_copy; ssize_t co
 ctor_declaration(Object *, DblList, Object *class; t_data **to_copy; ssize_t copy_amount;)
 ctor_declaration(Object *, DblClist, Object *class; t_data **to_copy; ssize_t copy_amount;)
 
-t_bool  _spl_list_add(Object *list, void *data, t_type type, ssize_t pos);
-t_bool  _spl_clist_add(Object *list, void *data, t_type type, ssize_t pos);
-t_bool  _dbl_list_add(Object *list, void *data, t_type type, ssize_t pos);
-t_bool  _dbl_clist_add(Object *list, void *data, t_type type, ssize_t pos);
+t_bool  spl_list_add(Object *list, void *data, t_type type, ssize_t pos);
+t_bool  spl_clist_add(Object *list, void *data, t_type type, ssize_t pos);
+t_bool	dbl_list_add(Object *list, void *data, t_type type, ssize_t pos);
+t_bool  dbl_clist_add(Object *list, void *data, t_type type, ssize_t pos);
 
-t_bool  _spl_list_del(Object *list, ssize_t pos);
-t_bool  _spl_clist_del(Object *list, ssize_t pos);
-t_bool  _dbl_list_del(Object *list, ssize_t pos);
-t_bool  _dbl_clist_del(Object *list, ssize_t pos);
+t_bool  spl_list_del(Object *list, ssize_t pos);
+t_bool  spl_clist_del(Object *list, ssize_t pos);
+t_bool  dbl_list_del(Object *list, ssize_t pos);
+t_bool  dbl_clist_del(Object *list, ssize_t pos);
 
-t_bool  _list_erase(Object *self);
+t_bool  list_erase(Object *self);
 
-Object  *_list_front(const Object *list);
-Object  *_list_end(const Object *list);
-Object  *_list_at(const Object *list, ssize_t pos);
+Object  *list_front(const Object *list);
+Object  *list_end(const Object *list);
+Object  *list_at(const Object *list, ssize_t pos);
 
 #endif /* !LISTS_H_ */

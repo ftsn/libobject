@@ -5,12 +5,12 @@
 #include "arrays.h"
 #include "dicts.h"
 
-inline t_bool  _it_equals(Iterator *it1, Iterator *it2)
+inline t_bool  it_equals(Iterator *it1, Iterator *it2)
 {
     return (it1->dereference(it1) == it2->dereference(it2) ? TRUE : FALSE);
 }
 
-t_bool      _list_it_previous(Iterator *it)
+t_bool      list_it_previous(Iterator *it)
 {
     List    *list;
 
@@ -39,7 +39,7 @@ t_bool      _list_it_previous(Iterator *it)
     return (TRUE);
 }
 
-t_bool      _list_it_next(Iterator *it)
+t_bool      list_it_next(Iterator *it)
 {
     List    *list;
 
@@ -65,27 +65,27 @@ t_bool      _list_it_next(Iterator *it)
     return (TRUE);
 }
 
-inline Object  *_list_it_dereference(Iterator *it)
+inline Object  *list_it_dereference(Iterator *it)
 {
     return (it->cur ? ((t_list_data *)it->cur)->data : NULL);
 }
 
-inline Object  *_ra_it_dereference(Iterator *it)
+inline Object  *ra_it_dereference(Iterator *it)
 {
     return (it->cur);
 }
 
-inline t_bool  _ra_it_lt(RandomAccessIterator *it1, RandomAccessIterator *it2)
+inline t_bool  ra_it_lt(RandomAccessIterator *it1, RandomAccessIterator *it2)
 {
     return (it1->it_idx < it2->it_idx ? TRUE : FALSE);
 }
 
-inline t_bool  _ra_it_gt(RandomAccessIterator *it1, RandomAccessIterator *it2)
+inline t_bool  ra_it_gt(RandomAccessIterator *it1, RandomAccessIterator *it2)
 {
     return (it1->it_idx > it2->it_idx ? TRUE : FALSE);
 }
 
-t_bool                      _array_ra_it_next(Iterator *self)
+t_bool                      array_ra_it_next(Iterator *self)
 {
     Array                   *array;
     RandomAccessIterator    *it;
@@ -104,7 +104,7 @@ t_bool                      _array_ra_it_next(Iterator *self)
     return (TRUE);
 }
 
-t_bool                      _array_ra_it_previous(Iterator *self)
+t_bool                      array_ra_it_previous(Iterator *self)
 {
     Array                   *array;
     RandomAccessIterator    *it;
@@ -123,7 +123,7 @@ t_bool                      _array_ra_it_previous(Iterator *self)
     return (TRUE);
 }
 
-t_bool      _array_ra_it_jump(RandomAccessIterator *it, ssize_t idx)
+t_bool      array_ra_it_jump(RandomAccessIterator *it, ssize_t idx)
 {
     Array   *array;
 
@@ -136,7 +136,7 @@ t_bool      _array_ra_it_jump(RandomAccessIterator *it, ssize_t idx)
     return (TRUE);
 }
 
-Object      *_array_ra_it_at(RandomAccessIterator *it, ssize_t idx)
+Object      *array_ra_it_at(RandomAccessIterator *it, ssize_t idx)
 {
     Array   *array;
 
@@ -144,7 +144,7 @@ Object      *_array_ra_it_at(RandomAccessIterator *it, ssize_t idx)
     return (array->at(array, idx));
 }
 
-t_bool                      _string_ra_it_next(Iterator *self)
+t_bool                      string_ra_it_next(Iterator *self)
 {
     String                  *s;
     RandomAccessIterator    *it;
@@ -163,7 +163,7 @@ t_bool                      _string_ra_it_next(Iterator *self)
     return (TRUE);
 }
 
-t_bool                      _string_ra_it_previous(Iterator *self)
+t_bool                      string_ra_it_previous(Iterator *self)
 {
     String                  *s;
     RandomAccessIterator    *it;
@@ -182,7 +182,7 @@ t_bool                      _string_ra_it_previous(Iterator *self)
     return (TRUE);
 }
 
-t_bool                      _string_ra_it_jump(RandomAccessIterator *self, ssize_t idx)
+t_bool                      string_ra_it_jump(RandomAccessIterator *self, ssize_t idx)
 {
     String                  *s;
     RandomAccessIterator    *it;
@@ -197,7 +197,7 @@ t_bool                      _string_ra_it_jump(RandomAccessIterator *self, ssize
     return (TRUE);
 }
 
-Object      *_string_ra_it_at(RandomAccessIterator *it, ssize_t idx)
+Object      *string_ra_it_at(RandomAccessIterator *it, ssize_t idx)
 {
     String  *s;
 
@@ -205,7 +205,7 @@ Object      *_string_ra_it_at(RandomAccessIterator *it, ssize_t idx)
     return (s->at(s, idx));
 }
 
-t_bool                          _dict_bidirectional_it_next(Iterator *it)
+t_bool                          dict_bidirectional_it_next(Iterator *it)
 {
     DictBidirectionalIterator   *dict_it;
     DblList                     **contained;
@@ -240,7 +240,7 @@ t_bool                          _dict_bidirectional_it_next(Iterator *it)
     return (TRUE);
 }
 
-t_bool                          _dict_bidirectional_it_previous(Iterator *it)
+t_bool                          dict_bidirectional_it_previous(Iterator *it)
 {
     DictBidirectionalIterator   *dict_it;
     DblList                     **contained;
@@ -269,7 +269,7 @@ t_bool                          _dict_bidirectional_it_previous(Iterator *it)
     return (TRUE);
 }
 
-inline Object  *_dict_bidirectional_it_dereference(Iterator *it)
+inline Object  *dict_bidirectional_it_dereference(Iterator *it)
 {
     return (it->cur ? ((t_list_data *)it->cur)->data : NULL);
 }

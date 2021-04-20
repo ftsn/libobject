@@ -121,7 +121,7 @@ static t_bool   list_del(t_list_data **list, ssize_t pos, t_list_type type)
     return (TRUE);
 }
 
-t_bool      _spl_list_add(Object *self, void *data, t_type type, ssize_t pos)
+t_bool      spl_list_add(Object *self, void *data, t_type type, ssize_t pos)
 {
     t_data  *typed_data;
     List    *list;
@@ -141,7 +141,7 @@ t_bool      _spl_list_add(Object *self, void *data, t_type type, ssize_t pos)
     return (FALSE);
 }
 
-t_bool      _spl_clist_add(Object *self, void *data, t_type type, ssize_t pos)
+t_bool      spl_clist_add(Object *self, void *data, t_type type, ssize_t pos)
 {
     t_data  *typed_data;
     List    *list;
@@ -161,7 +161,7 @@ t_bool      _spl_clist_add(Object *self, void *data, t_type type, ssize_t pos)
     return (FALSE);
 }
 
-t_bool      _dbl_list_add(Object *self, void *data, t_type type, ssize_t pos)
+t_bool      dbl_list_add(Object *self, void *data, t_type type, ssize_t pos)
 {
     t_data  *typed_data;
     List    *list;
@@ -181,7 +181,7 @@ t_bool      _dbl_list_add(Object *self, void *data, t_type type, ssize_t pos)
     return (FALSE);
 }
 
-t_bool      _dbl_clist_add(Object *self, void *data, t_type type, ssize_t pos)
+t_bool      dbl_clist_add(Object *self, void *data, t_type type, ssize_t pos)
 {
     t_data  *typed_data;
     List    *list;
@@ -201,7 +201,7 @@ t_bool      _dbl_clist_add(Object *self, void *data, t_type type, ssize_t pos)
     return (FALSE);
 }
 
-t_bool      _spl_list_del(Object *self, ssize_t pos)
+t_bool      spl_list_del(Object *self, ssize_t pos)
 {
     List    *list;
 
@@ -213,7 +213,7 @@ t_bool      _spl_list_del(Object *self, ssize_t pos)
     return (TRUE);
 }
 
-t_bool      _spl_clist_del(Object *self, ssize_t pos)
+t_bool      spl_clist_del(Object *self, ssize_t pos)
 {
     List    *list;
 
@@ -225,7 +225,7 @@ t_bool      _spl_clist_del(Object *self, ssize_t pos)
     return (TRUE);
 }
 
-t_bool      _dbl_list_del(Object *self, ssize_t pos)
+t_bool      dbl_list_del(Object *self, ssize_t pos)
 {
     List    *list;
 
@@ -237,7 +237,7 @@ t_bool      _dbl_list_del(Object *self, ssize_t pos)
     return (TRUE);
 }
 
-t_bool      _dbl_clist_del(Object *self, ssize_t pos)
+t_bool      dbl_clist_del(Object *self, ssize_t pos)
 {
     List    *list;
 
@@ -249,12 +249,12 @@ t_bool      _dbl_clist_del(Object *self, ssize_t pos)
     return (TRUE);
 }
 
-Object  *_list_front(const Object *list)
+Object  *list_front(const Object *list)
 {
     return (((List *)list)->contained);
 }
 
-Object          *_list_end(const Object *list)
+Object          *list_end(const Object *list)
 {
     t_list_data *begin;
     t_list_data *res;
@@ -267,7 +267,7 @@ Object          *_list_end(const Object *list)
     return (res);
 }
 
-Object          *_list_at(const Object *self, ssize_t pos)
+Object          *list_at(const Object *self, ssize_t pos)
 {
     const List  *list = self;
     t_list_data *list_data;
@@ -291,7 +291,7 @@ Object          *_list_at(const Object *self, ssize_t pos)
     return (list_data);
 }
 
-t_bool      _list_erase(Object *self)
+t_bool      list_erase(Object *self)
 {
     List    *list;
 

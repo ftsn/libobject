@@ -9,17 +9,17 @@
 #include "arrays.h"
 #include "dicts.h"
 
-Object  *_container_data(const Object *self)
+Object  *container_data(const Object *self)
 {
     return (((Container *)self)->contained);
 }
 
-ssize_t _container_size(const Object *container)
+ssize_t container_size(const Object *container)
 {
     return (((Container *)container)->contained_size);
 }
 
-t_bool  _container_empty(const Object *container)
+t_bool  container_empty(const Object *container)
 {
     return (((Container *)container)->contained_size == 0 ? TRUE : FALSE);
 }
@@ -43,7 +43,7 @@ static void copy_array(void **dest, void **src, t_data *typed_data, ssize_t pos)
         dest[i++] = src[j++];
 }
 
-t_bool          _container_insert_at(Object *container, void *data, t_type type, ssize_t pos)
+t_bool          container_insert_at(Object *container, void *data, t_type type, ssize_t pos)
 {
     void        **res;
     Container   *self;
@@ -67,7 +67,7 @@ t_bool          _container_insert_at(Object *container, void *data, t_type type,
     return (TRUE);
 }
 
-t_bool          _container_push_back(Object *self, void *data, t_type type)
+t_bool          container_push_back(Object *self, void *data, t_type type)
 {
     Container   *self_c;
 
@@ -152,7 +152,7 @@ void typed_basic_print(const t_data *elem, const char *prefix)
         case TYPE_PAIR:
             printf("[%s] => ", ((const t_pair *)elem->data)->key);
             if (is_container(elem->data) == TRUE)
-                _container_print(elem->data, "Sub container", typed_basic_print, "");
+                container_print(elem->data, "Sub container", typed_basic_print, "");
             else
                 typed_basic_print(elem->data, prefix);
             break;
@@ -161,10 +161,7 @@ void typed_basic_print(const t_data *elem, const char *prefix)
     }
 }
 
-void            _container_print(Object *container,
-                                 const char *title,
-                                 void (*f)(const t_data *elem, const char *prefix),
-                                 const char *prefix)
+void            container_print(Object *container, const char *title, void (*f)(const t_data *elem, const char *prefix), const char *prefix)
 {
     Iterator    *it;
     char        *concat_prefix;
@@ -196,7 +193,7 @@ void            _container_print(Object *container,
             else
                 recursion_title = "Undefined container";
             printf("%s%zd: ", concat_prefix, i);
-            _container_print(cur->data, recursion_title, typed_basic_print, concat_prefix);
+            container_print(cur->data, recursion_title, typed_basic_print, concat_prefix);
         }
         else
         {
@@ -211,7 +208,7 @@ void            _container_print(Object *container,
     free(concat_prefix);
 }
 
-Object          *_container_to_type(Object *self, Class *type)
+Object          *container_to_type(Object *self, Class *type)
 {
     Container   *self_c;
     Container   *ctn;
@@ -239,7 +236,7 @@ Object          *_container_to_type(Object *self, Class *type)
     return (ctn);
 }
 
-Object          *_container_sub(Object *self, Class *type, ssize_t begin, ssize_t len)
+Object          *container_sub(Object *self, Class *type, ssize_t begin, ssize_t len)
 {
     Container   *ctn;
     Container   *self_c;
@@ -283,7 +280,7 @@ Object          *_container_sub(Object *self, Class *type, ssize_t begin, ssize_
     return (ctn);
 }
 
-Object          *_container_map(Object *self, Class *type, t_data (*fptr)(ssize_t i, void *cur))
+Object          *container_map(Object *self, Class *type, t_data (*fptr)(ssize_t i, void *cur))
 {
     Container   *ctn;
     Iterator    *it;
@@ -314,12 +311,12 @@ Object          *_container_map(Object *self, Class *type, t_data (*fptr)(ssize_
     return (ctn);
 }
 
-Object  *_container_begin(Object *self)
+Object  *container_begin(Object *self)
 {
     return (generate_it(self, BEGIN));
 }
 
-Object  *_container_end(Object *self)
+Object  *container_end(Object *self)
 {
     return (generate_it(self, END));
 }

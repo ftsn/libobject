@@ -18,13 +18,13 @@ typedef struct  s_pair
 } t_pair;
 
 typedef t_data  *(*t_dict_get_by_key)(const Object *dict, const unsigned char *key);
-t_data          *_dict_get_by_key(const Object *dict, const unsigned char *key);
+t_data          *dict_get_by_key(const Object *dict, const unsigned char *key);
 
 typedef t_bool  (*t_dict_push)(Object *self, unsigned char *key, void *data, t_type type);
-t_bool          _dict_push(Object *self, unsigned char *key, void *data, t_type type);
+t_bool          dict_push(Object *self, unsigned char *key, void *data, t_type type);
 
 typedef t_bool  (*t_dict_remove)(Object *self, const unsigned char *key);
-t_bool          _dict_remove(Object *self, const unsigned char *key);
+t_bool          dict_remove(Object *self, const unsigned char *key);
 
 // Class and constructor declaration
 #define Dict_fields                     \
@@ -36,16 +36,16 @@ t_bool          _dict_remove(Object *self, const unsigned char *key);
 #define Dict_definition                     \
         Container_definition,               \
         .push_back = NULL,                  \
-        .erase = _dict_erase,               \
-        .total_size = 0,                    \
-        .get_by_key = _dict_get_by_key,     \
-        .push = _dict_push,                 \
-        .remove = _dict_remove
+        .erase = dict_erase,				\
+        .total_size = 0,					\
+        .get_by_key = dict_get_by_key,		\
+        .push = dict_push,					\
+        .remove = dict_remove
 
 class_declaration(Dict)
 ctor_declaration(Object *, Dict, Object *class;)
 
-t_bool  _dict_erase(Object *self);
+t_bool  dict_erase(Object *self);
 t_bool  dict_alloc(Dict *dict, ssize_t new_size);
 
 #endif /* !DICTS_H_ */

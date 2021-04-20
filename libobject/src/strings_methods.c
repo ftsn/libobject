@@ -5,7 +5,7 @@
 #include "utils.h"
 #include "iterators.h"
 
-t_bool      _string_insert_at(String *self, char c, ssize_t pos)
+t_bool      string_insert_at(String *self, char c, ssize_t pos)
 {
     char    *res;
 
@@ -21,12 +21,12 @@ t_bool      _string_insert_at(String *self, char c, ssize_t pos)
     return (TRUE);
 }
 
-t_bool  _string_push_back(String *self, char c)
+t_bool  string_push_back(String *self, char c)
 {
     return (self->insert_at(self, c, self->contained_size));
 }
 
-t_bool      _string_delete_at(String *self, ssize_t pos)
+t_bool      string_delete_at(String *self, ssize_t pos)
 {
     char    *res;
 
@@ -40,7 +40,7 @@ t_bool      _string_delete_at(String *self, ssize_t pos)
     return (TRUE);
 }
 
-t_bool  _string_erase(String *self)
+t_bool  string_erase(String *self)
 {
     free(self->contained);
     self->contained_size = 0;
@@ -48,7 +48,7 @@ t_bool  _string_erase(String *self)
     return (TRUE);
 }
 
-t_bool      _string_affect(String *self, void *data)
+t_bool      string_affect(String *self, void *data)
 {
     char    *tmp;
 
@@ -64,58 +64,52 @@ t_bool      _string_affect(String *self, void *data)
     return (TRUE);
 }
 
-char    *_string_front(const String *self)
+char    *string_front(const String *self)
 {
     return (self->contained ? self->contained : NULL);
 }
 
-char    *_string_back(const String *self)
+char    *string_back(const String *self)
 {
     if (!self->contained)
         return (NULL);
     return (self->contained_size > 0 ? &((char *)self->contained)[self->contained_size - 1] : self->contained);
 }
 
-char    *_string_at(const String *self, ssize_t pos)
+char    *string_at(const String *self, ssize_t pos)
 {
     if (!self->contained || pos < 0 || (pos >= self->contained_size && self->contained_size > 0))
         return (NULL);
     return (pos < self->contained_size ? &((char *)self->contained)[pos] : self->contained);
 }
 
-void    _string_print(const String *self, const char *title)
+void    string_print(const String *self, const char *title)
 {
     printf("%s[%s]\n", title, (char *)self->contained);
 }
 
-Object  *_string_begin(Object *self)
+Object  *string_begin(Object *self)
 {
     return (generate_it(self, BEGIN));
 }
 
-Object  *_string_end(Object *self)
+Object  *string_end(Object *self)
 {
     return (generate_it(self, END));
 }
 
-// To remove?
-String  *_string_dup(const String *self)
-{
-    return (new_obj(String, .to_copy = self->contained, .copy_amount = COPY_ALL));
-}
-
-char    *_string_findstr(const String *self, const char *substr)
+char    *string_findstr(const String *self, const char *substr)
 {
 
     return (self->contained && substr ? strstr((char *)self->contained, substr) : NULL);
 }
 
-char    *_string_find(const String *self, int c)
+char    *string_find(const String *self, int c)
 {
     return (self->contained ? strchr((char *)self->contained, c) : NULL);
 }
 
-char    *_string_lfind(const String *self, int c)
+char    *string_lfind(const String *self, int c)
 {
     return (self->contained ? strrchr((char *)self->contained, c) : NULL);
 }
@@ -133,17 +127,17 @@ static size_t   nmatch(const char *s1, const char *s2)
     return (0);
 }
 
-t_bool  _string_match(const String *self, const char *compare)
+t_bool  string_match(const String *self, const char *compare)
 {
     return (self->contained && compare && nmatch((char *)self->contained, compare) ? TRUE : FALSE);
 }
 
-ssize_t  _string_nmatch(const String *self, const char *compare)
+ssize_t  string_nmatch(const String *self, const char *compare)
 {
     return (self->contained && compare ? (ssize_t)nmatch((char *)self->contained, compare) : -1);
 }
 
-Object          *_string_split(const String *self, const Class *type, const char *sep)
+Object          *string_split(const String *self, const Class *type, const char *sep)
 {
     Container   *container;
     char        *token;
@@ -166,7 +160,7 @@ Object          *_string_split(const String *self, const Class *type, const char
     return (container);
 }
 
-char        *_string_sub(const String *self, ssize_t begin, ssize_t len)
+char        *string_sub(const String *self, ssize_t begin, ssize_t len)
 {
     char    *s;
     ssize_t i;

@@ -17,14 +17,14 @@ typedef enum e_array_opr
 #define Array_fields        \
         Container_fields    \
         ssize_t total_size;
-#define Array_definition                \
+#define Array_definition          		\
         Container_definition,           \
-        .insert_at = _array_insert_at,  \
-        .delete_at = _array_delete_at,  \
-        .erase = _array_erase,          \
-        .front = _array_front,          \
-        .back = _array_back,            \
-        .at = _array_at,                \
+        .insert_at = array_insert_at,   \
+        .delete_at = array_delete_at,   \
+        .erase = array_erase,           \
+        .front = array_front,           \
+        .back = array_back,             \
+        .at = array_at,                 \
         .total_size = 0
 
 class_declaration(Array)
@@ -32,12 +32,12 @@ ctor_declaration(Object *, Array, Object *class; t_data **to_copy; ssize_t copy_
 
 t_bool  array_alloc(Array *array, ssize_t size, t_array_opr operation, ...);
 
-t_bool  _array_insert_at(Object *container, void *data, t_type type, ssize_t pos);
-t_bool  _array_delete_at(Object *self, ssize_t pos);
-t_bool  _array_erase(Object *self);
+t_bool  array_insert_at(Object *container, void *data, t_type type, ssize_t pos);
+t_bool  array_delete_at(Object *self, ssize_t pos);
+t_bool  array_erase(Object *self);
 
-Object  *_array_front(const Object *self);
-Object  *_array_back(const Object *self);
-Object  *_array_at(const Object *self, ssize_t pos);
+Object  *array_front(const Object *self);
+Object  *array_back(const Object *self);
+Object  *array_at(const Object *self, ssize_t pos);
 
 #endif /* !ARRAYS_H_ */
