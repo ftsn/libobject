@@ -60,29 +60,58 @@ Object          *_string_ra_it_at(RandomAccessIterator *it, ssize_t idx);
         ssize_t             it_idx;                 \
         size_t              reached_the_end;        \
         size_t              reached_the_beginning;
+#define Iterator_definition			\
+        .equals = _it_equals,		\
+        .previous = NULL,			\
+        .next = NULL,				\
+        .dereference = NULL,		\
+        .iterated_obj = NULL,		\
+        .cur = NULL,				\
+        .it_idx = 0,				\
+        .reached_the_end = 0,		\
+        .reached_the_beginning = 0
 forward_declared_class_declaration(Iterator)
 
 // Forward iterators
-#define ForwardIterator_fields  \
+#define ForwardIterator_fields		\
         Iterator_fields
+#define ForwardIterator_definition	\
+        Iterator_definition
 forward_declared_class_declaration(ForwardIterator)
 
-#define SplListFwdIterator_fields   \
+#define SplListFwdIterator_fields			\
         ForwardIterator_fields
+#define SplListFwdIterator_definition		\
+        ForwardIterator_definition,			\
+		.next = _list_it_next,				\
+		.dereference = _list_it_dereference
 class_declaration(SplListFwdIterator)
 
 // BiDirectional iterators
-#define BidirectionalIterator_fields    \
+#define BidirectionalIterator_fields    	\
         Iterator_fields
+#define BidirectionalIterator_definition	\
+        Iterator_definition
 forward_declared_class_declaration(BidirectionalIterator)
 
-#define DblListBidirectionalIterator_fields \
+#define DblListBidirectionalIterator_fields 	\
         BidirectionalIterator_fields
+#define DblListBidirectionalIterator_definition	\
+        BidirectionalIterator_definition,		\
+		.previous = _list_it_previous,			\
+		.next = _list_it_next,					\
+		.dereference = _list_it_dereference
 class_declaration(DblListBidirectionalIterator)
 
 #define DictBidirectionalIterator_fields    \
         BidirectionalIterator_fields        \
         ssize_t internal_idx;
+#define DictBidirectionalIterator_definition				\
+        BidirectionalIterator_definition,					\
+		.previous = _dict_bidirectional_it_previous,		\
+		.next = _dict_bidirectional_it_next,				\
+		.dereference = _dict_bidirectional_it_dereference,	\
+		.internal_idx = 0
 class_declaration(DictBidirectionalIterator)
 
 // Random access iterators
@@ -97,14 +126,33 @@ class_declaration(DictBidirectionalIterator)
         t_ra_it_data_access at;     \
                                     \
         ssize_t             ra_idx;
+#define RandomAccessIterator_definition		\
+        Iterator_definition,				\
+		.dereference = _ra_it_dereference,	\
+		.lt = _ra_it_lt,					\
+		.gt = _ra_it_gt,					\
+		.ra_idx = 0
 forward_declared_class_declaration(RandomAccessIterator)
 
-#define ArrayRaIterator_fields      \
+#define ArrayRaIterator_fields				\
         RandomAccessIterator_fields
+#define ArrayRaIterator_definition			\
+        RandomAccessIterator_definition,	\
+		.previous = _array_ra_it_previous,	\
+		.next = _array_ra_it_next,			\
+		.jump = _array_ra_it_jump,			\
+		.at = _array_ra_it_at
+
 class_declaration(ArrayRaIterator)
 
-#define StringRaIterator_fields     \
+#define StringRaIterator_fields				\
         RandomAccessIterator_fields
+#define StringRaIterator_definition			\
+        RandomAccessIterator_definition,	\
+		.previous = _string_ra_it_previous,	\
+		.next = _string_ra_it_next,			\
+		.jump = _string_ra_it_jump,			\
+		.at = _string_ra_it_at
 class_declaration(StringRaIterator)
 
 ctor_declaration(Object *, SplListFwdIterator, Object *class; Object *iterable; t_it_type start_pos;)

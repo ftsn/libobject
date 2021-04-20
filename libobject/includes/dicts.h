@@ -17,8 +17,8 @@ typedef struct  s_pair
     unsigned char   *key;
 } t_pair;
 
-typedef t_data  *(*t_obj_by_key)(const Object *dict, const unsigned char *key);
-t_data          *_get_obj_by_key(const Object *dict, const unsigned char *key);
+typedef t_data  *(*t_dict_get_by_key)(const Object *dict, const unsigned char *key);
+t_data          *_dict_get_by_key(const Object *dict, const unsigned char *key);
 
 typedef t_bool  (*t_dict_push)(Object *self, unsigned char *key, void *data, t_type type);
 t_bool          _dict_push(Object *self, unsigned char *key, void *data, t_type type);
@@ -27,11 +27,21 @@ typedef t_bool  (*t_dict_remove)(Object *self, const unsigned char *key);
 t_bool          _dict_remove(Object *self, const unsigned char *key);
 
 // Class and constructor declaration
-#define Dict_fields                 \
-        Array_fields                \
-        t_obj_by_key    get_by_key; \
-        t_dict_push     push;       \
-        t_dict_remove   remove;
+#define Dict_fields                     \
+        Container_fields                \
+        ssize_t             total_size; \
+        t_dict_get_by_key   get_by_key; \
+        t_dict_push         push;       \
+        t_dict_remove       remove;
+#define Dict_definition                     \
+        Container_definition,               \
+        .push_back = NULL,                  \
+        .erase = _dict_erase,               \
+        .total_size = 0,                    \
+        .get_by_key = _dict_get_by_key,     \
+        .push = _dict_push,                 \
+        .remove = _dict_remove
+
 class_declaration(Dict)
 ctor_declaration(Object *, Dict, Object *class;)
 

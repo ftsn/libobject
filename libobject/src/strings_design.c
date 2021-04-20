@@ -42,36 +42,4 @@ static void string_dtor(Object *self)
     s->contained = NULL;
 }
 
-class_definition(String,
-    class_metadata(String, TYPE_STRING, string_dtor),
-    NULL,
-    0,
-
-    _container_data,
-    _container_size,
-    _container_empty,
-
-    _string_insert_at,
-    _string_push_back,
-    _string_delete_at,
-    _string_erase,
-    _string_affect,
-
-    _string_front,
-    _string_back,
-    _string_at,
-
-    _string_print,
-
-    _string_begin,
-    _string_end,
-
-    NULL,
-    _string_findstr,
-    _string_find,
-    _string_lfind,
-    _string_match,
-    _string_nmatch,
-    _string_split,
-    _string_sub
-)
+class_definition(String, TYPE_STRING, string_dtor)

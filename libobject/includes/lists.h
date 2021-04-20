@@ -25,22 +25,45 @@ typedef enum    e_list_type
 #define List_fields             \
         Container_fields        \
         t_get_node  nth_node;
+#define List_definition                 \
+        Container_definition,           \
+        .erase = _list_erase,           \
+        .front = _list_front,           \
+        .back = _list_end,              \
+        .at = _list_at,                 \
+        .nth_node = get_nth_node
 class_declaration(List)
 
 #define SplList_fields  \
         List_fields
+#define SplList_definition              \
+        List_definition,                \
+        .insert_at = _spl_list_add,     \
+        .delete_at = _spl_list_del
 class_declaration(SplList)
 
 #define SplClist_fields \
         List_fields
+#define SplClist_definition             \
+        List_definition,                \
+        .insert_at = _spl_clist_add,    \
+        .delete_at = _spl_clist_del
 class_declaration(SplClist)
 
 #define DblList_fields  \
         List_fields
+#define DblList_definition              \
+        List_definition,                \
+        .insert_at = _dbl_list_add,     \
+        .delete_at = _dbl_list_del
 class_declaration(DblList)
 
 #define DblClist_fields \
         List_fields
+#define DblClist_definition             \
+        List_definition,                \
+        .insert_at = _dbl_clist_add,    \
+        .delete_at = _dbl_clist_del
 class_declaration(DblClist)
 
 ctor_declaration(Object *, SplList, Object *class; t_data **to_copy; ssize_t copy_amount;)

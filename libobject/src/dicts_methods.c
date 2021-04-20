@@ -56,7 +56,7 @@ t_bool      _dict_erase(Object *self)
     return (TRUE);
 }
 
-t_data          *_get_obj_by_key(const Object *dict_obj, const unsigned char *key)
+t_data          *_dict_get_by_key(const Object *dict_obj, const unsigned char *key)
 {
     const Dict  *dict = dict_obj;
     DblList     *list;

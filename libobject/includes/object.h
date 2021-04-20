@@ -8,7 +8,8 @@
 
 #define BLUEPRINT_SUFFIX    _blueprint
 #define CTOR_SUFFIX         _ctor
-#define DEFINITION_SUFFIX   _def
+#define DEFINITION_SUFFIX   _definition
+#define INIT_SUFFIX         _init
 
 #define BLUEPRINT(type)     CAT(type,BLUEPRINT_SUFFIX)       
 
@@ -36,14 +37,14 @@ Object      *_init_new_obj(const Class *class);
 #define forward_class_declaration(class_type)   typedef struct CAT(s_,class_type)   class_type;
 
 // Class declaration macros
-#define forward_declared_class_declaration(class_type)     \
+#define forward_declared_class_declaration(class_type)      \
         struct CAT(s_,class_type) {                         \
             Class;                                          \
             CAT(class_type,_fields)                         \
         };                                                  \
         extern Class    *CAT(class_type,BLUEPRINT_SUFFIX);
 
-#define class_declaration(class_type)                      \
+#define class_declaration(class_type)                       \
         typedef struct                                      \
         {                                                   \
             Class;                                          \
@@ -59,14 +60,19 @@ Object      *_init_new_obj(const Class *class);
             CAT(_shallow_,CAT(class_type,CTOR_SUFFIX)), \
             dtor                                        \
         }
-#define class_definition(class_type, ...)                                                       \
+
+#define class_definition(class_type, type, dtor)                                                \
         static Object   *CAT(_shallow_,CAT(class_type,CTOR_SUFFIX()))                           \
         {                                                                                       \
             return (new_obj(class_type));                                                       \
         }                                                                                       \
-        static class_type CAT(class_type,DEFINITION_SUFFIX) = {                                 \
-            __VA_ARGS__                                                                         \
+        _Pragma("GCC diagnostic push")                                                          \
+        _Pragma("GCC diagnostic ignored \"-Woverride-init\"")                                   \
+        static class_type CAT(class_type,INIT_SUFFIX) = {                                       \
+            class_metadata(class_type, type, dtor),                                             \
+            CAT(class_type,DEFINITION_SUFFIX)                                                   \
         };                                                                                      \
-        Class * CAT(class_type,BLUEPRINT_SUFFIX) = (Class *)&CAT(class_type,DEFINITION_SUFFIX);
+        _Pragma("GCC diagnostic pop")                                                           \
+        Class * CAT(class_type,BLUEPRINT_SUFFIX) = (Class *)&CAT(class_type,INIT_SUFFIX);
 
 #endif /* !OBJECT_H_ */

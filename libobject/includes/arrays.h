@@ -17,6 +17,16 @@ typedef enum e_array_opr
 #define Array_fields        \
         Container_fields    \
         ssize_t total_size;
+#define Array_definition                \
+        Container_definition,           \
+        .insert_at = _array_insert_at,  \
+        .delete_at = _array_delete_at,  \
+        .erase = _array_erase,          \
+        .front = _array_front,          \
+        .back = _array_back,            \
+        .at = _array_at,                \
+        .total_size = 0
+
 class_declaration(Array)
 ctor_declaration(Object *, Array, Object *class; t_data **to_copy; ssize_t copy_amount;)
 

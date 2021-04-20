@@ -24,8 +24,6 @@ typedef t_bool  (*t_rand_delete)(Object *self, ssize_t pos);
 
 typedef t_bool  (*t_delete)(Object *self);
 
-typedef void    (*t_affect)(Object *self, void *data);
-
 typedef Object  *(*t_access)(const Object *container);
 
 typedef Object  *(*t_rand_access)(const Object *contained, ssize_t pos);
@@ -60,7 +58,6 @@ Object          *_container_end(Object *self);
         t_insert        push_back;      \
         t_rand_delete   delete_at;      \
         t_delete        erase;          \
-        t_affect        affect;         \
                                         \
         t_access        front;          \
         t_access        back;           \
@@ -74,6 +71,26 @@ Object          *_container_end(Object *self);
                                         \
         t_it_create     begin;          \
         t_it_create     end;
+
+#define Container_definition                \
+        .contained = NULL,                  \
+        .contained_size = 0,                \
+        .data = _container_data,            \
+        .size = _container_size,            \
+        .empty = _container_empty,          \
+        .insert_at = NULL,                  \
+        .push_back = _container_push_back,  \
+        .delete_at = NULL,                  \
+        .erase = NULL,                      \
+        .front = NULL,                      \
+        .back = NULL,                       \
+        .at = NULL,                         \
+        .dump = _container_print,           \
+        .convert = _container_to_type,      \
+        .sub = _container_sub,              \
+        .map = _container_map,              \
+        .begin = _container_begin,          \
+        .end = _container_end
 
 class_declaration(Container)
 

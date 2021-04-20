@@ -576,7 +576,7 @@ static void string_find_last_occurence_normal_char_null_string(void **state)
     String  *str;
 
     str = new_obj(String);
-    assert_null(str->rfind(str, 'o'));
+    assert_null(str->lfind(str, 'o'));
     delete(str);
     (void)state;
 }
@@ -586,7 +586,7 @@ static void string_find_last_occurence_normal_char_normal_string(void **state)
     String  *str;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    assert_string_equal(str->rfind(str, 'o'), "obar");
+    assert_string_equal(str->lfind(str, 'o'), "obar");
     delete(str);
     (void)state;
 }
@@ -596,7 +596,7 @@ static void string_find_last_occurence_normal_char_not_present_normal_string(voi
     String  *str;
 
     str = new_obj(String, .to_copy = "foobar", .copy_amount = COPY_ALL);
-    assert_null(str->rfind(str, 'z'));
+    assert_null(str->lfind(str, 'z'));
     delete(str);
     (void)state;
 }

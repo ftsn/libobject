@@ -85,11 +85,43 @@ char            *_string_sub(const String *self, ssize_t begin, ssize_t len);
         t_dup               dup;            \
         t_str_findstr       find_str;       \
         t_str_find          find;           \
-        t_str_find          rfind;          \
+        t_str_find          lfind;          \
         t_str_match         match;          \
         t_str_nmatch        nmatch;         \
         t_str_split         split;          \
         t_str_sub           sub;
+#define String_definition               \
+        .contained = NULL,              \
+        .contained_size = 0,            \
+                                        \
+        .cstr = _container_data,        \
+        .size = _container_size,        \
+        .empty = _container_empty,      \
+                                        \
+        .insert_at = _string_insert_at, \
+        .push_back = _string_push_back, \
+        .delete_at = _string_delete_at, \
+        .erase = _string_erase,         \
+        .affect = _string_affect,       \
+                                        \
+        .front = _string_front,         \
+        .back = _string_back,           \
+        .at = _string_at,               \
+                                        \
+        .dump = _string_print,          \
+                                        \
+        .begin = _string_begin,         \
+        .end = _string_end,             \
+                                        \
+        .dup = NULL,                    \
+        .find_str = _string_findstr,    \
+        .find = _string_find,           \
+        .lfind = _string_lfind,         \
+        .match = _string_match,         \
+        .nmatch = _string_nmatch,       \
+        .split = _string_split,         \
+        .sub = _string_sub
+
 forward_declared_class_declaration(String)
 ctor_declaration(Object *, String, Object *class; char *to_copy; ssize_t copy_amount;)
 
