@@ -30,4 +30,4 @@ static void dict_dtor(Object *self)
     dict->contained_size = 0;
 }
 
-_class_definition(Dict, TYPE_DICT, dict_dtor)
+class_definition(Dict, TYPE_DICT, dict_dtor)

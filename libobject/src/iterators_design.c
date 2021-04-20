@@ -151,8 +151,8 @@ static void _iterator_dtor(Object *self)
     (void)self;
 }
 
-_class_definition(ArrayRaIterator, TYPE_ARRAY_ITERATOR, _iterator_dtor)
-_class_definition(StringRaIterator, TYPE_STRING_ITERATOR, _iterator_dtor)
-_class_definition(SplListFwdIterator, TYPE_SPL_LIST_ITERATOR, _iterator_dtor)
-_class_definition(DblListBidirectionalIterator, TYPE_DBL_LIST_ITERATOR, _iterator_dtor)
-_class_definition(DictBidirectionalIterator, TYPE_DICT_ITERATOR, _iterator_dtor)
+class_definition(ArrayRaIterator, TYPE_ARRAY_ITERATOR, _iterator_dtor)
+class_definition(StringRaIterator, TYPE_STRING_ITERATOR, _iterator_dtor)
+class_definition(SplListFwdIterator, TYPE_SPL_LIST_ITERATOR, _iterator_dtor)
+class_definition(DblListBidirectionalIterator, TYPE_DBL_LIST_ITERATOR, _iterator_dtor)
+class_definition(DictBidirectionalIterator, TYPE_DICT_ITERATOR, _iterator_dtor)

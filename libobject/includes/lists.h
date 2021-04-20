@@ -38,7 +38,7 @@ typedef enum    e_list_type
         .back = list_end,               \
         .at = list_at,                  \
         .nth_node = get_nth_node
-_class_declaration(List)
+class_declaration(List)
 
 // SplList
 #define SplList_fields                  \
@@ -52,7 +52,7 @@ _class_declaration(List)
         List_vtable_definition,         \
         .insert_at = spl_list_add,     	\
         .delete_at = spl_list_del
-_class_declaration(SplList)
+class_declaration(SplList)
 
 // SplClist
 #define SplClist_fields                 \
@@ -66,7 +66,7 @@ _class_declaration(SplList)
         List_vtable_definition,         \
         .insert_at = spl_clist_add,     \
         .delete_at = spl_clist_del
-_class_declaration(SplClist)
+class_declaration(SplClist)
 
 // DblList
 #define DblList_fields                  \
@@ -80,7 +80,7 @@ _class_declaration(SplClist)
         List_vtable_definition,         \
         .insert_at = dbl_list_add,      \
         .delete_at = dbl_list_del
-_class_declaration(DblList)
+class_declaration(DblList)
 
 // DblClist
 #define DblClist_fields                 \
@@ -94,7 +94,7 @@ _class_declaration(DblList)
         List_vtable_definition,         \
         .insert_at = dbl_clist_add,     \
         .delete_at = dbl_clist_del
-_class_declaration(DblClist)
+class_declaration(DblClist)
 
 ctor_declaration(Object *, SplList, Object *class; t_data **to_copy; ssize_t copy_amount;)
 ctor_declaration(Object *, SplClist, Object *class; t_data **to_copy; ssize_t copy_amount;)

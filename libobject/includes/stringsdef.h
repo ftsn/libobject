@@ -115,7 +115,7 @@ char            *string_sub(const String *self, ssize_t begin, ssize_t len);
         .split = string_split,          \
         .sub = string_sub
 
-_forward_declared_class_declaration(String)
+forward_declared_class_declaration(String)
 ctor_declaration(Object *, String, Object *class; char *to_copy; ssize_t copy_amount;)
 
 #endif /* !STRINGSDEF_H_ */

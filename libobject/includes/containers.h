@@ -87,7 +87,7 @@ Object          *container_end(Object *self);
         .begin = container_begin,          	\
         .end = container_end
 
-_class_declaration(Container)
+class_declaration(Container)
 
 t_bool  ctn_copy_ctor(Container *ctn, t_data **copy, ssize_t size);
 

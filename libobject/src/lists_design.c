@@ -48,7 +48,7 @@ static void     list_dtor(Object *self)
     list->contained_size = 0;
 }
 
-_class_definition(SplList, TYPE_LINKED_LIST, list_dtor)
-_class_definition(SplClist, TYPE_CIRCULAR_LINKED_LIST, list_dtor)
-_class_definition(DblList, TYPE_DOUBLY_LINKED_LIST, list_dtor)
-_class_definition(DblClist, TYPE_CIRCULAR_DOUBLY_LINKED_LIST, list_dtor)
+class_definition(SplList, TYPE_LINKED_LIST, list_dtor)
+class_definition(SplClist, TYPE_CIRCULAR_LINKED_LIST, list_dtor)
+class_definition(DblList, TYPE_DOUBLY_LINKED_LIST, list_dtor)
+class_definition(DblClist, TYPE_CIRCULAR_DOUBLY_LINKED_LIST, list_dtor)

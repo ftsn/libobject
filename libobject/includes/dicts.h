@@ -47,7 +47,7 @@ t_bool          dict_remove(Object *self, const unsigned char *key);
         .push = dict_push,              \
         .remove = dict_remove
 
-_class_declaration(Dict)
+class_declaration(Dict)
 ctor_declaration(Object *, Dict, Object *class;)
 
 t_bool  dict_erase(Object *self);

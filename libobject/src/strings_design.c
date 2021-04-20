@@ -42,4 +42,4 @@ static void string_dtor(Object *self)
     s->contained = NULL;
 }
 
-_class_definition(String, TYPE_STRING, string_dtor)
+class_definition(String, TYPE_STRING, string_dtor)

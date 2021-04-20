@@ -32,7 +32,7 @@ typedef enum e_array_opr
         .back = array_back,             \
         .at = array_at
 
-_class_declaration(Array)
+class_declaration(Array)
 ctor_declaration(Object *, Array, Object *class; t_data **to_copy; ssize_t copy_amount;)
 
 t_bool  array_alloc(Array *array, ssize_t size, t_array_opr operation, ...);
