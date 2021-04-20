@@ -11,17 +11,17 @@
 
 Object  *container_data(const Object *self)
 {
-    return (((Container *)self)->contained);
+    return (((const Container *)self)->contained);
 }
 
 ssize_t container_size(const Object *container)
 {
-    return (((Container *)container)->contained_size);
+    return (((const Container *)container)->contained_size);
 }
 
 t_bool  container_empty(const Object *container)
 {
-    return (((Container *)container)->contained_size == 0 ? TRUE : FALSE);
+    return (((const Container *)container)->contained_size == 0 ? TRUE : FALSE);
 }
 
 static void copy_array(void **dest, void **src, t_data *typed_data, ssize_t pos)
