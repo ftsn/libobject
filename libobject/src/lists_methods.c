@@ -297,7 +297,7 @@ t_bool      list_erase(Object *self)
 
     list = self;
     while (list->contained)
-        list->delete_at(list, 0);
+        list->vtable->delete_at(list, 0);
     return (TRUE);
 }
 

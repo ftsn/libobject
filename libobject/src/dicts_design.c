@@ -24,10 +24,10 @@ static void dict_dtor(Object *self)
     Dict    *dict;
 
     dict = self;
-    dict->erase(self);
+    dict->vtable->erase(self);
     free(dict->contained);
     dict->contained = NULL;
     dict->contained_size = 0;
 }
 
-class_definition(Dict, TYPE_DICT, dict_dtor)
+_class_definition(Dict, TYPE_DICT, dict_dtor)

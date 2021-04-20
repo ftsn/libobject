@@ -22,49 +22,79 @@ typedef enum    e_list_type
 } t_list_type;
 
 // Class and constructors declarations
-#define List_fields             \
-        Container_fields        \
+// List
+#define List_fields                     \
+        Container_fields
+#define List_vtable_fields              \
+        Container_vtable_fields         \
         t_get_node  nth_node;
-#define List_definition                 \
-        Container_definition,           \
-        .erase = list_erase,           	\
-        .front = list_front,           	\
-        .back = list_end,              	\
-        .at = list_at,                 	\
-        .nth_node = get_nth_node
-class_declaration(List)
 
-#define SplList_fields  \
+#define List_definition                 \
+        Container_definition
+#define List_vtable_definition          \
+        Container_vtable_definition,    \
+        .erase = list_erase,            \
+        .front = list_front,            \
+        .back = list_end,               \
+        .at = list_at,                  \
+        .nth_node = get_nth_node
+_class_declaration(List)
+
+// SplList
+#define SplList_fields                  \
         List_fields
+#define SplList_vtable_fields           \
+        List_vtable_fields
+
 #define SplList_definition              \
-        List_definition,                \
+        List_definition
+#define SplList_vtable_definition       \
+        List_vtable_definition,         \
         .insert_at = spl_list_add,     	\
         .delete_at = spl_list_del
-class_declaration(SplList)
+_class_declaration(SplList)
 
-#define SplClist_fields \
+// SplClist
+#define SplClist_fields                 \
         List_fields
+#define SplClist_vtable_fields          \
+        List_vtable_fields
+
 #define SplClist_definition             \
-        List_definition,                \
-        .insert_at = spl_clist_add,    	\
+        List_definition
+#define SplClist_vtable_definition      \
+        List_vtable_definition,         \
+        .insert_at = spl_clist_add,     \
         .delete_at = spl_clist_del
-class_declaration(SplClist)
+_class_declaration(SplClist)
 
-#define DblList_fields  \
+// DblList
+#define DblList_fields                  \
         List_fields
+#define DblList_vtable_fields           \
+        List_vtable_fields
+
 #define DblList_definition              \
-        List_definition,                \
-        .insert_at = dbl_list_add,     	\
+        List_definition
+#define DblList_vtable_definition       \
+        List_vtable_definition,         \
+        .insert_at = dbl_list_add,      \
         .delete_at = dbl_list_del
-class_declaration(DblList)
+_class_declaration(DblList)
 
-#define DblClist_fields \
+// DblClist
+#define DblClist_fields                 \
         List_fields
+#define DblClist_vtable_fields          \
+        List_vtable_fields
+
 #define DblClist_definition             \
-        List_definition,                \
-        .insert_at = dbl_clist_add,    	\
+        List_definition
+#define DblClist_vtable_definition      \
+        List_vtable_definition,         \
+        .insert_at = dbl_clist_add,     \
         .delete_at = dbl_clist_del
-class_declaration(DblClist)
+_class_declaration(DblClist)
 
 ctor_declaration(Object *, SplList, Object *class; t_data **to_copy; ssize_t copy_amount;)
 ctor_declaration(Object *, SplClist, Object *class; t_data **to_copy; ssize_t copy_amount;)

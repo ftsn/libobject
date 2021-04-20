@@ -127,7 +127,7 @@ static t_bool   _dict_push_no_resizing(Object *self, unsigned char *key, void *d
     pair->data.data = data;
     if (existed == FALSE)
     {
-        if (list->push_back(list, pair, TYPE_PAIR) == FALSE)
+        if (list->vtable->push_back(list, pair, TYPE_PAIR) == FALSE)
         {
             free(pair);
             delete(list);
@@ -225,7 +225,7 @@ t_bool          dict_remove(Object *self, const unsigned char *key)
         if (!strcmp((char *)((t_pair *)((t_data *)cur->data)->data)->key, (char *)key))
         {
             free(((t_data *)cur->data)->data);
-            list->delete_at(list, i);
+            list->vtable->delete_at(list, i);
             if (list->contained_size == 0)
             {
                 delete(list);

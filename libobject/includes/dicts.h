@@ -29,20 +29,25 @@ t_bool          dict_remove(Object *self, const unsigned char *key);
 // Class and constructor declaration
 #define Dict_fields                     \
         Container_fields                \
-        ssize_t             total_size; \
+        ssize_t total_size;
+#define Dict_vtable_fields              \
+        Container_vtable_fields         \
         t_dict_get_by_key   get_by_key; \
         t_dict_push         push;       \
         t_dict_remove       remove;
-#define Dict_definition                     \
-        Container_definition,               \
-        .push_back = NULL,                  \
-        .erase = dict_erase,				\
-        .total_size = 0,					\
-        .get_by_key = dict_get_by_key,		\
-        .push = dict_push,					\
+
+#define Dict_definition                 \
+        Container_definition,           \
+        .total_size = 0
+#define Dict_vtable_definition          \
+        Container_vtable_definition,    \
+        .push_back = NULL,              \
+        .erase = dict_erase,		    \
+        .get_by_key = dict_get_by_key,  \
+        .push = dict_push,              \
         .remove = dict_remove
 
-class_declaration(Dict)
+_class_declaration(Dict)
 ctor_declaration(Object *, Dict, Object *class;)
 
 t_bool  dict_erase(Object *self);

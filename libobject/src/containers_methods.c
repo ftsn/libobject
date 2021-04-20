@@ -72,7 +72,7 @@ t_bool          container_push_back(Object *self, void *data, t_type type)
     Container   *self_c;
 
     self_c = self;
-    return (self_c->insert_at(self_c, data, type, self_c->contained_size));
+    return (self_c->vtable->insert_at(self_c, data, type, self_c->contained_size));
 }
 
 /*
@@ -169,7 +169,7 @@ void            container_print(Object *container, const char *title, void (*f)(
     char        *recursion_title;
     ssize_t     i;
 
-    if (!(it = ((Container *)container)->begin(container)))
+    if (!(it = ((Container *)container)->vtable->begin(container)))
         return;
     i = 0;
     if (!(concat_prefix = concat(prefix, "  ")))
@@ -217,14 +217,14 @@ Object          *container_to_type(Object *self, Class *type)
     self_c = self;
     if (!(ctn = shallow_new_obj(type)))
         return (NULL);
-    if (!(it = self_c->begin(self_c)))
+    if (!(it = self_c->vtable->begin(self_c)))
     {
         delete(ctn);
         return (NULL);
     }
     while (!it->reached_the_end)
     {
-        if (ctn->push_back(ctn, ((t_data *)it->vtable->dereference(it))->data, ((t_data *)it->vtable->dereference(it))->type) == FALSE)
+        if (ctn->vtable->push_back(ctn, ((t_data *)it->vtable->dereference(it))->data, ((t_data *)it->vtable->dereference(it))->type) == FALSE)
         {
             delete(ctn);
             delete(it);
@@ -254,7 +254,7 @@ Object          *container_sub(Object *self, Class *type, ssize_t begin, ssize_t
         return (NULL);
     if (!(ctn = shallow_new_obj(type)))
         return (NULL);
-    if (!(it = self_c->begin(self_c)))
+    if (!(it = self_c->vtable->begin(self_c)))
     {
         delete(ctn);
         return (NULL);
@@ -267,7 +267,7 @@ Object          *container_sub(Object *self, Class *type, ssize_t begin, ssize_t
     i = 0;
     while (i < len)
     {
-        if (ctn->push_back(ctn, ((t_data *)it->vtable->dereference(it))->data, ((t_data *)it->vtable->dereference(it))->type) == FALSE)
+        if (ctn->vtable->push_back(ctn, ((t_data *)it->vtable->dereference(it))->data, ((t_data *)it->vtable->dereference(it))->type) == FALSE)
         {
             delete (ctn);
             delete (it);
@@ -289,7 +289,7 @@ Object          *container_map(Object *self, Class *type, t_data (*fptr)(ssize_t
 
     if (!(ctn = shallow_new_obj(type)))
         return (NULL);
-    if (!(it = ((Container *)self)->begin(self)))
+    if (!(it = ((Container *)self)->vtable->begin(self)))
     {
         delete (ctn);
         return (NULL);
@@ -298,7 +298,7 @@ Object          *container_map(Object *self, Class *type, t_data (*fptr)(ssize_t
     while (!it->reached_the_end)
     {
         typed_data = fptr(i, it->vtable->dereference(it));
-        if (ctn->push_back(ctn, typed_data.data, typed_data.type) == FALSE)
+        if (ctn->vtable->push_back(ctn, typed_data.data, typed_data.type) == FALSE)
         {
             delete (it);
             delete (ctn);
@@ -334,7 +334,7 @@ t_bool      ctn_copy_ctor(Container *ctn, t_data **copy, ssize_t size)
     }
     while (i < size)
     {
-        if (ctn->push_back(ctn, ((t_data *)copy[i])->data, ((t_data *)copy[i])->type) == FALSE)
+        if (ctn->vtable->push_back(ctn, ((t_data *)copy[i])->data, ((t_data *)copy[i])->type) == FALSE)
             return (FALSE);
         ++i;
     }

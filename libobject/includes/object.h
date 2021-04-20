@@ -117,11 +117,11 @@ Object      *_init_new_obj(const Class *class);
         {                                                                                       \
             return (new_obj(class_type));                                                       \
         }                                                                                       \
-        static CAT(class_type,VTABLE_TYPE_SUFFIX)   CAT(class_type,VTABLE_BLUEPRINT_SUFFIX) = { \
-            CAT(class_type,VTABLE_DEFINITION_SUFFIX)                                            \
-        };                                                                                      \
         _Pragma("GCC diagnostic push")                                                          \
         _Pragma("GCC diagnostic ignored \"-Woverride-init\"")                                   \
+        CAT(class_type,VTABLE_TYPE_SUFFIX)   CAT(class_type,VTABLE_BLUEPRINT_SUFFIX) = {        \
+            CAT(class_type,VTABLE_DEFINITION_SUFFIX)                                            \
+        };                                                                                      \
         static class_type CAT(class_type,INIT_SUFFIX) = {                                       \
             class_metadata(class_type, type, dtor),                                             \
             &CAT(class_type,VTABLE_BLUEPRINT_SUFFIX),                                           \

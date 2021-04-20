@@ -141,7 +141,7 @@ Object      *array_ra_it_at(RandomAccessIterator *it, ssize_t idx)
     Array   *array;
 
     array = it->iterated_obj;
-    return (array->at(array, idx));
+    return (array->vtable->at(array, idx));
 }
 
 t_bool                      string_ra_it_next(Iterator *self)

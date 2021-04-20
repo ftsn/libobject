@@ -1,4 +1,5 @@
 CC	=	cc
+#CC	=	/opt/homebrew/Cellar/gcc/10.2.0_4/bin/gcc-10
 
 EXT	=	c
 

@@ -164,7 +164,7 @@ Object          *string_split(const String *self, const Class *type, const char 
     token = strtok(strdump, sep);
     while (token)
     {
-        if (container->push_back(container, token, TYPE_CSTRING) == FALSE)
+        if (container->vtable->push_back(container, token, TYPE_CSTRING) == FALSE)
         {
             free(strdump);
             delete(container);

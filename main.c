@@ -65,6 +65,7 @@ int main(int argc, char *argv[])
 {
     FOR_EACH(PRN_STRUCT_OFFSETS, "HELLO", a, b, c, s, ch, d);
     printf("\n");
+
     (void)argc;
     (void)argv;
     return (0);

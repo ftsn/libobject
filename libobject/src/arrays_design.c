@@ -43,4 +43,4 @@ static void     array_dtor(Object *self)
     ((Container *)self)->contained_size = 0;
 }
 
-class_definition(Array, TYPE_ARRAY, array_dtor)
+_class_definition(Array, TYPE_ARRAY, array_dtor)

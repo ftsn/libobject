@@ -29,7 +29,7 @@ static void     dict_insert_key(void **state)
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
     assert_int_not_equal(((Dict *)ctn)->total_size, 0);
-    assert_int_equal(((Dict *)ctn)->push(ctn, (unsigned char *)"foo", "bar", TYPE_CSTRING), TRUE);
+    assert_int_equal(((Dict *)ctn)->vtable->push(ctn, (unsigned char *)"foo", "bar", TYPE_CSTRING), TRUE);
     assert_int_equal(ctn->contained_size, 1);
     assert_int_not_equal(((Dict *)ctn)->total_size, 0);
     assert_string_equal(DICT_DATA_LOOKUP(ctn, "foo"), "bar");
@@ -46,11 +46,11 @@ static void     dict_insert_key_twice(void **state)
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
     assert_int_not_equal(((Dict *)ctn)->total_size, 0);
-    assert_int_equal(((Dict *)ctn)->push(ctn, (unsigned char *)"foo", "bar", TYPE_CSTRING), TRUE);
+    assert_int_equal(((Dict *)ctn)->vtable->push(ctn, (unsigned char *)"foo", "bar", TYPE_CSTRING), TRUE);
     assert_int_equal(ctn->contained_size, 1);
     assert_int_not_equal(((Dict *)ctn)->total_size, 0);
     assert_string_equal(DICT_DATA_LOOKUP(ctn, "foo"), "bar");
-    assert_int_equal(((Dict *)ctn)->push(ctn, (unsigned char *)"foo", "barz", TYPE_CSTRING), TRUE);
+    assert_int_equal(((Dict *)ctn)->vtable->push(ctn, (unsigned char *)"foo", "barz", TYPE_CSTRING), TRUE);
     assert_int_equal(ctn->contained_size, 1);
     assert_int_not_equal(((Dict *)ctn)->total_size, 0);
     assert_string_equal(DICT_DATA_LOOKUP(ctn, "foo"), "barz");
@@ -68,12 +68,12 @@ static void     dict_insert_different_keys(void **state)
     assert_int_equal(ctn->contained_size, 0);
     assert_int_not_equal(((Dict *)ctn)->total_size, 0);
 
-    assert_int_equal(((Dict *)ctn)->push(ctn, (unsigned char *)"foo", "bar", TYPE_CSTRING), TRUE);
+    assert_int_equal(((Dict *)ctn)->vtable->push(ctn, (unsigned char *)"foo", "bar", TYPE_CSTRING), TRUE);
     assert_int_equal(ctn->contained_size, 1);
     assert_int_not_equal(((Dict *)ctn)->total_size, 0);
     assert_string_equal(DICT_DATA_LOOKUP(ctn, "foo"), "bar");
 
-    assert_int_equal(((Dict *)ctn)->push(ctn, (unsigned char *)"bar", "foo", TYPE_CSTRING), TRUE);
+    assert_int_equal(((Dict *)ctn)->vtable->push(ctn, (unsigned char *)"bar", "foo", TYPE_CSTRING), TRUE);
     assert_int_equal(ctn->contained_size, 2);
     assert_int_not_equal(((Dict *)ctn)->total_size, 0);
     assert_string_equal(DICT_DATA_LOOKUP(ctn, "bar"), "foo");
@@ -92,64 +92,64 @@ static void     dict_mixed_insertion_deletion(void **state)
     assert_int_equal(ctn->contained_size, 0);
     assert_int_not_equal(((Dict *)ctn)->total_size, 0);
 
-    assert_int_equal(((Dict *)ctn)->push(ctn, (unsigned char *)"foo", "bar", TYPE_CSTRING), TRUE);
+    assert_int_equal(((Dict *)ctn)->vtable->push(ctn, (unsigned char *)"foo", "bar", TYPE_CSTRING), TRUE);
     assert_int_equal(ctn->contained_size, 1);
     assert_int_not_equal(((Dict *)ctn)->total_size, 0);
     assert_string_equal(DICT_DATA_LOOKUP(ctn, "foo"), "bar");
 
-    assert_int_equal(((Dict *)ctn)->remove(ctn, (unsigned char *)"foo"), TRUE);
+    assert_int_equal(((Dict *)ctn)->vtable->remove(ctn, (unsigned char *)"foo"), TRUE);
     assert_int_equal(ctn->contained_size, 0);
     assert_int_not_equal(((Dict *)ctn)->total_size, 0);
     assert_null(DICT_PAIR_LOOKUP(ctn, "foo"));
-    assert_int_equal(((Dict *)ctn)->remove(ctn, (unsigned char *)"foo"), FALSE);
+    assert_int_equal(((Dict *)ctn)->vtable->remove(ctn, (unsigned char *)"foo"), FALSE);
 
-    assert_int_equal(((Dict *)ctn)->push(ctn, (unsigned char *)"foo", "barz", TYPE_CSTRING), TRUE);
+    assert_int_equal(((Dict *)ctn)->vtable->push(ctn, (unsigned char *)"foo", "barz", TYPE_CSTRING), TRUE);
     assert_int_equal(ctn->contained_size, 1);
     assert_int_not_equal(((Dict *)ctn)->total_size, 0);
     assert_string_equal(DICT_DATA_LOOKUP(ctn, "foo"), "barz");
 
-    assert_int_equal(((Dict *)ctn)->remove(ctn, (unsigned char *)"foo"), TRUE);
+    assert_int_equal(((Dict *)ctn)->vtable->remove(ctn, (unsigned char *)"foo"), TRUE);
     assert_int_equal(ctn->contained_size, 0);
     assert_int_not_equal(((Dict *)ctn)->total_size, 0);
     assert_null(DICT_PAIR_LOOKUP(ctn, "foo"));
 
-    assert_int_equal(((Dict *)ctn)->push(ctn, (unsigned char *)"push1", "data1", TYPE_CSTRING), TRUE);
+    assert_int_equal(((Dict *)ctn)->vtable->push(ctn, (unsigned char *)"push1", "data1", TYPE_CSTRING), TRUE);
     assert_int_equal(ctn->contained_size, 1);
     assert_int_not_equal(((Dict *)ctn)->total_size, 0);
     assert_string_equal(DICT_DATA_LOOKUP(ctn, "push1"), "data1");
 
-    assert_int_equal(((Dict *)ctn)->push(ctn, (unsigned char *)"push2", "data2", TYPE_CSTRING), TRUE);
+    assert_int_equal(((Dict *)ctn)->vtable->push(ctn, (unsigned char *)"push2", "data2", TYPE_CSTRING), TRUE);
     assert_int_equal(ctn->contained_size, 2);
     assert_int_not_equal(((Dict *)ctn)->total_size, 0);
     assert_string_equal(DICT_DATA_LOOKUP(ctn, "push2"), "data2");
 
-    assert_int_equal(((Dict *)ctn)->push(ctn, (unsigned char *)"push3", "data3", TYPE_CSTRING), TRUE);
+    assert_int_equal(((Dict *)ctn)->vtable->push(ctn, (unsigned char *)"push3", "data3", TYPE_CSTRING), TRUE);
     assert_int_equal(ctn->contained_size, 3);
     assert_int_not_equal(((Dict *)ctn)->total_size, 0);
     assert_string_equal(DICT_DATA_LOOKUP(ctn, "push3"), "data3");
 
-    assert_int_equal(((Dict *)ctn)->remove(ctn, (unsigned char *)"wrongKey"), FALSE);
+    assert_int_equal(((Dict *)ctn)->vtable->remove(ctn, (unsigned char *)"wrongKey"), FALSE);
     assert_int_equal(ctn->contained_size, 3);
     assert_int_not_equal(((Dict *)ctn)->total_size, 0);
     assert_non_null(DICT_PAIR_LOOKUP(ctn, "push1"));
     assert_non_null(DICT_PAIR_LOOKUP(ctn, "push2"));
     assert_non_null(DICT_PAIR_LOOKUP(ctn, "push3"));
 
-    assert_int_equal(((Dict *)ctn)->remove(ctn, (unsigned char *)"push2"), TRUE);
+    assert_int_equal(((Dict *)ctn)->vtable->remove(ctn, (unsigned char *)"push2"), TRUE);
     assert_int_equal(ctn->contained_size, 2);
     assert_int_not_equal(((Dict *)ctn)->total_size, 0);
     assert_non_null(DICT_PAIR_LOOKUP(ctn, "push1"));
     assert_null(DICT_PAIR_LOOKUP(ctn, "push2"));
     assert_non_null(DICT_PAIR_LOOKUP(ctn, "push3"));
 
-    assert_int_equal(((Dict *)ctn)->remove(ctn, (unsigned char *)"push3"), TRUE);
+    assert_int_equal(((Dict *)ctn)->vtable->remove(ctn, (unsigned char *)"push3"), TRUE);
     assert_int_equal(ctn->contained_size, 1);
     assert_int_not_equal(((Dict *)ctn)->total_size, 0);
     assert_non_null(DICT_PAIR_LOOKUP(ctn, "push1"));
     assert_null(DICT_PAIR_LOOKUP(ctn, "push2"));
     assert_null(DICT_PAIR_LOOKUP(ctn, "push3"));
 
-    assert_int_equal(((Dict *)ctn)->remove(ctn, (unsigned char *)"push1"), TRUE);
+    assert_int_equal(((Dict *)ctn)->vtable->remove(ctn, (unsigned char *)"push1"), TRUE);
     assert_int_equal(ctn->contained_size, 0);
     assert_int_not_equal(((Dict *)ctn)->total_size, 0);
     assert_null(DICT_PAIR_LOOKUP(ctn, "push1"));
@@ -169,7 +169,7 @@ static void     dict_data(void **state)
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
     assert_int_not_equal(((Dict *)ctn)->total_size, 0);
-    assert_ptr_equal(ctn->data(ctn), ctn->contained);
+    assert_ptr_equal(ctn->vtable->data(ctn), ctn->contained);
     delete(ctn);
     (void)state;
 }
@@ -183,7 +183,7 @@ static void     dict_empty_size(void **state)
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
     assert_int_not_equal(((Dict *)ctn)->total_size, 0);
-    assert_int_equal(ctn->size(ctn), 0);
+    assert_int_equal(ctn->vtable->size(ctn), 0);
     delete(ctn);
     (void)state;
 }
@@ -197,11 +197,11 @@ static void     dict_non_empty_size(void **state)
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
     assert_int_not_equal(((Dict *)ctn)->total_size, 0);
-    assert_int_equal(((Dict *)ctn)->push(ctn, (unsigned char *)"foo", "bar", TYPE_CSTRING), TRUE);
+    assert_int_equal(((Dict *)ctn)->vtable->push(ctn, (unsigned char *)"foo", "bar", TYPE_CSTRING), TRUE);
     assert_int_equal(ctn->contained_size, 1);
     assert_int_not_equal(((Dict *)ctn)->total_size, 0);
     assert_string_equal(DICT_DATA_LOOKUP(ctn, "foo"), "bar");
-    assert_int_equal(ctn->size(ctn), 1);
+    assert_int_equal(ctn->vtable->size(ctn), 1);
     delete(ctn);
     (void)state;
 }
@@ -215,7 +215,7 @@ static void     dict_empty_test_empty(void **state)
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
     assert_int_not_equal(((Dict *)ctn)->total_size, 0);
-    assert_int_equal(ctn->empty(ctn), TRUE);
+    assert_int_equal(ctn->vtable->empty(ctn), TRUE);
     delete(ctn);
     (void)state;
 }
@@ -229,11 +229,11 @@ static void     dict_non_empty_test_empty(void **state)
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
     assert_int_not_equal(((Dict *)ctn)->total_size, 0);
-    assert_int_equal(((Dict *)ctn)->push(ctn, (unsigned char *)"foo", "bar", TYPE_CSTRING), TRUE);
+    assert_int_equal(((Dict *)ctn)->vtable->push(ctn, (unsigned char *)"foo", "bar", TYPE_CSTRING), TRUE);
     assert_int_equal(ctn->contained_size, 1);
     assert_int_not_equal(((Dict *)ctn)->total_size, 0);
     assert_string_equal(DICT_DATA_LOOKUP(ctn, "foo"), "bar");
-    assert_int_equal(ctn->empty(ctn), FALSE);
+    assert_int_equal(ctn->vtable->empty(ctn), FALSE);
     delete(ctn);
     (void)state;
 }

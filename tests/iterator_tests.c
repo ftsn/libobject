@@ -37,7 +37,7 @@ static void     iterator_empty_array_begin(void **state)
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
     assert_int_not_equal(((Array *)ctn)->total_size, 0);
-    it = ctn->begin(ctn);
+    it = ctn->vtable->begin(ctn);
     assert_non_null(it);
     assert_int_equal(it->reached_the_beginning, 1);
     assert_int_equal(it->reached_the_end, 1);
@@ -59,7 +59,7 @@ static void     iterator_empty_array_end(void **state)
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
     assert_int_not_equal(((Array *)ctn)->total_size, 0);
-    it = ctn->end(ctn);
+    it = ctn->vtable->end(ctn);
     assert_non_null(it);
     assert_int_equal(it->reached_the_beginning, 1);
     assert_int_equal(it->reached_the_end, 1);
@@ -81,7 +81,7 @@ static void     iterator_non_empty_array_begin(void **state)
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
     assert_int_not_equal(((Array *)ctn)->total_size, 0);
-    it = ctn->begin(ctn);
+    it = ctn->vtable->begin(ctn);
     assert_non_null(it);
     assert_int_equal(it->reached_the_beginning, 0);
     assert_int_equal(it->reached_the_end, 0);
@@ -112,7 +112,7 @@ static void     iterator_non_empty_array_end(void **state)
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
     assert_int_not_equal(((Array *)ctn)->total_size, 0);
-    it = ctn->end(ctn);
+    it = ctn->vtable->end(ctn);
     assert_non_null(it);
     assert_int_equal(it->reached_the_beginning, 0);
     assert_int_equal(it->reached_the_end, 0);
@@ -141,13 +141,13 @@ static void                 iterator_non_empty_array_arithmetic(void **state)
     RandomAccessIterator    *ra;
 
     ctn = new_obj(Array, .to_copy = *state, .copy_amount = COPY_ALL);
-    assert_int_equal(ctn->push_back(ctn, "baz", TYPE_CSTRING), TRUE);
-    assert_int_equal(ctn->push_back(ctn, "barz", TYPE_CSTRING), TRUE);
+    assert_int_equal(ctn->vtable->push_back(ctn, "baz", TYPE_CSTRING), TRUE);
+    assert_int_equal(ctn->vtable->push_back(ctn, "barz", TYPE_CSTRING), TRUE);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 4);
     assert_int_not_equal(((Array *)ctn)->total_size, 0);
-    it = ctn->begin(ctn);
+    it = ctn->vtable->begin(ctn);
     ra = (RandomAccessIterator *)it;
     assert_non_null(it);
     assert_int_equal(it->reached_the_beginning, 0);
@@ -189,13 +189,13 @@ static void                 iterator_non_empty_array_compare_its(void **state)
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
     assert_int_not_equal(((Array *)ctn)->total_size, 0);
-    it1 = ctn->begin(ctn);
+    it1 = ctn->vtable->begin(ctn);
     assert_non_null(it1);
     assert_int_equal(it1->reached_the_beginning, 0);
     assert_int_equal(it1->reached_the_end, 0);
     assert_int_equal(it1->it_idx, 0);
     assert_string_equal(((t_data *)it1->vtable->dereference(it1))->data, "foo");
-    it2 = ctn->begin(ctn);
+    it2 = ctn->vtable->begin(ctn);
     assert_non_null(it2);
     assert_int_equal(it2->reached_the_beginning, 0);
     assert_int_equal(it2->reached_the_end, 0);
@@ -447,7 +447,7 @@ static void     iterator_empty_spl_list_begin(void **state)
     assert_non_null(ctn);
     assert_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
-    it = ctn->begin(ctn);
+    it = ctn->vtable->begin(ctn);
     assert_non_null(it);
     assert_int_equal(it->reached_the_beginning, 1);
     assert_int_equal(it->reached_the_end, 1);
@@ -467,7 +467,7 @@ static void     iterator_empty_spl_list_end(void **state)
     assert_non_null(ctn);
     assert_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
-    it = ctn->end(ctn);
+    it = ctn->vtable->end(ctn);
     assert_non_null(it);
     assert_int_equal(it->reached_the_beginning, 1);
     assert_int_equal(it->reached_the_end, 1);
@@ -487,7 +487,7 @@ static void     iterator_non_empty_spl_list_begin(void **state)
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
-    it = ctn->begin(ctn);
+    it = ctn->vtable->begin(ctn);
     assert_non_null(it);
     assert_int_equal(it->reached_the_beginning, 0);
     assert_int_equal(it->reached_the_end, 0);
@@ -527,7 +527,7 @@ static void     iterator_non_empty_spl_list_end(void **state)
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
-    it = ctn->end(ctn);
+    it = ctn->vtable->end(ctn);
     if (is_dbl_list(ctn) == TRUE)
     {
         assert_non_null(it);
@@ -570,7 +570,7 @@ static void     iterator_empty_spl_clist_begin(void **state)
     assert_non_null(ctn);
     assert_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
-    it = ctn->begin(ctn);
+    it = ctn->vtable->begin(ctn);
     assert_non_null(it);
     assert_int_equal(it->reached_the_beginning, 1);
     assert_int_equal(it->reached_the_end, 1);
@@ -590,7 +590,7 @@ static void     iterator_empty_spl_clist_end(void **state)
     assert_non_null(ctn);
     assert_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
-    it = ctn->end(ctn);
+    it = ctn->vtable->end(ctn);
     assert_non_null(it);
     assert_int_equal(it->reached_the_beginning, 1);
     assert_int_equal(it->reached_the_end, 1);
@@ -610,7 +610,7 @@ static void     iterator_non_empty_spl_clist_begin(void **state)
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
-    it = ctn->begin(ctn);
+    it = ctn->vtable->begin(ctn);
     assert_non_null(it);
     assert_int_equal(it->reached_the_beginning, 0);
     assert_int_equal(it->reached_the_end, 0);
@@ -650,7 +650,7 @@ static void     iterator_non_empty_spl_clist_end(void **state)
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
-    it = ctn->end(ctn);
+    it = ctn->vtable->end(ctn);
     if (is_dbl_list(ctn) == TRUE)
     {
         assert_non_null(it);
@@ -693,7 +693,7 @@ static void     iterator_empty_dbl_list_begin(void **state)
     assert_non_null(ctn);
     assert_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
-    it = ctn->begin(ctn);
+    it = ctn->vtable->begin(ctn);
     assert_non_null(it);
     assert_int_equal(it->reached_the_beginning, 1);
     assert_int_equal(it->reached_the_end, 1);
@@ -713,7 +713,7 @@ static void     iterator_empty_dbl_list_end(void **state)
     assert_non_null(ctn);
     assert_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
-    it = ctn->end(ctn);
+    it = ctn->vtable->end(ctn);
     assert_non_null(it);
     assert_int_equal(it->reached_the_beginning, 1);
     assert_int_equal(it->reached_the_end, 1);
@@ -733,7 +733,7 @@ static void     iterator_non_empty_dbl_list_begin(void **state)
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
-    it = ctn->begin(ctn);
+    it = ctn->vtable->begin(ctn);
     assert_non_null(it);
     assert_int_equal(it->reached_the_beginning, 0);
     assert_int_equal(it->reached_the_end, 0);
@@ -773,7 +773,7 @@ static void     iterator_non_empty_dbl_list_end(void **state)
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
-    it = ctn->end(ctn);
+    it = ctn->vtable->end(ctn);
     if (is_dbl_list(ctn) == TRUE)
     {
         assert_non_null(it);
@@ -816,7 +816,7 @@ static void     iterator_empty_dbl_clist_begin(void **state)
     assert_non_null(ctn);
     assert_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
-    it = ctn->begin(ctn);
+    it = ctn->vtable->begin(ctn);
     assert_non_null(it);
     assert_int_equal(it->reached_the_beginning, 1);
     assert_int_equal(it->reached_the_end, 1);
@@ -836,7 +836,7 @@ static void     iterator_empty_dbl_clist_end(void **state)
     assert_non_null(ctn);
     assert_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
-    it = ctn->end(ctn);
+    it = ctn->vtable->end(ctn);
     assert_non_null(it);
     assert_int_equal(it->reached_the_beginning, 1);
     assert_int_equal(it->reached_the_end, 1);
@@ -856,7 +856,7 @@ static void     iterator_non_empty_dbl_clist_begin(void **state)
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
-    it = ctn->begin(ctn);
+    it = ctn->vtable->begin(ctn);
     assert_non_null(it);
     assert_int_equal(it->reached_the_beginning, 0);
     assert_int_equal(it->reached_the_end, 0);
@@ -896,7 +896,7 @@ static void     iterator_non_empty_dbl_clist_end(void **state)
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
-    it = ctn->end(ctn);
+    it = ctn->vtable->end(ctn);
     if (is_dbl_list(ctn) == TRUE)
     {
         assert_non_null(it);
@@ -940,7 +940,7 @@ static void     iterator_empty_dict_begin(void **state)
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
     assert_int_not_equal(((Dict *)ctn)->total_size, 0);
-    it = ctn->begin(ctn);
+    it = ctn->vtable->begin(ctn);
     assert_non_null(it);
     assert_int_equal(it->reached_the_beginning, 1);
     assert_int_equal(it->reached_the_end, 1);
@@ -961,7 +961,7 @@ static void     iterator_empty_dict_end(void **state)
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
     assert_int_not_equal(((Dict *)ctn)->total_size, 0);
-    it = ctn->end(ctn);
+    it = ctn->vtable->end(ctn);
     assert_non_null(it);
     assert_int_equal(it->reached_the_beginning, 1);
     assert_int_equal(it->reached_the_end, 1);
@@ -981,11 +981,11 @@ static void     iterator_non_empty_dict_begin(void **state)
     ctn = new_obj(Dict);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
-    assert_int_equal(((Dict *)ctn)->push(ctn, (unsigned char *)"baz", "barz", TYPE_CSTRING), TRUE);
-    assert_int_equal(((Dict *)ctn)->push(ctn, (unsigned char *)"foo", "bar", TYPE_CSTRING), TRUE);
+    assert_int_equal(((Dict *)ctn)->vtable->push(ctn, (unsigned char *)"baz", "barz", TYPE_CSTRING), TRUE);
+    assert_int_equal(((Dict *)ctn)->vtable->push(ctn, (unsigned char *)"foo", "bar", TYPE_CSTRING), TRUE);
     assert_int_equal(ctn->contained_size, 2);
     assert_int_not_equal(((Dict *)ctn)->total_size, 0);
-    it = ctn->begin(ctn);
+    it = ctn->vtable->begin(ctn);
     assert_non_null(it);
     assert_int_equal(it->reached_the_beginning, 0);
     assert_int_equal(it->reached_the_end, 0);
@@ -1018,11 +1018,11 @@ static void     iterator_non_empty_dict_end(void **state)
     ctn = new_obj(Dict);
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
-    assert_int_equal(((Dict *)ctn)->push(ctn, (unsigned char *)"baz", "barz", TYPE_CSTRING), TRUE);
-    assert_int_equal(((Dict *)ctn)->push(ctn, (unsigned char *)"foo", "bar", TYPE_CSTRING), TRUE);
+    assert_int_equal(((Dict *)ctn)->vtable->push(ctn, (unsigned char *)"baz", "barz", TYPE_CSTRING), TRUE);
+    assert_int_equal(((Dict *)ctn)->vtable->push(ctn, (unsigned char *)"foo", "bar", TYPE_CSTRING), TRUE);
     assert_int_equal(ctn->contained_size, 2);
     assert_int_not_equal(((Dict *)ctn)->total_size, 0);
-    it = ctn->end(ctn);
+    it = ctn->vtable->end(ctn);
     assert_non_null(it);
     assert_int_equal(it->reached_the_beginning, 0);
     assert_int_equal(it->reached_the_end, 0);

@@ -43,12 +43,12 @@ static void     list_dtor(Object *self)
     Container   *list;
 
     list = self;
-    list->erase(list);
+    list->vtable->erase(list);
     list->contained = NULL;
     list->contained_size = 0;
 }
 
-class_definition(SplList, TYPE_LINKED_LIST, list_dtor)
-class_definition(SplClist, TYPE_CIRCULAR_LINKED_LIST, list_dtor)
-class_definition(DblList, TYPE_DOUBLY_LINKED_LIST, list_dtor)
-class_definition(DblClist, TYPE_CIRCULAR_DOUBLY_LINKED_LIST, list_dtor)
+_class_definition(SplList, TYPE_LINKED_LIST, list_dtor)
+_class_definition(SplClist, TYPE_CIRCULAR_LINKED_LIST, list_dtor)
+_class_definition(DblList, TYPE_DOUBLY_LINKED_LIST, list_dtor)
+_class_definition(DblClist, TYPE_CIRCULAR_DOUBLY_LINKED_LIST, list_dtor)

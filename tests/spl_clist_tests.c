@@ -81,7 +81,7 @@ static void spl_clist_data(void **state)
 
     ctn = new_obj(SplClist);
     assert_non_null(ctn);
-    assert_ptr_equal(ctn->data(ctn), ctn->contained);
+    assert_ptr_equal(ctn->vtable->data(ctn), ctn->contained);
     delete (ctn);
     (void)state;
 }
@@ -93,7 +93,7 @@ static void spl_clist_empty_test_size(void **state)
     ctn = new_obj(SplClist);
     assert_non_null(ctn);
     assert_int_equal(ctn->contained_size, 0);
-    assert_int_equal(ctn->size(ctn), 0);
+    assert_int_equal(ctn->vtable->size(ctn), 0);
     delete (ctn);
     (void)state;
 }
@@ -105,7 +105,7 @@ static void spl_clist_non_empty_test_size(void **state)
     ctn = new_obj(SplClist, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
     assert_int_equal(ctn->contained_size, 2);
-    assert_int_equal(ctn->size(ctn), 2);
+    assert_int_equal(ctn->vtable->size(ctn), 2);
     delete (ctn);
     (void)state;
 }
@@ -117,7 +117,7 @@ static void spl_clist_empty_test_empty(void **state)
     ctn = new_obj(SplClist);
     assert_non_null(ctn);
     assert_int_equal(ctn->contained_size, 0);
-    assert_int_equal(ctn->empty(ctn), TRUE);
+    assert_int_equal(ctn->vtable->empty(ctn), TRUE);
     delete (ctn);
     (void)state;
 }
@@ -129,7 +129,7 @@ static void spl_clist_non_empty_test_empty(void **state)
     ctn = new_obj(SplClist, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
     assert_int_equal(ctn->contained_size, 2);
-    assert_int_equal(ctn->empty(ctn), FALSE);
+    assert_int_equal(ctn->vtable->empty(ctn), FALSE);
     delete (ctn);
     (void)state;
 }
@@ -140,7 +140,7 @@ static void spl_clist_empty_insert_at_negative_pos(void **state)
 
     ctn = new_obj(SplClist);
     assert_non_null(ctn);
-    assert_int_equal(ctn->insert_at(ctn, "foobar", TYPE_CSTRING, -1), FALSE);
+    assert_int_equal(ctn->vtable->insert_at(ctn, "foobar", TYPE_CSTRING, -1), FALSE);
     assert_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
     delete (ctn);
@@ -153,7 +153,7 @@ static void spl_clist_empty_insert_at_out_of_range_pos(void **state)
 
     ctn = new_obj(SplClist);
     assert_non_null(ctn);
-    assert_int_equal(ctn->insert_at(ctn, "foobar", TYPE_CSTRING, 666), FALSE);
+    assert_int_equal(ctn->vtable->insert_at(ctn, "foobar", TYPE_CSTRING, 666), FALSE);
     assert_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
     delete (ctn);
@@ -166,7 +166,7 @@ static void spl_clist_non_empty_insert_at_negative_pos(void **state)
 
     ctn = new_obj(SplClist, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
-    assert_int_equal(ctn->insert_at(ctn, "foobar", TYPE_CSTRING, -1), FALSE);
+    assert_int_equal(ctn->vtable->insert_at(ctn, "foobar", TYPE_CSTRING, -1), FALSE);
     assert_int_equal(ctn->contained_size, 2);
     assert_string_equal(list_data_lookup(ctn, 0), "foo");
     assert_string_equal(list_data_lookup(ctn, 1), "bar");
@@ -180,7 +180,7 @@ static void spl_clist_non_empty_insert_at_out_of_range_pos(void **state)
 
     ctn = new_obj(SplClist, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
-    assert_int_equal(ctn->insert_at(ctn, "foobar", TYPE_CSTRING, 666), FALSE);
+    assert_int_equal(ctn->vtable->insert_at(ctn, "foobar", TYPE_CSTRING, 666), FALSE);
     assert_int_equal(ctn->contained_size, 2);
     assert_string_equal(list_data_lookup(ctn, 0), "foo");
     assert_string_equal(list_data_lookup(ctn, 1), "bar");
@@ -194,7 +194,7 @@ static void spl_clist_empty_insert_at_pos_0(void **state)
 
     ctn = new_obj(SplClist);
     assert_non_null(ctn);
-    assert_int_equal(ctn->insert_at(ctn, "foobar", TYPE_CSTRING, 0), TRUE);
+    assert_int_equal(ctn->vtable->insert_at(ctn, "foobar", TYPE_CSTRING, 0), TRUE);
     assert_int_equal(ctn->contained_size, 1);
     assert_string_equal(list_data_lookup(ctn, 0), "foobar");
     delete (ctn);
@@ -207,7 +207,7 @@ static void spl_clist_non_empty_insert_at_pos_0(void **state)
 
     ctn = new_obj(SplClist, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
-    assert_int_equal(ctn->insert_at(ctn, "foobar", TYPE_CSTRING, 0), TRUE);
+    assert_int_equal(ctn->vtable->insert_at(ctn, "foobar", TYPE_CSTRING, 0), TRUE);
     assert_int_equal(ctn->contained_size, 3);
     assert_string_equal(list_data_lookup(ctn, 0), "foobar");
     assert_string_equal(list_data_lookup(ctn, 1), "foo");
@@ -222,7 +222,7 @@ static void spl_clist_non_empty_insert_at_pos_1(void **state)
 
     ctn = new_obj(SplClist, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
-    assert_int_equal(ctn->insert_at(ctn, "foobar", TYPE_CSTRING, 1), TRUE);
+    assert_int_equal(ctn->vtable->insert_at(ctn, "foobar", TYPE_CSTRING, 1), TRUE);
     assert_int_equal(ctn->contained_size, 3);
     assert_string_equal(list_data_lookup(ctn, 0), "foo");
     assert_string_equal(list_data_lookup(ctn, 1), "foobar");
@@ -237,7 +237,7 @@ static void spl_clist_non_empty_insert_at_last_pos(void **state)
 
     ctn = new_obj(SplClist, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
-    assert_int_equal(ctn->insert_at(ctn, "foobar", TYPE_CSTRING, 2), TRUE);
+    assert_int_equal(ctn->vtable->insert_at(ctn, "foobar", TYPE_CSTRING, 2), TRUE);
     assert_int_equal(ctn->contained_size, 3);
     assert_string_equal(list_data_lookup(ctn, 0), "foo");
     assert_string_equal(list_data_lookup(ctn, 1), "bar");
@@ -252,7 +252,7 @@ static void spl_clist_empty_push_back(void **state)
 
     ctn = new_obj(SplClist);
     assert_non_null(ctn);
-    assert_int_equal(ctn->push_back(ctn, "foobar", TYPE_CSTRING), TRUE);
+    assert_int_equal(ctn->vtable->push_back(ctn, "foobar", TYPE_CSTRING), TRUE);
     assert_int_equal(ctn->contained_size, 1);
     assert_string_equal(list_data_lookup(ctn, 0), "foobar");
     delete (ctn);
@@ -265,7 +265,7 @@ static void spl_clist_non_empty_push_back(void **state)
 
     ctn = new_obj(SplClist, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
-    assert_int_equal(ctn->push_back(ctn, "foobar", TYPE_CSTRING), TRUE);
+    assert_int_equal(ctn->vtable->push_back(ctn, "foobar", TYPE_CSTRING), TRUE);
     assert_int_equal(ctn->contained_size, 3);
     assert_string_equal(list_data_lookup(ctn, 0), "foo");
     assert_string_equal(list_data_lookup(ctn, 1), "bar");
@@ -280,7 +280,7 @@ static void spl_clist_empty_delete_at_negative_pos(void **state)
 
     ctn = new_obj(SplClist);
     assert_non_null(ctn);
-    assert_int_equal(ctn->delete_at(ctn, -1), FALSE);
+    assert_int_equal(ctn->vtable->delete_at(ctn, -1), FALSE);
     assert_int_equal(ctn->contained_size, 0);
     assert_null(ctn->contained);
     delete (ctn);
@@ -293,7 +293,7 @@ static void spl_clist_empty_delete_at_out_of_range_pos(void **state)
 
     ctn = new_obj(SplClist);
     assert_non_null(ctn);
-    assert_int_equal(ctn->delete_at(ctn, 666), FALSE);
+    assert_int_equal(ctn->vtable->delete_at(ctn, 666), FALSE);
     assert_int_equal(ctn->contained_size, 0);
     assert_null(ctn->contained);
     delete (ctn);
@@ -306,7 +306,7 @@ static void spl_clist_non_empty_delete_at_negative_pos(void **state)
 
     ctn = new_obj(SplClist, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
-    assert_int_equal(ctn->delete_at(ctn, -1), FALSE);
+    assert_int_equal(ctn->vtable->delete_at(ctn, -1), FALSE);
     assert_int_equal(ctn->contained_size, 2);
     delete (ctn);
     (void)state;
@@ -318,7 +318,7 @@ static void spl_clist_non_empty_delete_at_out_of_range_pos(void **state)
 
     ctn = new_obj(SplClist, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
-    assert_int_equal(ctn->delete_at(ctn, 666), FALSE);
+    assert_int_equal(ctn->vtable->delete_at(ctn, 666), FALSE);
     assert_int_equal(ctn->contained_size, 2);
     delete (ctn);
     (void)state;
@@ -330,7 +330,7 @@ static void spl_clist_non_empty_delete_at_pos_0(void **state)
 
     ctn = new_obj(SplClist, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
-    assert_int_equal(ctn->delete_at(ctn, 0), TRUE);
+    assert_int_equal(ctn->vtable->delete_at(ctn, 0), TRUE);
     assert_int_equal(ctn->contained_size, 1);
     assert_string_equal(list_data_lookup(ctn, 0), "bar");
     delete (ctn);
@@ -343,7 +343,7 @@ static void spl_clist_non_empty_delete_at_pos_1(void **state)
 
     ctn = new_obj(SplClist, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
-    assert_int_equal(ctn->delete_at(ctn, 1), TRUE);
+    assert_int_equal(ctn->vtable->delete_at(ctn, 1), TRUE);
     assert_int_equal(ctn->contained_size, 1);
     assert_string_equal(list_data_lookup(ctn, 0), "foo");
     delete (ctn);
@@ -356,45 +356,45 @@ static void spl_clist_mixed_insertion_deletion(void **state)
 
     ctn = new_obj(SplClist, .to_copy = *state, .copy_amount = COPY_ALL);
     assert_non_null(ctn);
-    assert_int_equal(ctn->delete_at(ctn, 1), TRUE);
+    assert_int_equal(ctn->vtable->delete_at(ctn, 1), TRUE);
     assert_int_equal(ctn->contained_size, 1);
     assert_string_equal(list_data_lookup(ctn, 0), "foo");
-    assert_int_equal(ctn->insert_at(ctn, "foobar", TYPE_CSTRING, 1), TRUE);
+    assert_int_equal(ctn->vtable->insert_at(ctn, "foobar", TYPE_CSTRING, 1), TRUE);
     assert_int_equal(ctn->contained_size, 2);
     assert_string_equal(list_data_lookup(ctn, 0), "foo");
     assert_string_equal(list_data_lookup(ctn, 1), "foobar");
-    assert_int_equal(ctn->insert_at(ctn, "barfoo", TYPE_CSTRING, 1), TRUE);
+    assert_int_equal(ctn->vtable->insert_at(ctn, "barfoo", TYPE_CSTRING, 1), TRUE);
     assert_int_equal(ctn->contained_size, 3);
     assert_string_equal(list_data_lookup(ctn, 0), "foo");
     assert_string_equal(list_data_lookup(ctn, 1), "barfoo");
     assert_string_equal(list_data_lookup(ctn, 2), "foobar");
-    assert_int_equal(ctn->push_back(ctn, "baz", TYPE_CSTRING), TRUE);
+    assert_int_equal(ctn->vtable->push_back(ctn, "baz", TYPE_CSTRING), TRUE);
     assert_int_equal(ctn->contained_size, 4);
     assert_string_equal(list_data_lookup(ctn, 0), "foo");
     assert_string_equal(list_data_lookup(ctn, 1), "barfoo");
     assert_string_equal(list_data_lookup(ctn, 2), "foobar");
     assert_string_equal(list_data_lookup(ctn, 3), "baz");
-    assert_int_equal(ctn->delete_at(ctn, -1), FALSE);
+    assert_int_equal(ctn->vtable->delete_at(ctn, -1), FALSE);
     assert_int_equal(ctn->contained_size, 4);
     assert_string_equal(list_data_lookup(ctn, 0), "foo");
     assert_string_equal(list_data_lookup(ctn, 1), "barfoo");
     assert_string_equal(list_data_lookup(ctn, 2), "foobar");
     assert_string_equal(list_data_lookup(ctn, 3), "baz");
-    assert_int_equal(ctn->delete_at(ctn, 2), TRUE);
+    assert_int_equal(ctn->vtable->delete_at(ctn, 2), TRUE);
     assert_int_equal(ctn->contained_size, 3);
     assert_string_equal(list_data_lookup(ctn, 0), "foo");
     assert_string_equal(list_data_lookup(ctn, 1), "barfoo");
     assert_string_equal(list_data_lookup(ctn, 2), "baz");
-    assert_int_equal(ctn->delete_at(ctn, 0), TRUE);
+    assert_int_equal(ctn->vtable->delete_at(ctn, 0), TRUE);
     assert_int_equal(ctn->contained_size, 2);
     assert_string_equal(list_data_lookup(ctn, 0), "barfoo");
     assert_string_equal(list_data_lookup(ctn, 1), "baz");
-    assert_int_equal(ctn->delete_at(ctn, 0), TRUE);
+    assert_int_equal(ctn->vtable->delete_at(ctn, 0), TRUE);
     assert_int_equal(ctn->contained_size, 1);
     assert_string_equal(list_data_lookup(ctn, 0), "baz");
-    assert_int_equal(ctn->delete_at(ctn, 0), TRUE);
+    assert_int_equal(ctn->vtable->delete_at(ctn, 0), TRUE);
     assert_int_equal(ctn->contained_size, 0);
-    assert_int_equal(ctn->delete_at(ctn, 0), FALSE);
+    assert_int_equal(ctn->vtable->delete_at(ctn, 0), FALSE);
     assert_int_equal(ctn->contained_size, 0);
     delete (ctn);
     (void)state;
@@ -408,7 +408,7 @@ static void spl_clist_empty_erase(void **state)
     assert_non_null(ctn);
     assert_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
-    assert_int_equal(ctn->erase(ctn), TRUE);
+    assert_int_equal(ctn->vtable->erase(ctn), TRUE);
     assert_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
     delete (ctn);
@@ -423,7 +423,7 @@ static void spl_clist_non_empty_erase(void **state)
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
-    assert_int_equal(ctn->erase(ctn), TRUE);
+    assert_int_equal(ctn->vtable->erase(ctn), TRUE);
     assert_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
     delete (ctn);
@@ -438,7 +438,7 @@ static void spl_clist_empty_front(void **state)
     assert_non_null(ctn);
     assert_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
-    assert_null(ctn->front(ctn));
+    assert_null(ctn->vtable->front(ctn));
     delete (ctn);
     (void)state;
 }
@@ -452,7 +452,7 @@ static void spl_clist_non_empty_front(void **state)
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
-    node = ctn->front(ctn);
+    node = ctn->vtable->front(ctn);
     assert_string_equal(((t_data *)node->data)->data, "foo");
     delete (ctn);
     (void)state;
@@ -466,7 +466,7 @@ static void spl_clist_empty_back(void **state)
     assert_non_null(ctn);
     assert_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
-    assert_null(ctn->back(ctn));
+    assert_null(ctn->vtable->back(ctn));
     delete (ctn);
     (void)state;
 }
@@ -480,7 +480,7 @@ static void spl_clist_non_empty_back(void **state)
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
-    node = ctn->back(ctn);
+    node = ctn->vtable->back(ctn);
     assert_string_equal(((t_data *)node->data)->data, "bar");
     delete (ctn);
     (void)state;
@@ -494,7 +494,7 @@ static void spl_clist_empty_at_negative_pos(void **state)
     assert_non_null(ctn);
     assert_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
-    assert_null(ctn->at(ctn, -1));
+    assert_null(ctn->vtable->at(ctn, -1));
     delete (ctn);
     (void)state;
 }
@@ -507,7 +507,7 @@ static void spl_clist_empty_at_out_of_range_pos(void **state)
     assert_non_null(ctn);
     assert_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
-    assert_null(ctn->at(ctn, 666));
+    assert_null(ctn->vtable->at(ctn, 666));
     delete (ctn);
     (void)state;
 }
@@ -520,7 +520,7 @@ static void spl_clist_non_empty_at_negative_pos(void **state)
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
-    assert_null(ctn->at(ctn, -1));
+    assert_null(ctn->vtable->at(ctn, -1));
     delete (ctn);
     (void)state;
 }
@@ -533,7 +533,7 @@ static void spl_clist_non_empty_at_out_of_range_pos(void **state)
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
-    assert_null(ctn->at(ctn, 666));
+    assert_null(ctn->vtable->at(ctn, 666));
     delete (ctn);
     (void)state;
 }
@@ -546,7 +546,7 @@ static void spl_clist_empty_at_pos_0(void **state)
     assert_non_null(ctn);
     assert_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
-    assert_null(ctn->at(ctn, 0));
+    assert_null(ctn->vtable->at(ctn, 0));
     delete (ctn);
     (void)state;
 }
@@ -559,7 +559,7 @@ static void spl_clist_non_empty_at_pos_0(void **state)
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
-    assert_string_equal(NODE_TO_DATA(ctn->at(ctn, 0)), "foo");
+    assert_string_equal(NODE_TO_DATA(ctn->vtable->at(ctn, 0)), "foo");
     delete (ctn);
     (void)state;
 }
@@ -572,7 +572,7 @@ static void spl_clist_non_empty_at_last_pos(void **state)
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
-    assert_string_equal(NODE_TO_DATA(ctn->at(ctn, 1)), "bar");
+    assert_string_equal(NODE_TO_DATA(ctn->vtable->at(ctn, 1)), "bar");
     delete (ctn);
     (void)state;
 }
@@ -586,7 +586,7 @@ static void spl_clist_empty_convert_to_lists(void **state)
     assert_non_null(ctn);
     assert_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
-    converted = ctn->convert(ctn, BLUEPRINT(SplClist));
+    converted = ctn->vtable->convert(ctn, BLUEPRINT(SplClist));
     assert_non_null(converted);
     assert_null(converted->contained);
     assert_int_equal(converted->contained_size, 0);
@@ -604,7 +604,7 @@ static void spl_clist_non_empty_convert_to_lists(void **state)
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
-    converted = ctn->convert(ctn, BLUEPRINT(SplClist));
+    converted = ctn->vtable->convert(ctn, BLUEPRINT(SplClist));
     assert_non_null(converted);
     assert_non_null(converted->contained);
     assert_int_equal(converted->contained_size, 2);
@@ -622,7 +622,7 @@ static void spl_clist_empty_sub_to_array_out_of_range_negative_pos_correct_lengt
     assert_non_null(ctn);
     assert_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
-    converted = ctn->sub(ctn, BLUEPRINT(SplClist), -666, 0);
+    converted = ctn->vtable->sub(ctn, BLUEPRINT(SplClist), -666, 0);
     assert_null(converted);
     delete (ctn);
     delete (converted);
@@ -638,7 +638,7 @@ static void spl_clist_empty_sub_to_array_correct_pos_too_long_length(void **stat
     assert_non_null(ctn);
     assert_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
-    converted = ctn->sub(ctn, BLUEPRINT(SplClist), 0, 1);
+    converted = ctn->vtable->sub(ctn, BLUEPRINT(SplClist), 0, 1);
     assert_null(converted);
     delete (ctn);
     delete (converted);
@@ -654,7 +654,7 @@ static void spl_clist_empty_sub_to_array_out_of_range_negative_pos_too_long_leng
     assert_non_null(ctn);
     assert_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
-    converted = ctn->sub(ctn, BLUEPRINT(SplClist), -666, 1);
+    converted = ctn->vtable->sub(ctn, BLUEPRINT(SplClist), -666, 1);
     assert_null(converted);
     delete (ctn);
     delete (converted);
@@ -670,7 +670,7 @@ static void spl_clist_empty_sub_to_array_out_of_range_pos_correct_length(void **
     assert_non_null(ctn);
     assert_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
-    converted = ctn->sub(ctn, BLUEPRINT(SplClist), 666, 0);
+    converted = ctn->vtable->sub(ctn, BLUEPRINT(SplClist), 666, 0);
     assert_null(converted);
     delete (ctn);
     delete (converted);
@@ -686,7 +686,7 @@ static void spl_clist_non_empty_sub_to_array_out_of_range_negative_pos_correct_l
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
-    converted = ctn->sub(ctn, BLUEPRINT(SplClist), -666, 1);
+    converted = ctn->vtable->sub(ctn, BLUEPRINT(SplClist), -666, 1);
     assert_null(converted);
     delete (ctn);
     delete (converted);
@@ -702,7 +702,7 @@ static void spl_clist_non_empty_sub_to_array_correct_pos_too_long_length(void **
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
-    converted = ctn->sub(ctn, BLUEPRINT(SplClist), 0, 3);
+    converted = ctn->vtable->sub(ctn, BLUEPRINT(SplClist), 0, 3);
     assert_null(converted);
     delete (ctn);
     delete (converted);
@@ -718,7 +718,7 @@ static void spl_clist_non_empty_sub_to_array_out_of_range_negative_pos_too_long_
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
-    converted = ctn->sub(ctn, BLUEPRINT(SplClist), -666, 3);
+    converted = ctn->vtable->sub(ctn, BLUEPRINT(SplClist), -666, 3);
     assert_null(converted);
     delete (ctn);
     delete (converted);
@@ -734,7 +734,7 @@ static void spl_clist_non_empty_sub_to_array_out_of_range_pos_correct_length(voi
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
-    converted = ctn->sub(ctn, BLUEPRINT(SplClist), 666, 1);
+    converted = ctn->vtable->sub(ctn, BLUEPRINT(SplClist), 666, 1);
     assert_null(converted);
     delete (ctn);
     delete (converted);
@@ -750,7 +750,7 @@ static void spl_clist_empty_sub_to_array_pos_0_len_0(void **state)
     assert_non_null(ctn);
     assert_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
-    converted = ctn->sub(ctn, BLUEPRINT(SplClist), 0, 0);
+    converted = ctn->vtable->sub(ctn, BLUEPRINT(SplClist), 0, 0);
     assert_non_null(converted);
     assert_null(converted->contained);
     delete (ctn);
@@ -767,7 +767,7 @@ static void spl_clist_non_empty_sub_to_array_pos_0_len_0(void **state)
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
-    converted = ctn->sub(ctn, BLUEPRINT(SplClist), 0, 0);
+    converted = ctn->vtable->sub(ctn, BLUEPRINT(SplClist), 0, 0);
     assert_non_null(converted);
     assert_null(converted->contained);
     delete (ctn);
@@ -784,7 +784,7 @@ static void spl_clist_non_empty_sub_to_array_pos_0_len_1(void **state)
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
-    converted = ctn->sub(ctn, BLUEPRINT(SplClist), 0, 1);
+    converted = ctn->vtable->sub(ctn, BLUEPRINT(SplClist), 0, 1);
     assert_non_null(converted);
     assert_non_null(converted->contained);
     assert_int_equal(converted->contained_size, 1);
@@ -803,7 +803,7 @@ static void spl_clist_non_empty_sub_to_array_pos_1_len_1(void **state)
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
-    converted = ctn->sub(ctn, BLUEPRINT(SplClist), 1, 1);
+    converted = ctn->vtable->sub(ctn, BLUEPRINT(SplClist), 1, 1);
     assert_non_null(converted);
     assert_non_null(converted->contained);
     assert_int_equal(converted->contained_size, 1);
@@ -822,7 +822,7 @@ static void spl_clist_non_empty_sub_to_array_copy_all(void **state)
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
-    converted = ctn->sub(ctn, BLUEPRINT(SplClist), 0, 2);
+    converted = ctn->vtable->sub(ctn, BLUEPRINT(SplClist), 0, 2);
     assert_non_null(converted);
     assert_non_null(converted->contained);
     assert_int_equal(converted->contained_size, 2);
@@ -842,7 +842,7 @@ static void spl_clist_non_empty_sub_to_array_correct_negative_pos_minus_2_len_1(
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
-    converted = ctn->sub(ctn, BLUEPRINT(SplClist), -2, 1);
+    converted = ctn->vtable->sub(ctn, BLUEPRINT(SplClist), -2, 1);
     assert_non_null(converted);
     assert_non_null(converted->contained);
     assert_int_equal(converted->contained_size, 1);
@@ -861,7 +861,7 @@ static void spl_clist_non_empty_sub_to_array_correct_negative_pos_minus_1_len_1(
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
-    converted = ctn->sub(ctn, BLUEPRINT(SplClist), -1, 1);
+    converted = ctn->vtable->sub(ctn, BLUEPRINT(SplClist), -1, 1);
     assert_non_null(converted);
     assert_non_null(converted->contained);
     assert_int_equal(converted->contained_size, 1);
@@ -880,7 +880,7 @@ static void spl_clist_non_empty_sub_to_array_correct_negative_pos_minus_2_copy_a
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
-    converted = ctn->sub(ctn, BLUEPRINT(SplClist), -2, 2);
+    converted = ctn->vtable->sub(ctn, BLUEPRINT(SplClist), -2, 2);
     assert_non_null(converted);
     assert_non_null(converted->contained);
     assert_int_equal(converted->contained_size, 2);
@@ -910,7 +910,7 @@ static void spl_clist_empty_map_to_lists(void **state)
     assert_non_null(ctn);
     assert_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 0);
-    converted = ctn->map(ctn, BLUEPRINT(SplClist), map_fn);
+    converted = ctn->vtable->map(ctn, BLUEPRINT(SplClist), map_fn);
     assert_non_null(converted);
     assert_null(converted->contained);
     assert_int_equal(converted->contained_size, 0);
@@ -928,7 +928,7 @@ static void spl_clist_non_empty_map_to_lists(void **state)
     assert_non_null(ctn);
     assert_non_null(ctn->contained);
     assert_int_equal(ctn->contained_size, 2);
-    converted = ctn->map(ctn, BLUEPRINT(SplClist), map_fn);
+    converted = ctn->vtable->map(ctn, BLUEPRINT(SplClist), map_fn);
     assert_non_null(converted);
     assert_non_null(converted->contained);
     assert_int_equal(converted->contained_size, 2);

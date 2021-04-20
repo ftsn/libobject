@@ -14,20 +14,25 @@ typedef enum e_array_opr
 } t_array_opr;
 
 // Class and constructor declaration
-#define Array_fields        \
-        Container_fields    \
+#define Array_fields            \
+        Container_fields        \
         ssize_t total_size;
+#define Array_vtable_fields     \
+        Container_vtable_fields
+
 #define Array_definition          		\
         Container_definition,           \
+        .total_size = 0
+#define Array_vtable_definition         \
+        Container_vtable_definition,    \
         .insert_at = array_insert_at,   \
         .delete_at = array_delete_at,   \
         .erase = array_erase,           \
         .front = array_front,           \
         .back = array_back,             \
-        .at = array_at,                 \
-        .total_size = 0
+        .at = array_at
 
-class_declaration(Array)
+_class_declaration(Array)
 ctor_declaration(Object *, Array, Object *class; t_data **to_copy; ssize_t copy_amount;)
 
 t_bool  array_alloc(Array *array, ssize_t size, t_array_opr operation, ...);

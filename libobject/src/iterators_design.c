@@ -24,7 +24,7 @@ Object                  *ctor_definition(SplListFwdIterator)
         it->reached_the_beginning = 1;
         it->reached_the_end = 1;
     }
-    it->cur = iterated_obj->front(iterated_obj);
+    it->cur = iterated_obj->vtable->front(iterated_obj);
     if (it->cur == NULL)
         return (it);
     idx_start = args->start_pos;
@@ -56,7 +56,7 @@ Object                              *ctor_definition(DblListBidirectionalIterato
         it->reached_the_beginning = 1;
         it->reached_the_end = 1;
     }
-    it->cur = iterated_obj->front(iterated_obj);
+    it->cur = iterated_obj->vtable->front(iterated_obj);
     if (it->cur == NULL)
         return (it);
     idx_start = args->start_pos;
