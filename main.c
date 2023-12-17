@@ -17,6 +17,7 @@ struct a
   char *s;
   char ch;
   double d;
+  double e;
 };
 
 #define STRINGIZE(arg)  STRINGIZE1(arg)
